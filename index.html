@@ -1,1 +1,585 @@
-hola
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Chica de Sistemas | Portfolio</title>
+    <style>
+        :root {
+            --primary: #00ff00;
+            --secondary: #0000ff;
+            --dark: #0a0a0a;
+            --darker: #050505;
+            --light: #f0f0f0;
+            --terminal: #00ff00;
+            --matrix: #00ff41;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Courier New', monospace;
+        }
+        
+        body {
+            background-color: var(--dark);
+            color: var(--light);
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* Efecto Matrix */
+        #matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.1;
+        }
+        
+        /* Header */
+        header {
+            background-color: var(--darker);
+            padding: 1.5rem 0;
+            border-bottom: 2px solid var(--primary);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary);
+            text-shadow: 0 0 5px var(--primary);
+        }
+        
+        .logo span {
+            color: var(--secondary);
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 2rem;
+        }
+        
+        .nav-links a {
+            color: var(--light);
+            text-decoration: none;
+            transition: color 0.3s;
+            position: relative;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+        
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--primary);
+            transition: width 0.3s;
+        }
+        
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding: 4rem 0;
+            text-align: center;
+            position: relative;
+        }
+        
+        .profile-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .profile-img {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            border: 3px solid var(--primary);
+            box-shadow: 0 0 15px var(--primary);
+            margin-bottom: 1.5rem;
+            object-fit: cover;
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        
+        .hero h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--secondary);
+        }
+        
+        .terminal {
+            background-color: var(--darker);
+            border: 1px solid var(--terminal);
+            border-radius: 5px;
+            padding: 1.5rem;
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: left;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+        }
+        
+        .terminal-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .terminal-buttons {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .terminal-button {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        
+        .terminal-button.close {
+            background-color: #ff5f56;
+        }
+        
+        .terminal-button.minimize {
+            background-color: #ffbd2e;
+        }
+        
+        .terminal-button.maximize {
+            background-color: #27c93f;
+        }
+        
+        .terminal-title {
+            margin-left: 10px;
+            color: var(--light);
+            font-size: 0.9rem;
+        }
+        
+        .terminal-content {
+            color: var(--terminal);
+        }
+        
+        .terminal-content p {
+            margin-bottom: 1rem;
+        }
+        
+        .prompt {
+            color: var(--secondary);
+        }
+        
+        .cursor {
+            display: inline-block;
+            width: 8px;
+            height: 16px;
+            background-color: var(--terminal);
+            margin-left: 5px;
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        
+        /* Skills Section */
+        .skills {
+            padding: 4rem 0;
+            background-color: var(--darker);
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--primary);
+            font-size: 2rem;
+        }
+        
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        
+        .skill-card {
+            background-color: var(--dark);
+            border: 1px solid var(--secondary);
+            border-radius: 5px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .skill-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 255, 0.3);
+        }
+        
+        .skill-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        
+        .skill-card h3 {
+            margin-bottom: 1rem;
+            color: var(--light);
+        }
+        
+        /* Projects Section */
+        .projects {
+            padding: 4rem 0;
+        }
+        
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .project-card {
+            background-color: var(--darker);
+            border: 1px solid var(--primary);
+            border-radius: 5px;
+            padding: 1.5rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 255, 0, 0.3);
+        }
+        
+        .project-card h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .project-card p {
+            margin-bottom: 1.5rem;
+        }
+        
+        .project-link {
+            display: inline-block;
+            background-color: var(--primary);
+            color: var(--dark);
+            padding: 0.5rem 1rem;
+            border-radius: 3px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        
+        .project-link:hover {
+            background-color: var(--secondary);
+            color: var(--light);
+        }
+        
+        /* Social Section */
+        .social {
+            padding: 4rem 0;
+            background-color: var(--darker);
+            text-align: center;
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .social-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--light);
+            transition: transform 0.3s, color 0.3s;
+        }
+        
+        .social-link:hover {
+            transform: translateY(-5px);
+            color: var(--primary);
+        }
+        
+        .social-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--darker);
+            padding: 2rem 0;
+            text-align: center;
+            border-top: 1px solid var(--primary);
+        }
+        
+        .footer-text {
+            color: var(--light);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+            }
+            
+            .nav-links {
+                margin-top: 1rem;
+            }
+            
+            .nav-links li {
+                margin: 0 1rem;
+            }
+            
+            .social-links {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Efecto Matrix -->
+    <canvas id="matrix-bg"></canvas>
+    
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">La<span>Chica</span>DeSistemas</div>
+                <ul class="nav-links">
+                    <li><a href="#about">Sobre Mí</a></li>
+                    <li><a href="#skills">Habilidades</a></li>
+                    <li><a href="#projects">Proyectos</a></li>
+                    <li><a href="#social">Contacto</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Hero Section -->
+    <section class="hero" id="about">
+        <div class="container">
+            <div class="profile-container">
+                <!-- Aquí puedes agregar tu foto de perfil -->
+                <img src="https://via.placeholder.com/200" alt="Foto de perfil" class="profile-img">
+                <h1>La Chica de Sistemas</h1>
+                <h2>Desarrolladora Backend & Administradora de Sistemas Linux</h2>
+            </div>
+            <div class="terminal">
+                <div class="terminal-header">
+                    <div class="terminal-buttons">
+                        <div class="terminal-button close"></div>
+                        <div class="terminal-button minimize"></div>
+                        <div class="terminal-button maximize"></div>
+                    </div>
+                    <div class="terminal-title">terminal@lachicadesistemas:~</div>
+                </div>
+                <div class="terminal-content">
+                    <p><span class="prompt">$</span> whoami</p>
+                    <p>Desarrolladora backend con más de 15 años de experiencia, especializada en C, PHP, Python y administración de sistemas Linux. Actualmente trabajo en el sector financiero como DevOps.</p>
+                    <p><span class="prompt">$</span> cat bio.txt</p>
+                    <p>42 años, apasionada por la tecnología, los sistemas operativos y el código eficiente. Me encanta resolver problemas complejos y optimizar procesos. Cuando no estoy codificando, comparto mis conocimientos en YouTube y redes sociales.</p>
+                    <p><span class="prompt">$</span> <span class="cursor"></span></p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Skills Section -->
+    <section class="skills" id="skills">
+        <div class="container">
+            <h2 class="section-title">Habilidades Técnicas</h2>
+            <div class="skills-grid">
+                <div class="skill-card">
+                    <div class="skill-icon">C</div>
+                    <h3>Lenguaje C</h3>
+                    <p>Desarrollo de sistemas, optimización y programación de bajo nivel.</p>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-icon">PHP</div>
+                    <h3>PHP</h3>
+                    <p>Desarrollo backend, APIs y aplicaciones web.</p>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-icon">🐧</div>
+                    <h3>Administración Linux</h3>
+                    <p>Configuración, mantenimiento y seguridad de servidores.</p>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-icon">🔧</div>
+                    <h3>DevOps</h3>
+                    <p>CI/CD, automatización, Docker, Kubernetes y más.</p>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-icon">🐍</div>
+                    <h3>Python</h3>
+                    <p>Scripting, automatización y desarrollo de herramientas.</p>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-icon">💻</div>
+                    <h3>Bash Scripting</h3>
+                    <p>Automatización de tareas y administración de sistemas.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Projects Section -->
+    <section class="projects" id="projects">
+        <div class="container">
+            <h2 class="section-title">Proyectos Destacados</h2>
+            <div class="projects-grid">
+                <div class="project-card">
+                    <h3>SystemLoad</h3>
+                    <p>Una herramienta para monitorear y analizar la carga del sistema en tiempo real.</p>
+                    <a href="https://github.com/alexiarstein/systemload" class="project-link" target="_blank">Ver en GitHub</a>
+                </div>
+                <div class="project-card">
+                    <h3>SSL Check</h3>
+                    <p>Utilidad para verificar el estado y validez de certificados SSL.</p>
+                    <a href="https://github.com/alexiarstein/sslcheck" class="project-link" target="_blank">Ver en GitHub</a>
+                </div>
+                <div class="project-card">
+                    <h3>Kernel Install</h3>
+                    <p>Script para automatizar la instalación y configuración de kernels Linux.</p>
+                    <a href="https://github.com/alexiarstein/kernelinstall" class="project-link" target="_blank">Ver en GitHub</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Social Section -->
+    <section class="social" id="social">
+        <div class="container">
+            <h2 class="section-title">Conéctate Conmigo</h2>
+            <div class="social-links">
+                <a href="https://www.youtube.com/@lachicadesistemas" class="social-link" target="_blank">
+                    <div class="social-icon">▶️</div>
+                    <span>YouTube</span>
+                </a>
+                <a href="https://instagram.com/lachicadesistemas" class="social-link" target="_blank">
+                    <div class="social-icon">📷</div>
+                    <span>Instagram</span>
+                </a>
+                <a href="https://threads.com/lachicadesistemas" class="social-link" target="_blank">
+                    <div class="social-icon">🧵</div>
+                    <span>Threads</span>
+                </a>
+                <a href="https://github.com/alexiarstein" class="social-link" target="_blank">
+                    <div class="social-icon">🐙</div>
+                    <span>GitHub</span>
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p class="footer-text">&copy; 2023 La Chica de Sistemas. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+    
+    <script>
+        // Efecto Matrix
+        const canvas = document.getElementById('matrix-bg');
+        const ctx = canvas.getContext('2d');
+        
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        
+        const chars = "01";
+        const charArray = chars.split("");
+        
+        const font_size = 14;
+        const columns = canvas.width / font_size;
+        
+        const drops = [];
+        
+        for(let x = 0; x < columns; x++)
+            drops[x] = 1;
+        
+        function drawMatrix() {
+            ctx.fillStyle = "rgba(0, 0, 0, 0.04)";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.fillStyle = "#0F0";
+            ctx.font = font_size + "px arial";
+            
+            for(let i = 0; i < drops.length; i++) {
+                const text = charArray[Math.floor(Math.random() * charArray.length)];
+                ctx.fillText(text, i * font_size, drops[i] * font_size);
+                
+                if(drops[i] * font_size > canvas.height && Math.random() > 0.975)
+                    drops[i] = 0;
+                
+                drops[i]++;
+            }
+        }
+        
+        setInterval(drawMatrix, 35);
+        
+        // Ajustar canvas al cambiar tamaño de ventana
+        window.addEventListener('resize', function() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+        
+        // Navegación suave
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if(targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if(targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
