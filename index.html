@@ -1,1 +1,134 @@
-hola
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Alexia Michelle – Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #faf7ff;
+        --lav: #c39fed;
+        --dark: #181820;
+        --soft-border: #b9b9b9;
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+        background: var(--bg);
+        font-family: 'IBM Plex Mono', monospace;
+        color: var(--dark);
+        line-height: 1.6;
+    }
+
+    header {
+        text-align: center;
+        padding: 3rem 1rem 2rem;
+        font-family: 'IBM Plex Sans', sans-serif;
+        font-size: 2.4rem;
+        font-weight: 600;
+        position: relative;
+        color: var(--dark);
+    }
+
+    header .cursor {
+        display: inline-block;
+        width: 10px;
+        height: 1.2em;
+        background: var(--lav);
+        animation: blink 0.9s infinite;
+        margin-left: 3px;
+    }
+
+    @keyframes blink {
+        0%, 50% { opacity: 1; }
+        51%, 100% { opacity: 0; }
+    }
+
+    main {
+        max-width: 850px;
+        margin: auto;
+        padding: 1rem 1.5rem 3rem;
+    }
+
+    .section {
+        margin-bottom: 2.5rem;
+        padding: 1.5rem;
+        border: 1px solid var(--soft-border);
+        border-radius: 12px;
+        background: white;
+        position: relative;
+    }
+
+    .section::before {
+        content: "/* " attr(data-title) " */";
+        position: absolute;
+        top: -0.9rem;
+        left: 1rem;
+        font-size: 0.85rem;
+        padding: 0 4px;
+        background: var(--bg);
+        color: var(--lav);
+    }
+
+    a {
+        color: var(--dark);
+        text-decoration: none;
+        border-bottom: 1px solid var(--lav);
+        transition: 0.2s;
+    }
+
+    a:hover {
+        color: var(--lav);
+    }
+
+    ul {
+        list-style: none;
+        padding-left: 0;
+    }
+
+    ul li {
+        margin-bottom: 0.6rem;
+    }
+</style>
+</head>
+<body>
+
+<header>
+    Alexia Michelle <span class="cursor"></span>
+</header>
+
+<main>
+
+    <section class="section" data-title="Sobre mí">
+        <p>¡Hola! Tengo 42 años, soy desarrolladora backend especializada en C y administradora de sistemas Linux/Unix. Estoy certificada como <strong>OpenShift Administrator</strong> (DO180/DO280) y <strong>Red Hat Certified System Administrator</strong> (RHCSA, EX RH200).</p>
+        <p>Trabajo actualmente en el sector financiero, donde combino automatización, performance y arquitectura de sistemas críticos.</p>
+        <p>Soy entusiasta del software libre, divulgadora técnica y aprendiz de historiadora de las tecnologías de la información.</p>
+    </section>
+
+    <section class="section" data-title="Proyectos libres">
+        <ul>
+            <li><strong>Kernel Installer:</strong> <a href="https://github.com/alexiarstein/kernelinstall">github.com/alexiarstein/kernelinstall</a></li>
+            <li><strong>sslcheck:</strong> <a href="https://github.com/alexiarstein/sslcheck">github.com/alexiarstein/sslcheck</a></li>
+            <li><strong>systemload:</strong> <a href="https://github.com/alexiarstein/systemload">github.com/alexiarstein/systemload</a></li>
+        </ul>
+    </section>
+
+    <section class="section" data-title="Mis redes">
+        <ul>
+            <li><strong>YouTube:</strong> <a href="https://youtube.com/@lachicadesistemas">youtube.com/@lachicadesistemas</a></li>
+            <li><strong>Instagram:</strong> <a href="https://instagram.com/lachicadesistemas">instagram.com/lachicadesistemas</a></li>
+            <li><strong>Threads:</strong> <a href="https://threads.com/lachicadesistemas">threads.com/lachicadesistemas</a></li>
+            <li><strong>Blog:</strong> <a href="https://lexi.lat">lexi.lat</a></li>
+        </ul>
+    </section>
+
+    <section class="section" data-title="Contacto">
+        <p><code>contact_email = "alexia@lexiworks.dev"</code></p>
+    </section>
+
+</main>
+
+</body>
+</html>
