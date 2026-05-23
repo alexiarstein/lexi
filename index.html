@@ -1,130 +1,784 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Alexia Michelle – Portfolio</title>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;600&display=swap" rel="stylesheet">
-<style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alexia Michelle</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Mono:wght@300;400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+  <style>
+    /* ── TOKENS ── */
     :root {
-        --bg: #faf7ff;
-        --lav: #c39fed;
-        --dark: #181820;
-        --soft-border: #b9b9b9;
+      --bg:          #0d0810;
+      --bg2:         #120c17;
+      --surface:     rgba(255,255,255,0.035);
+      --surface-h:   rgba(255,255,255,0.065);
+      --border:      rgba(220,170,210,0.12);
+      --border-h:    rgba(220,170,210,0.30);
+      --text:        #f0e8f4;
+      --text-2:      #b49ec2;
+      --text-3:      #7a6888;
+      --rose:        #e8a0c4;
+      --mauve:       #c47dd4;
+      --gold:        #e8c882;
+      --cyan:        #80d4d0;
+      --glow-rose:   rgba(232,160,196,0.18);
+      --glow-mauve:  rgba(196,125,212,0.22);
+      --radius:      18px;
+      --mono: 'DM Mono', monospace;
+      --serif: 'Cormorant Garamond', serif;
+      --sans: 'Jost', sans-serif;
     }
 
+    /* ── LIGHT MODE ── */
+    body.light {
+      --bg:         #fdf8fb;
+      --bg2:        #f5eef8;
+      --surface:    rgba(255,255,255,0.72);
+      --surface-h:  rgba(255,255,255,0.9);
+      --border:     rgba(180,100,200,0.15);
+      --border-h:   rgba(180,100,200,0.35);
+      --text:       #1e0d2a;
+      --text-2:     #5a3d6e;
+      --text-3:     #9d7fb0;
+      --rose:       #c0458a;
+      --mauve:      #8b35b0;
+      --gold:       #b07a20;
+      --cyan:       #2a8a86;
+      --glow-rose:  rgba(192,69,138,0.08);
+      --glow-mauve: rgba(139,53,176,0.10);
+    }
+
+    /* ── RESET ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    /* ── BODY ── */
     body {
-        margin: 0;
-        padding: 0;
-        background: var(--bg);
-        font-family: 'IBM Plex Mono', monospace;
-        color: var(--dark);
-        line-height: 1.6;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      font-weight: 300;
+      min-height: 100vh;
+      overflow-x: hidden;
+      line-height: 1.7;
+      transition: background 0.5s, color 0.5s;
+      cursor: none;
     }
 
-    header {
-        text-align: center;
-        padding: 3rem 1rem 2rem;
-        font-family: 'IBM Plex Sans', sans-serif;
-        font-size: 2.4rem;
-        font-weight: 600;
-        position: relative;
-        color: var(--dark);
+    /* ── GRAIN OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 180px;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.5;
     }
 
-    header .cursor {
-        display: inline-block;
-        width: 10px;
-        height: 1.2em;
-        background: var(--lav);
-        animation: blink 0.9s infinite;
-        margin-left: 3px;
+    /* ── AMBIENT ORBS ── */
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(90px);
+      pointer-events: none;
+      z-index: 0;
+      transition: opacity 0.8s;
+    }
+    .orb-1 { width: 520px; height: 520px; background: radial-gradient(circle, rgba(196,125,212,0.22), transparent 70%); top: -160px; right: -80px; }
+    .orb-2 { width: 400px; height: 400px; background: radial-gradient(circle, rgba(232,160,196,0.18), transparent 70%); bottom: -120px; left: -60px; }
+    .orb-3 { width: 280px; height: 280px; background: radial-gradient(circle, rgba(128,212,208,0.10), transparent 70%); top: 50%; left: 50%; transform: translate(-50%,-50%); }
+    body.light .orb { opacity: 0.5; }
+
+    /* ── CURSOR ── */
+    #cursor {
+      position: fixed;
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: var(--rose);
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%,-50%);
+      transition: transform 0.08s, width 0.2s, height 0.2s, opacity 0.2s;
+      mix-blend-mode: difference;
+    }
+    #cursor-ring {
+      position: fixed;
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      border: 1px solid rgba(232,160,196,0.5);
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%,-50%);
+      transition: transform 0.18s ease, width 0.2s, height 0.2s;
     }
 
-    @keyframes blink {
-        0%, 50% { opacity: 1; }
-        51%, 100% { opacity: 0; }
+    /* ── LAYOUT ── */
+    .page {
+      position: relative;
+      z-index: 1;
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 0 2.5rem;
     }
 
-    main {
-        max-width: 850px;
-        margin: auto;
-        padding: 1rem 1.5rem 3rem;
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 1.4rem 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      background: rgba(13,8,16,0.55);
+      border-bottom: 1px solid var(--border);
+      transition: background 0.5s, border-color 0.5s;
+    }
+    body.light nav { background: rgba(253,248,251,0.75); }
+
+    .nav-logo {
+      font-family: var(--serif);
+      font-size: 1.35rem;
+      font-weight: 300;
+      font-style: italic;
+      color: var(--rose);
+      letter-spacing: 0.03em;
     }
 
-    .section {
-        margin-bottom: 2.5rem;
-        padding: 1.5rem;
-        border: 1px solid var(--soft-border);
-        border-radius: 12px;
-        background: white;
-        position: relative;
+    .nav-controls {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
     }
 
-    .section::before {
-        content: "/* " attr(data-title) " */";
-        position: absolute;
-        top: -0.9rem;
-        left: 1rem;
-        font-size: 0.85rem;
-        padding: 0 4px;
-        background: var(--bg);
-        color: var(--lav);
+    .pill-btn {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      font-weight: 300;
+      letter-spacing: 0.08em;
+      padding: 0.4rem 1rem;
+      border-radius: 100px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-2);
+      cursor: none;
+      transition: all 0.25s;
+      backdrop-filter: blur(8px);
+    }
+    .pill-btn:hover {
+      border-color: var(--rose);
+      color: var(--rose);
+      box-shadow: 0 0 14px var(--glow-rose);
     }
 
-    a {
-        color: var(--dark);
-        text-decoration: none;
-        border-bottom: 1px solid var(--lav);
-        transition: 0.2s;
+    /* ── HERO ── */
+    .hero {
+      padding: 160px 0 80px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 3rem;
+      align-items: end;
     }
 
-    a:hover {
-        color: var(--lav);
+    .hero-left {}
+
+    .hero-eyebrow {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      color: var(--rose);
+      text-transform: uppercase;
+      margin-bottom: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      display: block;
+      width: 28px;
+      height: 1px;
+      background: var(--rose);
+      opacity: 0.6;
     }
 
-    ul {
-        list-style: none;
-        padding-left: 0;
+    h1 {
+      font-family: var(--serif);
+      font-size: clamp(3.2rem, 7vw, 6rem);
+      font-weight: 300;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 0.15em;
+    }
+    h1 em {
+      font-style: italic;
+      color: var(--rose);
     }
 
-    ul li {
-        margin-bottom: 0.6rem;
+    .hero-title-accent {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      color: var(--text-3);
+      letter-spacing: 0.12em;
+      margin-top: 1.5rem;
+      margin-bottom: 1.8rem;
     }
-</style>
+    .hero-title-accent span { color: var(--cyan); }
+
+    .hero-desc {
+      font-size: 1.05rem;
+      color: var(--text-2);
+      max-width: 560px;
+      line-height: 1.8;
+    }
+
+    .hero-right {
+      padding-bottom: 0.5rem;
+    }
+
+    .hero-badge {
+      writing-mode: vertical-rl;
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      color: var(--text-3);
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .hero-badge::before {
+      content: '';
+      display: block;
+      width: 1px;
+      height: 70px;
+      background: linear-gradient(to bottom, transparent, var(--border-h));
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border-h), transparent);
+      margin: 0;
+    }
+
+    /* ── SECTIONS ── */
+    section {
+      padding: 6rem 0;
+    }
+
+    .section-label {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.2em;
+      color: var(--text-3);
+      text-transform: uppercase;
+      margin-bottom: 3rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    h2 {
+      font-family: var(--serif);
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      font-weight: 300;
+      line-height: 1.2;
+      margin-bottom: 1.4rem;
+      color: var(--text);
+    }
+    h2 em { font-style: italic; color: var(--mauve); }
+
+    /* ── ABOUT ── */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .about-text p {
+      color: var(--text-2);
+      margin-bottom: 1.1rem;
+      font-size: 1rem;
+    }
+    .about-text p:last-child { margin-bottom: 0; }
+
+    .cert-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+    }
+
+    .cert-item {
+      padding: 1rem 1.2rem;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      transition: border-color 0.25s, background 0.25s, box-shadow 0.25s;
+    }
+    .cert-item:hover {
+      border-color: var(--border-h);
+      background: var(--surface-h);
+      box-shadow: 0 4px 24px var(--glow-mauve);
+    }
+
+    .cert-icon {
+      width: 32px; height: 32px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--mauve), var(--rose));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.85rem;
+      flex-shrink: 0;
+    }
+
+    .cert-name {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      color: var(--text);
+      font-weight: 400;
+    }
+    .cert-meta {
+      font-size: 0.7rem;
+      color: var(--text-3);
+      margin-top: 0.15rem;
+    }
+
+    /* ── PROJECTS ── */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+    }
+
+    .project-card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      padding: 1.8rem 2rem;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s, background 0.3s;
+      cursor: none;
+    }
+    .project-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, var(--glow-mauve), transparent 60%);
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+    }
+    .project-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--border-h);
+      background: var(--surface-h);
+      box-shadow: 0 8px 40px rgba(0,0,0,0.25);
+    }
+    .project-card:hover::after { opacity: 1; }
+
+    /* Special featured card */
+    .project-card.featured {
+      grid-column: span 2;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 2rem;
+      align-items: center;
+    }
+    .project-card.featured::after {
+      background: linear-gradient(100deg, var(--glow-rose), transparent 50%);
+    }
+
+    .project-tag {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--rose);
+      margin-bottom: 0.8rem;
+    }
+    .project-name {
+      font-family: var(--serif);
+      font-size: 1.4rem;
+      font-weight: 400;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+    .project-desc {
+      font-size: 0.88rem;
+      color: var(--text-2);
+      line-height: 1.6;
+    }
+
+    .project-link {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--rose);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-top: 1.2rem;
+      transition: color 0.2s, gap 0.2s;
+    }
+    .project-link:hover { color: var(--mauve); gap: 0.65rem; }
+
+    .project-arrow {
+      font-size: 0.9rem;
+      transition: transform 0.2s;
+    }
+    .project-link:hover .project-arrow { transform: translateX(3px); }
+
+    /* ── SOCIAL ── */
+    .social-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+    }
+
+    .social-card {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: var(--surface);
+      padding: 1.4rem 1.2rem;
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      transition: all 0.25s;
+      cursor: none;
+    }
+    .social-card:hover {
+      border-color: var(--border-h);
+      background: var(--surface-h);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 28px rgba(0,0,0,0.2);
+    }
+
+    .social-icon {
+      font-size: 1.4rem;
+      line-height: 1;
+    }
+    .social-name {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-3);
+    }
+    .social-handle {
+      font-size: 0.85rem;
+      color: var(--text);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2.5rem 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-copy {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--text-3);
+    }
+
+    .footer-sig {
+      font-family: var(--serif);
+      font-size: 1rem;
+      font-style: italic;
+      color: var(--text-3);
+    }
+
+    /* ── HIGHLIGHT ── */
+    .hi { color: var(--gold); }
+    .hi-rose { color: var(--rose); }
+    .hi-cyan { color: var(--cyan); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    .hero-left    { animation: fadeUp 0.9s cubic-bezier(0.16,1,0.3,1) 0.1s both; }
+    .hero-right   { animation: fadeIn 1.2s ease 0.5s both; }
+    section       { animation: fadeUp 0.8s cubic-bezier(0.16,1,0.3,1) 0.2s both; }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border-h); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--mauve); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 800px) {
+      nav { padding: 1.2rem 1.5rem; }
+      .page { padding: 0 1.5rem; }
+      .hero { grid-template-columns: 1fr; padding: 120px 0 60px; }
+      .hero-right { display: none; }
+      .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+      .projects-grid { grid-template-columns: 1fr; }
+      .project-card.featured { grid-column: span 1; grid-template-columns: 1fr; }
+      .social-grid { grid-template-columns: repeat(2, 1fr); }
+      footer { flex-direction: column; gap: 1rem; text-align: center; }
+    }
+  </style>
 </head>
 <body>
+  <!-- Ambient orbs -->
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
 
-<header>
-    Alexia Michelle <span class="cursor"></span>
-</header>
+  <!-- Custom cursor -->
+  <div id="cursor"></div>
+  <div id="cursor-ring"></div>
 
-<main>
+  <!-- ── NAV ── -->
+  <nav>
+    <div class="nav-logo">Alexia Michelle</div>
+    <div class="nav-controls">
+      <button class="pill-btn" id="btn-lang" onclick="toggleLang()">
+        <span class="lang-es">EN</span><span class="lang-en">ES</span>
+      </button>
+      <button class="pill-btn" id="btn-mode" onclick="toggleMode()">
+        <span class="lang-es">☽ <span style="opacity:0.4">/ ☀</span></span>
+        <span class="lang-en">☽ <span style="opacity:0.4">/ ☀</span></span>
+      </button>
+    </div>
+  </nav>
 
-    <section class="section" data-title="Sobre mí">
-        <p>¡Hola! Soy desarrolladora backend especializada en C y administradora de sistemas Linux/Unix. Estoy certificada como <strong>OpenShift Administrator</strong> (DO180/DO280) y <strong>Red Hat Certified System Administrator</strong> (RHCSA, EX RH200).</p>
-        <p>Trabajo actualmente en el sector financiero, donde combino automatización, performance y arquitectura de sistemas críticos.</p>
-        <p>Soy entusiasta del software libre, divulgadora técnica y aprendiz de historiadora de las tecnologías de la información.</p>
+  <!-- ── PAGE WRAPPER ── -->
+  <div class="page">
+
+    <!-- ── HERO ── -->
+    <header class="hero">
+      <div class="hero-left">
+        <p class="hero-eyebrow lang-es">Linux Developer & SysAdmin</p>
+        <p class="hero-eyebrow lang-en">Linux Developer & SysAdmin</p>
+        <h1>Alexia<br><em>Michelle</em></h1>
+        <p class="hero-title-accent lang-es">
+          <span>$</span> whoami — Desarrolladora. Administradora. Divulgadora.
+        </p>
+        <p class="hero-title-accent lang-en">
+          <span>$</span> whoami — Developer. Administrator. Communicator.
+        </p>
+        <p class="hero-desc lang-es">
+          Construyo sistemas robustos y código que perdura. Especialista en C y Linux con más de media década en el sector financiero, certificada Red Hat y OpenShift. Geek, Comunicadora y entusiasta del software libre.
+        </p>
+        <p class="hero-desc lang-en">
+          I build robust systems and code that lasts. C &amp; Linux specialist with over half a decade in financial infrastructure, Red Hat and OpenShift certified. Geek, Communicator, and FOSS enthusiast.
+        </p>
+      </div>
+      <div class="hero-right">
+        <div class="hero-badge lang-es">Buenos Aires · Argentina</div>
+        <div class="hero-badge lang-en">Buenos Aires · Argentina</div>
+      </div>
+    </header>
+
+    <div class="divider"></div>
+
+    <!-- ── ABOUT ── -->
+    <section>
+      <p class="section-label lang-es">01 — Sobre mí</p>
+      <p class="section-label lang-en">01 — About me</p>
+      <div class="about-grid">
+        <div class="about-text">
+          <h2 class="lang-es">Backend & <em>Linux</em>,<br>sector financiero</h2>
+          <h2 class="lang-en">Backend & <em>Linux</em>,<br>financial sector</h2>
+          <p class="lang-es">Soy desarrolladora backend especializada en <span class="hi-rose">C</span> y administradora senior de sistemas <span class="hi-rose">Linux/Unix</span>. Mi trabajo combina automatización, rendimiento y arquitectura de sistemas críticos en entornos de alta disponibilidad.</p>
+          <p class="lang-en">I'm a backend developer specialized in <span class="hi-rose">C</span> and a senior <span class="hi-rose">Linux/Unix</span> systems administrator. My work combines automation, performance, and critical systems architecture in high-availability environments.</p>
+          <p class="lang-es">Trabajo en el sector financiero, donde la precisión no es negociable y los sistemas tienen que funcionar o funcionar.</p>
+          <p class="lang-en">I work in the financial sector, where precision is non-negotiable and systems simply have to work — period.</p>
+        </div>
+        <div class="cert-list">
+          <div class="cert-item">
+            <div class="cert-icon">⬡</div>
+            <div>
+              <div class="cert-name">RHCSA — EX200</div>
+              <div class="cert-meta">Red Hat Certified System Administrator</div>
+            </div>
+          </div>
+          <div class="cert-item">
+            <div class="cert-icon">◈</div>
+            <div>
+              <div class="cert-name">OpenShift — DO180</div>
+              <div class="cert-meta">Red Hat OpenShift I: Containers & Kubernetes</div>
+            </div>
+          </div>
+          <div class="cert-item">
+            <div class="cert-icon">◉</div>
+            <div>
+              <div class="cert-name">OpenShift — DO280</div>
+              <div class="cert-meta">Red Hat OpenShift Administration II</div>
+            </div>
+          </div>
+          <div class="cert-item" style="border-color: rgba(232,200,130,0.2);">
+            <div class="cert-icon" style="background: linear-gradient(135deg,#e8c882,#c0903a);">✦</div>
+            <div>
+              <div class="cert-name lang-es" style="color: var(--gold)">goldendoglinux.org</div>
+              <div class="cert-name lang-en" style="color: var(--gold)">goldendoglinux.org</div>
+              <div class="cert-meta lang-es">Sistema Operativo Linux Propio</div>
+              <div class="cert-meta lang-en">Personal Linux Operating System</div>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
 
-    <section class="section" data-title="Proyectos libres">
-        <ul>
-            <li><strong>Kernel Installer:</strong> <a href="https://github.com/alexiarstein/kernelinstall">github.com/alexiarstein/kernelinstall</a></li>
-            <li><strong>sslcheck:</strong> <a href="https://github.com/alexiarstein/sslcheck">github.com/alexiarstein/sslcheck</a></li>
-            <li><strong>systemload:</strong> <a href="https://github.com/alexiarstein/systemload">github.com/alexiarstein/systemload</a></li>
-        </ul>
+    <div class="divider"></div>
+
+    <!-- ── PROJECTS ── -->
+    <section>
+      <p class="section-label lang-es">02 — Proyectos de Código Abierto</p>
+      <p class="section-label lang-en">02 — Open Source Projects</p>
+      <div class="projects-grid">
+
+        <!-- Featured -->
+        <div class="project-card featured">
+          <div>
+            <p class="project-tag lang-es">✦ Proyecto destacado</p>
+            <p class="project-tag lang-en">✦ Featured project</p>
+            <p class="project-name">Golden Dog Linux</p>
+            <p class="project-desc lang-es">Una distribución Linux construida desde cero. Filosofía minimalista, alto rendimiento, sin compromisos.</p>
+            <p class="project-desc lang-en">A Linux distribution built from scratch. Minimalist philosophy, high performance, no compromises.</p>
+            <a href="https://goldendoglinux.org" target="_blank" class="project-link">
+              goldendoglinux.org <span class="project-arrow">→</span>
+            </a>
+          </div>
+          <div style="font-family: var(--mono); font-size: 4rem; opacity: 0.07; user-select: none;">🐕</div>
+        </div>
+
+        <div class="project-card">
+          <p class="project-tag">bash / kernel</p>
+          <p class="project-name">Kernel Installer</p>
+          <p class="project-desc lang-es">Script para compilar e instalar kernels de Linux de forma sencilla y reproducible.</p>
+          <p class="project-desc lang-en">Script to compile and install Linux kernels in a simple, reproducible way.</p>
+          <a href="https://github.com/alexiarstein/kernelinstall" target="_blank" class="project-link">
+            github/kernelinstall <span class="project-arrow">→</span>
+          </a>
+        </div>
+
+        <div class="project-card">
+          <p class="project-tag">bash / security</p>
+          <p class="project-name">sslcheck</p>
+          <p class="project-desc lang-es">Herramienta de línea de comandos para auditar certificados SSL/TLS en producción.</p>
+          <p class="project-desc lang-en">Command-line tool to audit SSL/TLS certificates in production environments.</p>
+          <a href="https://github.com/alexiarstein/sslcheck" target="_blank" class="project-link">
+            github/sslcheck <span class="project-arrow">→</span>
+          </a>
+        </div>
+
+        <div class="project-card" style="grid-column: span 2;">
+          <p class="project-tag">bash / monitoring</p>
+          <p class="project-name">systemload</p>
+          <p class="project-desc lang-es">Monitor de carga del sistema ligero y sin dependencias. Información útil, sin ruido.</p>
+          <p class="project-desc lang-en">Lightweight, dependency-free system load monitor. Useful information, no noise.</p>
+          <a href="https://github.com/alexiarstein/systemload" target="_blank" class="project-link">
+            github/systemload <span class="project-arrow">→</span>
+          </a>
+        </div>
+
+      </div>
     </section>
 
-    <section class="section" data-title="Mis redes">
-        <ul>
-            <li><strong>YouTube:</strong> <a href="https://youtube.com/@lachicadesistemas">youtube.com/@lachicadesistemas</a></li>
-            <li><strong>Instagram:</strong> <a href="https://instagram.com/lachicadesistemas">instagram.com/lachicadesistemas</a></li>
-            <li><strong>Threads:</strong> <a href="https://threads.com/lachicadesistemas">threads.com/lachicadesistemas</a></li>
-            <li><strong>Blog:</strong> <a href="https://lexi.lat">lexi.lat</a></li>
-        </ul>
+    <div class="divider"></div>
+
+    <!-- ── SOCIAL ── -->
+    <section>
+      <p class="section-label lang-es">03 — Encuéntrame en</p>
+      <p class="section-label lang-en">03 — Find me on</p>
+      <div class="social-grid">
+        <a href="https://youtube.com/@lachicadesistemas" target="_blank" class="social-card">
+          <div class="social-icon">▶</div>
+          <div class="social-name">YouTube</div>
+          <div class="social-handle">@lachicadesistemas</div>
+        </a>
+        <a href="https://instagram.com/lachicadesistemas" target="_blank" class="social-card">
+          <div class="social-icon">◈</div>
+          <div class="social-name">Instagram</div>
+          <div class="social-handle">@lachicadesistemas</div>
+        </a>
+        <a href="https://threads.com/lachicadesistemas" target="_blank" class="social-card">
+          <div class="social-icon">◎</div>
+          <div class="social-name">Threads</div>
+          <div class="social-handle">@lachicadesistemas</div>
+        </a>
+        <a href="https://lexi.lat" target="_blank" class="social-card">
+          <div class="social-icon">✦</div>
+          <div class="social-name">Blog</div>
+          <div class="social-handle">lexi.lat</div>
+        </a>
+      </div>
     </section>
 
-</main>
+    <!-- ── FOOTER ── -->
+    <footer>
+      <p class="footer-copy lang-es">© 2025 Alexia Michelle · hecho con ♡ y demasiado café</p>
+      <p class="footer-copy lang-en">© 2025 Alexia Michelle · made with ♡ and too much coffee</p>
+      <p class="footer-sig">lexi.lat</p>
+    </footer>
 
+  </div><!-- /page -->
+
+  <script>
+    /* ── CURSOR ── */
+    const cur = document.getElementById('cursor');
+    const ring = document.getElementById('cursor-ring');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+    document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+    function animCursor() {
+      cur.style.left = mx + 'px'; cur.style.top = my + 'px';
+      rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+      ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+      requestAnimationFrame(animCursor);
+    }
+    animCursor();
+    document.querySelectorAll('a, button, .project-card, .social-card, .cert-item').forEach(el => {
+      el.addEventListener('mouseenter', () => { cur.style.width = '18px'; cur.style.height = '18px'; ring.style.width = '48px'; ring.style.height = '48px'; });
+      el.addEventListener('mouseleave', () => { cur.style.width = '10px'; cur.style.height = '10px'; ring.style.width = '34px'; ring.style.height = '34px'; });
+    });
+
+    /* ── LANG TOGGLE ── */
+    function toggleLang() {
+      const isEs = document.documentElement.lang === 'es';
+      document.documentElement.lang = isEs ? 'en' : 'es';
+      document.querySelectorAll('.lang-es').forEach(el => el.style.display = isEs ? 'none' : '');
+      document.querySelectorAll('.lang-en').forEach(el => el.style.display = isEs ? '' : 'none');
+    }
+
+    /* ── MODE TOGGLE ── */
+    function toggleMode() {
+      document.body.classList.toggle('light');
+    }
+
+    /* ── INIT: Spanish + Dark as default ── */
+    window.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.lang-en').forEach(el => el.style.display = 'none');
+    });
+  </script>
 </body>
 </html>
