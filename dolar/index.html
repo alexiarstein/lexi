@@ -13,6 +13,7 @@
             --text-dim: #94a3b8;
             --accent: #38bdf8;
             --success: #4ade80;
+            --warning: #facc15;
         }
 
         body {
@@ -46,7 +47,7 @@
         }
 
         .input-group {
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.2rem;
         }
 
         label {
@@ -72,6 +73,16 @@
 
         input:focus {
             border-color: var(--accent);
+        }
+
+        .cotiz-info {
+            font-size: 0.8rem;
+            color: var(--warning);
+            margin-bottom: 1.2rem;
+            background: rgba(250, 204, 21, 0.1);
+            padding: 0.5rem;
+            border-radius: 4px;
+            border: 1px dashed rgba(250, 204, 21, 0.3);
         }
 
         .result-box {
@@ -130,8 +141,10 @@
 <body>
 
     <div class="container">
-        <h2 id="greeting">Calculadora de Dólar Tarjeta</h2>
+        <h2>Hola Alexia - Calculadora de Dólar Tarjeta</h2>
         
+        <div class="cotiz-info" id="lblCotizacion">Obteniendo dólar oficial venta...</div>
+
         <div class="input-group">
             <label for="inputDolares">Ingrese consumo en dólares (USD):</label>
             <input type="number" id="inputDolares" placeholder="Ej. 42" step="any" autofocus>
@@ -172,51 +185,66 @@
     </div>
 
     <script>
-        // Obtener un nombre estimativo en navegador (ej. extrayendo del hostname o usuario si se puede, sino fallback)
-        // Como el navegador no lee /etc/passwd por seguridad, usamos un saludo amigable o detectamos por userAgent/temporal
-        document.addEventListener("DOMContentLoaded", () => {
-            // Intentar personalizar el saludo de forma genérica o amigable
-            const saludoElem = document.getElementById("greeting");
-            saludoElem.innerText = `Calculadora de Dólar Tarjeta`;
+        let cotizacionOficialVenta = 0;
 
-            const inputDolares = document.getElementById("inputDolares");
-            const lblTotal = document.getElementById("lblTotal");
-            const lblBase = document.getElementById("lblBase");
-            const lblP30 = document.getElementById("lblP30");
-            const lblIva = document.getElementById("lblIva");
-            const lblIibb = document.getElementById("lblIibb");
-            const lblNota = document.getElementById("lblNota");
+        const inputDolares = document.getElementById("inputDolares");
+        const lblTotal = document.getElementById("lblTotal");
+        const lblBase = document.getElementById("lblBase");
+        const lblP30 = document.getElementById("lblP30");
+        const lblIva = document.getElementById("lblIva");
+        const lblIibb = document.getElementById("lblIibb");
+        const lblNota = document.getElementById("lblNota");
+        const lblCotizacion = document.getElementById("lblCotizacion");
 
-            const cotizacionOficial = 1565.60;
-
-            function formatARS(monto) {
-                return new Intl.NumberFormat('es-AR', {
-                    style: 'currency',
-                    currency: 'ARS',
-                    minimumFractionDigits: 2
-                }).format(monto).replace('ARS', '$');
+        // Consultar la API al cargar la página
+        async function obtenerCotizacion() {
+            try {
+                const response = await fetch('https://dolarapi.com/v1/dolares/oficial');
+                const data = await response.json();
+                
+                // Usamos explícitamente el valor de venta
+                cotizacionOficialVenta = data.venta;
+                lblCotizacion.innerText = `Dólar oficial venta (API): $ ${cotizacionOficialVenta}`;
+                
+                // Si ya había un número escrito, recalcula
+                calcular();
+            } catch (error) {
+                lblCotizacion.innerText = "Error al obtener cotización en línea. Usando fallback.";
+                cotizacionOficialVenta = 1565.60; // Valor por si falla la red
+                calcular();
             }
+        }
 
-            function calcular() {
-                let val = parseFloat(inputDolares.value);
-                if (isNaN(val) || val < 0) val = 0;
+        function formatARS(monto) {
+            return new Intl.NumberFormat('es-AR', {
+                style: 'currency',
+                currency: 'ARS',
+                minimumFractionDigits: 2
+            }).format(monto).replace('ARS', '$');
+        }
 
-                const base = val * cotizacionOficial;
-                const p30 = base * 0.30;
-                const iva21 = base * 0.21;
-                const iibb2 = base * 0.02;
-                const total = base + p30 + iva21 + iibb2;
+        function calcular() {
+            let val = parseFloat(inputDolares.value);
+            if (isNaN(val) || val < 0) val = 0;
 
-                lblTotal.innerText = formatARS(total);
-                lblBase.innerText = formatARS(base);
-                lblP30.innerText = formatARS(p30);
-                lblIva.innerText = formatARS(iva21);
-                lblIibb.innerText = formatARS(iibb2);
-                lblNota.innerText = `(Esto fue sobre un cálculo de ${val} dólares)`;
-            }
+            const base = val * cotizacionOficialVenta;
+            const p30 = base * 0.30;
+            const iva21 = base * 0.21;
+            const iibb2 = base * 0.02;
+            const total = base + p30 + iva21 + iibb2;
 
-            inputDolares.addEventListener("input", calcular);
-        });
+            lblTotal.innerText = formatARS(total);
+            lblBase.innerText = formatARS(base);
+            lblP30.innerText = formatARS(p30);
+            lblIva.innerText = formatARS(iva21);
+            lblIibb.innerText = formatARS(iibb2);
+            lblNota.innerText = `(Esto fue sobre un cálculo de ${val} dólares)`;
+        }
+
+        inputDolares.addEventListener("input", calcular);
+
+        // Llamar a la API al iniciar
+        obtenerCotizacion();
     </script>
 </body>
 </html>
