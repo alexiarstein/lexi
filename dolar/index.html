@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Dólar Tarjeta</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --panel-bg: #1e293b;
+            --border-color: #334155;
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
+            --accent: #38bdf8;
+            --success: #4ade80;
+        }
+
+        body {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+        }
+
+        h2 {
+            font-size: 1.1rem;
+            color: var(--accent);
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.5rem;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            margin-bottom: 0.5rem;
+        }
+
+        input {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-main);
+            font-size: 1.1rem;
+            font-family: inherit;
+            box-sizing: border-box;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input:focus {
+            border-color: var(--accent);
+        }
+
+        .result-box {
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.25rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .result-title {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .result-total {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--success);
+            margin-top: 0.25rem;
+        }
+
+        .breakdown-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .breakdown-table td {
+            padding: 0.5rem 0;
+            border-bottom: 1px dashed var(--border-color);
+        }
+
+        .breakdown-table td:nth-child(2) {
+            text-align: center;
+            color: var(--success);
+        }
+
+        .breakdown-table td:nth-child(3) {
+            text-align: right;
+            font-weight: bold;
+        }
+
+        .footer-info {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            text-align: center;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2 id="greeting">Hola - Calculadora de Dólar Tarjeta</h2>
+        
+        <div class="input-group">
+            <label for="inputDolares">Ingrese consumo en dólares (USD):</label>
+            <input type="number" id="inputDolares" placeholder="Ej. 42" step="any" autofocus>
+        </div>
+
+        <div class="result-box">
+            <div class="result-title">Total a pagar</div>
+            <div class="result-total" id="lblTotal">$ 0,00</div>
+        </div>
+
+        <table class="breakdown-table">
+            <tr>
+                <td>Consumo base</td>
+                <td>✓</td>
+                <td id="lblBase">$ 0,00</td>
+            </tr>
+            <tr>
+                <td>Percepción 30% RG 5617</td>
+                <td>✓</td>
+                <td id="lblP30">$ 0,00</td>
+            </tr>
+            <tr>
+                <td>IVA 21% Digital</td>
+                <td>✓</td>
+                <td id="lblIva">$ 0,00</td>
+            </tr>
+            <tr>
+                <td>IIBB 2%</td>
+                <td>✓</td>
+                <td id="lblIibb">$ 0,00</td>
+            </tr>
+        </table>
+
+        <div class="footer-info">
+            Recargo total: <strong>53,0%</strong><br>
+            <span id="lblNota" style="font-style: italic;">(Cálculo sobre 0 dólares)</span>
+        </div>
+    </div>
+
+    <script>
+        // Obtener un nombre estimativo en navegador (ej. extrayendo del hostname o usuario si se puede, sino fallback)
+        // Como el navegador no lee /etc/passwd por seguridad, usamos un saludo amigable o detectamos por userAgent/temporal
+        document.addEventListener("DOMContentLoaded", () => {
+            // Intentar personalizar el saludo de forma genérica o amigable
+            const saludoElem = document.getElementById("greeting");
+            saludoElem.innerText = `Hola Alexia - Calculadora de Dólar Tarjeta`;
+
+            const inputDolares = document.getElementById("inputDolares");
+            const lblTotal = document.getElementById("lblTotal");
+            const lblBase = document.getElementById("lblBase");
+            const lblP30 = document.getElementById("lblP30");
+            const lblIva = document.getElementById("lblIva");
+            const lblIibb = document.getElementById("lblIibb");
+            const lblNota = document.getElementById("lblNota");
+
+            const cotizacionOficial = 1565.60;
+
+            function formatARS(monto) {
+                return new Intl.NumberFormat('es-AR', {
+                    style: 'currency',
+                    currency: 'ARS',
+                    minimumFractionDigits: 2
+                }).format(monto).replace('ARS', '$');
+            }
+
+            function calcular() {
+                let val = parseFloat(inputDolares.value);
+                if (isNaN(val) || val < 0) val = 0;
+
+                const base = val * cotizacionOficial;
+                const p30 = base * 0.30;
+                const iva21 = base * 0.21;
+                const iibb2 = base * 0.02;
+                const total = base + p30 + iva21 + iibb2;
+
+                lblTotal.innerText = formatARS(total);
+                lblBase.innerText = formatARS(base);
+                lblP30.innerText = formatARS(p30);
+                lblIva.innerText = formatARS(iva21);
+                lblIibb.innerText = formatARS(iibb2);
+                lblNota.innerText = `(Esto fue sobre un cálculo de ${val} dólares)`;
+            }
+
+            inputDolares.addEventListener("input", calcular);
+        });
+    </script>
+</body>
+</html>
