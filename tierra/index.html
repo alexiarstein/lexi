@@ -1,0 +1,498 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>¿Cuánto falta para que la Tierra termine su vuelta al Sol?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #eef1f8;
+    --ink: #131a36;
+    --muted: #56618a;
+    --card: #ffffff;
+    --line: #d3daee;
+    --track: #dfe4f3;
+    --cell: #eef1f8;
+    --sun: #ffc857;
+    --stage: #0c1128;
+    --stage-line: #232c55;
+    --stage-muted: #9aa6d6;
+    color-scheme: light;
+    --disp: "Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+    --body: "Figtree", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #080c1b; --ink: #e9edfb; --muted: #97a1c9; --card: #121933;
+      --line: #252e52; --track: #1f2749; --cell: #0b1024; --stage: #0c1128; --stage-line: #2a3462;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #080c1b; --ink: #e9edfb; --muted: #97a1c9; --card: #121933;
+    --line: #252e52; --track: #1f2749; --cell: #0b1024; --stage: #0c1128; --stage-line: #2a3462;
+    color-scheme: dark;
+  }
+  html { height: 100%; scroll-padding-top: env(safe-area-inset-top, 0px); }
+  *, *::before, *::after { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100%;
+    background: var(--bg); color: var(--ink);
+    font: 400 1rem/1.5 var(--body);
+    -webkit-text-size-adjust: 100%;
+  }
+  [hidden] { display: none !important; }
+  .wrap {
+    max-width: 1080px; margin: 0 auto;
+    padding: 22px max(16px, env(safe-area-inset-right, 0px)) 40px max(16px, env(safe-area-inset-left, 0px));
+  }
+  h1 {
+    font: 800 clamp(1.7rem, 5.4vw, 2.75rem)/1.04 var(--disp);
+    letter-spacing: -0.025em; margin: 0 0 10px; text-wrap: balance; max-width: 27ch;
+  }
+  .lead { margin: 0; color: var(--muted); max-width: 56ch; text-wrap: pretty; }
+  .grid { display: grid; gap: 16px; margin-top: 22px; }
+  @media (min-width: 880px) {
+    .grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1.12fr); align-items: start; }
+  }
+
+  .panel { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 18px; }
+  .pickers { display: grid; gap: 12px; }
+  @media (min-width: 520px) and (max-width: 879px), (min-width: 1000px) { .pickers.two { grid-template-columns: 1fr 1fr; } }
+  .field label { display: block; font-size: .86rem; font-weight: 500; color: var(--muted); margin-bottom: 5px; }
+  select {
+    width: 100%; min-height: 46px; padding: 10px 12px;
+    font: 500 1rem var(--body); color: var(--ink);
+    background: var(--cell); border: 1px solid var(--line); border-radius: 10px;
+  }
+  select:focus-visible, button:focus-visible { outline: 3px solid #5b9dff; outline-offset: 2px; }
+
+  .count { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 20px 0 0; }
+  .unit { background: var(--cell); border-radius: 12px; padding: 12px 2px 9px; text-align: center; }
+  .unit b {
+    display: block; font: 800 clamp(1.9rem, 8.6vw, 3.1rem)/1 var(--disp);
+    font-variant-numeric: tabular-nums; letter-spacing: -0.02em;
+  }
+  .unit span { display: block; margin-top: 4px; font-size: .82rem; color: var(--muted); }
+  .end { margin: 16px 0 0; font-size: 1.06rem; line-height: 1.5; }
+  .end strong { font-weight: 600; }
+  .alt { margin: 6px 0 0; color: var(--muted); font-size: .92rem; }
+
+  .progress { margin-top: 18px; }
+  .progress-head { display: flex; justify-content: space-between; gap: 12px; font-size: .9rem; margin-bottom: 7px; }
+  .progress-head span:first-child { color: var(--muted); }
+  .progress-head span:last-child { font-variant-numeric: tabular-nums; font-weight: 600; }
+  .bar { height: 10px; border-radius: 99px; background: var(--track); overflow: hidden; }
+  .bar i { display: block; height: 100%; width: 0; border-radius: inherit; background: linear-gradient(90deg, #f59f0b, var(--sun)); }
+  .since { margin: 8px 0 0; font-size: .85rem; color: var(--muted); }
+
+  .facts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 18px 0 0; }
+  .facts div { background: var(--cell); border-radius: 12px; padding: 10px 12px; min-width: 0; }
+  .facts dt { font-size: .8rem; color: var(--muted); }
+  .facts dd { margin: 2px 0 0; font: 800 .98rem/1.25 var(--disp); font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+  .stage { margin: 0; background: var(--stage); border: 1px solid var(--stage-line); border-radius: 18px; overflow: hidden; }
+  .stage svg { display: block; width: 100%; height: auto; }
+  .stage text { font-family: var(--body); }
+  .stage-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 14px; padding: 4px 16px 16px; color: var(--stage-muted); font-size: .82rem; }
+  .stage-foot button {
+    min-height: 46px; padding: 10px 20px; border: 0; border-radius: 999px;
+    background: var(--sun); color: #1b1300; font: 600 .98rem var(--body); cursor: pointer;
+  }
+  .stage-foot button:hover { filter: brightness(1.06); }
+  .stage-foot button[aria-pressed="true"] { background: #e9edfb; }
+
+  .note { margin: 18px 2px 0; color: var(--muted); font-size: .84rem; max-width: 84ch; text-wrap: pretty; }
+
+  .pulse { transform-box: fill-box; transform-origin: center; animation: pulse 2.6s ease-out infinite; }
+  .pulse.two { animation-delay: 1.3s; }
+  .glow { transform-box: fill-box; transform-origin: center; animation: breathe 7s ease-in-out infinite; }
+  .land { animation: spin 16s linear infinite; }
+  .tw { animation: tw 4s ease-in-out infinite; }
+  @keyframes pulse { 0% { transform: scale(.7); opacity: .65; } 100% { transform: scale(2.9); opacity: 0; } }
+  @keyframes breathe { 0%, 100% { transform: scale(1); opacity: .9; } 50% { transform: scale(1.14); opacity: 1; } }
+  @keyframes spin { from { transform: translateX(0); } to { transform: translateX(-22px); } }
+  @keyframes tw { 0%, 100% { opacity: .25; } 50% { opacity: 1; } }
+  @media (prefers-reduced-motion: reduce) {
+    .pulse, .glow, .land, .tw { animation: none; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>¿Cuánto falta para que la Tierra termine su vuelta al Sol?</h1>
+    <p class="lead">La cuenta se ajusta a la zona horaria que elijas. Una vuelta va de un perihelio, el punto de la órbita más cercano al Sol, al siguiente.</p>
+  </header>
+
+  <main class="grid">
+    <section class="panel" aria-label="Cuenta regresiva">
+      <div class="pickers" id="pickers">
+        <div class="field">
+          <label for="pais">País</label>
+          <select id="pais"></select>
+        </div>
+        <div class="field" id="zonaField" hidden>
+          <label for="zona">Región</label>
+          <select id="zona"></select>
+        </div>
+      </div>
+
+      <div class="count" role="timer" aria-label="Tiempo restante para completar la vuelta">
+        <div class="unit"><b id="cd">0</b><span id="ld">días</span></div>
+        <div class="unit"><b id="ch">00</b><span>horas</span></div>
+        <div class="unit"><b id="cm">00</b><span>min</span></div>
+        <div class="unit"><b id="cs">00</b><span>seg</span></div>
+      </div>
+
+      <p class="end" id="endLine"></p>
+      <p class="alt" id="altLine"></p>
+
+      <div class="progress">
+        <div class="progress-head"><span>Vuelta recorrida</span><span id="pct">0 %</span></div>
+        <div class="bar" role="progressbar" aria-label="Porcentaje de la vuelta recorrido" aria-valuemin="0" aria-valuemax="100" id="bar"><i id="barFill"></i></div>
+        <p class="since" id="sinceLine"></p>
+      </div>
+
+      <dl class="facts">
+        <div><dt>Distancia al Sol</dt><dd id="dist">—</dd></div>
+        <div><dt>Velocidad orbital</dt><dd id="vel">—</dd></div>
+      </dl>
+    </section>
+
+    <figure class="stage">
+      <svg id="svg" viewBox="0 0 680 540" role="img" aria-label="Órbita de la Tierra alrededor del Sol">
+        <defs>
+          <radialGradient id="sunGrad" cx=".4" cy=".38" r=".7">
+            <stop offset="0" stop-color="#fff4c9"/><stop offset=".55" stop-color="#ffc857"/><stop offset="1" stop-color="#ff9d2e"/>
+          </radialGradient>
+          <radialGradient id="sunGlow">
+            <stop offset="0" stop-color="#ffc857" stop-opacity=".55"/><stop offset="1" stop-color="#ffc857" stop-opacity="0"/>
+          </radialGradient>
+          <radialGradient id="earthGrad" cx=".35" cy=".3" r=".85">
+            <stop offset="0" stop-color="#9fd0ff"/><stop offset=".55" stop-color="#3f88ec"/><stop offset="1" stop-color="#1a469e"/>
+          </radialGradient>
+          <radialGradient id="earthShade" cx=".3" cy=".28" r=".95">
+            <stop offset=".5" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".45"/>
+          </radialGradient>
+          <clipPath id="earthClip"><circle r="11"/></clipPath>
+        </defs>
+
+        <g id="stars"></g>
+
+        <path id="pathRest" fill="none" stroke="#8b99d3" stroke-opacity=".7" stroke-width="2.6" stroke-linecap="round" stroke-dasharray="0.5 8"/>
+        <path id="pathDone" fill="none" stroke="#ffc857" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path id="pathGhost" fill="none" stroke="#7fbcff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" opacity="0"/>
+
+        <g id="marks"></g>
+
+        <g id="center">
+          <text id="cTop" x="340" y="350" text-anchor="middle" font-size="18" fill="#8f9bd0">vuelta actual</text>
+          <text id="cMain" x="340" y="381" text-anchor="middle" font-size="21" font-weight="600" fill="#e6ebff"></text>
+        </g>
+
+        <g transform="translate(384 265)">
+          <circle class="glow" r="52" fill="url(#sunGlow)"/>
+          <circle r="17" fill="url(#sunGrad)"/>
+        </g>
+
+        <circle id="ghost" r="6.5" fill="#fff" stroke="#7fbcff" stroke-width="2.5" style="display:none"/>
+
+        <g id="earth">
+          <g transform="scale(1.3)">
+          <circle class="pulse" r="12" fill="none" stroke="#7fbcff" stroke-width="2"/>
+          <circle class="pulse two" r="12" fill="none" stroke="#7fbcff" stroke-width="2"/>
+          <circle r="11" fill="url(#earthGrad)"/>
+          <g clip-path="url(#earthClip)">
+            <g class="land" fill="#5fd39a" fill-opacity=".92">
+              <ellipse cx="-5" cy="-3" rx="6" ry="4"/><ellipse cx="17" cy="-3" rx="6" ry="4"/>
+              <ellipse cx="4" cy="5" rx="4.5" ry="3.2"/><ellipse cx="26" cy="5" rx="4.5" ry="3.2"/>
+              <ellipse cx="-2" cy="-9" rx="3.5" ry="2.2"/><ellipse cx="20" cy="-9" rx="3.5" ry="2.2"/>
+            </g>
+          </g>
+          <circle r="11" fill="url(#earthShade)"/>
+          </g>
+          <text id="earthLabel" font-size="19" font-weight="600" fill="#f2f5ff" stroke="#0c1128" stroke-width="4" paint-order="stroke" stroke-linejoin="round">Tierra · hoy</text>
+        </g>
+      </svg>
+      <figcaption class="stage-foot">
+        <span>Escala de la órbita exagerada para que se note su forma.</span>
+        <button type="button" id="tlBtn" aria-pressed="false">Ver la vuelta completa</button>
+      </figcaption>
+    </figure>
+  </main>
+
+  <p class="note">Los horarios de perihelio (3 de enero de 2026, 17:15 UTC; 3 de enero de 2027, 02:32 UTC) salen de efemérides astronómicas publicadas y tienen precisión de minutos. Entre un perihelio y el siguiente la duración varía unos días por la influencia de la Luna y los demás planetas. La posición de la Tierra se calcula con la ecuación de Kepler, con la excentricidad real (0,0167), sobre esa vuelta.</p>
+
+
+<br/><br/>
+<p class="note">2026 - Alexia Michelle - <a href="https://lexiworks.dev">lexiworks.dev</a></p>
+</div>
+<script>
+(() => {
+  'use strict';
+
+  /* ---------- Astronomía ---------- */
+  const TAU = Math.PI * 2, DAY = 864e5;
+  const E_ORB = 0.0167086, A_KM = 149597870.7, GM = 132712440018;
+  // Perihelios (UTC): 2026-01-03 17:15, 2027-01-03 02:32, 2028-01-05 12:27
+  const PERI = [Date.UTC(2026, 0, 3, 17, 15), Date.UTC(2027, 0, 3, 2, 32), Date.UTC(2028, 0, 5, 12, 27)];
+  const MEAN_LAP = 365.259636 * DAY;
+
+  function lapFor(t) {
+    const last = PERI[PERI.length - 1];
+    if (t >= last) { const n = Math.floor((t - last) / MEAN_LAP); const a = last + n * MEAN_LAP; return [a, a + MEAN_LAP]; }
+    if (t < PERI[0]) { const n = Math.ceil((PERI[0] - t) / MEAN_LAP); const a = PERI[0] - n * MEAN_LAP; return [a, a + MEAN_LAP]; }
+    for (let i = 0; i < PERI.length - 1; i++) if (t >= PERI[i] && t < PERI[i + 1]) return [PERI[i], PERI[i + 1]];
+    return [PERI[0], PERI[1]];
+  }
+
+  function kepler(f) {
+    const M = TAU * f; let E = M;
+    for (let i = 0; i < 8; i++) E -= (E - E_ORB * Math.sin(E) - M) / (1 - E_ORB * Math.cos(E));
+    const nu = 2 * Math.atan2(Math.sqrt(1 + E_ORB) * Math.sin(E / 2), Math.sqrt(1 - E_ORB) * Math.cos(E / 2));
+    const r = A_KM * (1 - E_ORB * Math.cos(E));
+    const v = Math.sqrt(GM * (2 / r - 1 / A_KM));
+    return { nu, r, v };
+  }
+
+  /* ---------- Países y zonas ---------- */
+  const RAW = [
+    ['Alemania', ['Europe/Berlin']], ['Arabia Saudita', ['Asia/Riyadh']], ['Argentina', ['America/Argentina/Buenos_Aires']],
+    ['Australia', ['Australia/Sydney|Sídney y Melbourne', 'Australia/Brisbane|Brisbane', 'Australia/Adelaide|Adelaida', 'Australia/Darwin|Darwin', 'Australia/Perth|Perth']],
+    ['Austria', ['Europe/Vienna']], ['Bélgica', ['Europe/Brussels']], ['Bolivia', ['America/La_Paz']],
+    ['Brasil', ['America/Sao_Paulo|Brasilia, São Paulo y Río', 'America/Manaus|Manaos', 'America/Rio_Branco|Acre', 'America/Noronha|Fernando de Noronha']],
+    ['Canadá', ['America/Toronto|Toronto y Montreal', 'America/Vancouver|Vancouver', 'America/Edmonton|Calgary y Edmonton', 'America/Winnipeg|Winnipeg', 'America/Halifax|Halifax', 'America/St_Johns|Terranova']],
+    ['Chile', ['America/Santiago|Continental', 'Pacific/Easter|Isla de Pascua']], ['China', ['Asia/Shanghai']], ['Colombia', ['America/Bogota']],
+    ['Corea del Sur', ['Asia/Seoul']], ['Costa Rica', ['America/Costa_Rica']], ['Cuba', ['America/Havana']], ['Dinamarca', ['Europe/Copenhagen']],
+    ['Ecuador', ['America/Guayaquil|Continental', 'Pacific/Galapagos|Galápagos']], ['Egipto', ['Africa/Cairo']], ['El Salvador', ['America/El_Salvador']],
+    ['Emiratos Árabes Unidos', ['Asia/Dubai']], ['España', ['Europe/Madrid|Península y Baleares', 'Atlantic/Canary|Canarias']],
+    ['Estados Unidos', ['America/New_York|Nueva York (Este)', 'America/Chicago|Chicago (Centro)', 'America/Denver|Denver (Montaña)', 'America/Phoenix|Arizona', 'America/Los_Angeles|Los Ángeles (Pacífico)', 'America/Anchorage|Alaska', 'Pacific/Honolulu|Hawái']],
+    ['Filipinas', ['Asia/Manila']], ['Finlandia', ['Europe/Helsinki']], ['Francia', ['Europe/Paris']], ['Grecia', ['Europe/Athens']],
+    ['Guatemala', ['America/Guatemala']], ['Honduras', ['America/Tegucigalpa']], ['India', ['Asia/Kolkata']],
+    ['Indonesia', ['Asia/Jakarta|Java y Sumatra', 'Asia/Makassar|Célebes y Bali', 'Asia/Jayapura|Papúa']],
+    ['Irlanda', ['Europe/Dublin']], ['Israel', ['Asia/Jerusalem']], ['Italia', ['Europe/Rome']], ['Japón', ['Asia/Tokyo']], ['Kenia', ['Africa/Nairobi']],
+    ['Marruecos', ['Africa/Casablanca']], ['México', ['America/Mexico_City|Ciudad de México', 'America/Cancun|Cancún', 'America/Mazatlan|Sinaloa y Baja California Sur', 'America/Hermosillo|Sonora', 'America/Tijuana|Tijuana']],
+    ['Nicaragua', ['America/Managua']], ['Nigeria', ['Africa/Lagos']], ['Noruega', ['Europe/Oslo']], ['Nueva Zelanda', ['Pacific/Auckland']],
+    ['Países Bajos', ['Europe/Amsterdam']], ['Pakistán', ['Asia/Karachi']], ['Panamá', ['America/Panama']], ['Paraguay', ['America/Asuncion']], ['Perú', ['America/Lima']],
+    ['Polonia', ['Europe/Warsaw']], ['Portugal', ['Europe/Lisbon|Continental', 'Atlantic/Azores|Azores']], ['Puerto Rico', ['America/Puerto_Rico']],
+    ['Reino Unido', ['Europe/London']], ['República Dominicana', ['America/Santo_Domingo']], ['Rumania', ['Europe/Bucharest']],
+    ['Rusia', ['Europe/Moscow|Moscú', 'Asia/Yekaterinburg|Ekaterimburgo', 'Asia/Novosibirsk|Novosibirsk', 'Asia/Vladivostok|Vladivostok']],
+    ['Singapur', ['Asia/Singapore']], ['Sudáfrica', ['Africa/Johannesburg']], ['Suecia', ['Europe/Stockholm']], ['Suiza', ['Europe/Zurich']],
+    ['Tailandia', ['Asia/Bangkok']], ['Turquía', ['Europe/Istanbul']], ['Ucrania', ['Europe/Kyiv']], ['Uruguay', ['America/Montevideo']],
+    ['Venezuela', ['America/Caracas']], ['Vietnam', ['Asia/Ho_Chi_Minh']]
+  ];
+  const validTz = tz => { try { new Intl.DateTimeFormat('es', { timeZone: tz }); return true; } catch (e) { return false; } };
+  const canon = tz => { try { return new Intl.DateTimeFormat('en', { timeZone: tz }).resolvedOptions().timeZone; } catch (e) { return tz; } };
+  const PAISES = RAW.map(([name, zs]) => ({
+    name,
+    zonas: zs.map(z => { const [tz, label] = z.split('|'); return { tz, label: label || '' }; }).filter(z => validTz(z.tz))
+  })).filter(p => p.zonas.length).sort((a, b) => a.name.localeCompare(b.name, 'es'));
+
+  const detected = (Intl.DateTimeFormat().resolvedOptions().timeZone) || 'UTC';
+  const cityOf = tz => tz.split('/').pop().replace(/_/g, ' ');
+
+  /* ---------- Formato ---------- */
+  const fcache = new Map();
+  const F = (tz, key, opts) => {
+    const k = tz + '|' + key; let f = fcache.get(k);
+    if (!f) { f = new Intl.DateTimeFormat('es', Object.assign({ timeZone: tz }, opts)); fcache.set(k, f); }
+    return f;
+  };
+  const part = (parts, type) => (parts.find(p => p.type === type) || {}).value || '';
+  function longDate(ms, tz) {
+    const p = F(tz, 'long', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }).formatToParts(ms);
+    return `${part(p, 'weekday')} ${part(p, 'day')} de ${part(p, 'month')} de ${part(p, 'year')}`;
+  }
+  const clock = (ms, tz, sec) => F(tz, sec ? 'hms' : 'hm', sec
+    ? { hour: '2-digit', minute: '2-digit', second: '2-digit', hourCycle: 'h23' }
+    : { hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).format(ms);
+  const shortDate = (ms, tz) => F(tz, 'short', { day: 'numeric', month: 'short', year: 'numeric' }).format(ms).replace(/\./g, '');
+  function offsetLabel(ms, tz) {
+    let v = '';
+    try { v = part(F(tz, 'off', { timeZoneName: 'shortOffset' }).formatToParts(ms), 'timeZoneName'); } catch (e) { /* sin soporte */ }
+    if (!v) v = part(F(tz, 'offs', { timeZoneName: 'short' }).formatToParts(ms), 'timeZoneName');
+    return v.replace('GMT', 'UTC').replace('-', '−');
+  }
+  const nf = (n, o) => n.toLocaleString('es', o);
+  const plural = (n, s, p) => `${nf(n)} ${n === 1 ? s : p}`;
+
+  /* ---------- Geometría del dibujo ---------- */
+  const $ = id => document.getElementById(id);
+  const SUN = { x: 384, y: 265 }, A_PX = 220, EV = 0.2, P = A_PX * (1 - EV * EV);
+  const R = nu => P / (1 + EV * Math.cos(nu));
+  const PT = nu => [SUN.x + R(nu) * Math.cos(nu), SUN.y - R(nu) * Math.sin(nu)];
+  const IN = (nu, inset) => [SUN.x + (R(nu) - inset) * Math.cos(nu), SUN.y - (R(nu) - inset) * Math.sin(nu)];
+  function arcPath(n0, n1) {
+    if (n1 - n0 < 1e-4) return '';
+    const steps = Math.max(2, Math.ceil((n1 - n0) / (TAU / 240)));
+    let d = '';
+    for (let i = 0; i <= steps; i++) {
+      const [x, y] = PT(n0 + (n1 - n0) * i / steps);
+      d += (i ? 'L' : 'M') + x.toFixed(1) + ' ' + y.toFixed(1);
+    }
+    return d;
+  }
+
+  // Estrellas de fondo (fijas)
+  (function stars() {
+    let s = 20260103; const rnd = () => { s = (s * 1664525 + 1013904223) >>> 0; return s / 4294967296; };
+    const g = $('stars'); let out = '';
+    for (let i = 0; i < 95; i++) {
+      const x = (rnd() * 680).toFixed(1), y = (rnd() * 540).toFixed(1), r = (0.5 + rnd() * 1.1).toFixed(2), o = (0.25 + rnd() * 0.5).toFixed(2);
+      const tw = i % 5 === 0 ? ` class="tw" style="animation-delay:${(rnd() * 4).toFixed(1)}s;animation-duration:${(3 + rnd() * 3).toFixed(1)}s"` : '';
+      out += `<circle cx="${x}" cy="${y}" r="${r}" fill="#cfd8ff" opacity="${o}"${tw}/>`;
+    }
+    g.innerHTML = out;
+  })();
+
+  // Puntos de referencia sobre la órbita (anomalía verdadera, en grados, medida desde el perihelio)
+  const MARKS = [
+    [0, 'Perihelio'], [77.1, 'Equinoccio mar'], [167.1, 'Solsticio jun'],
+    [180, 'Afelio'], [257.1, 'Equinoccio sep'], [347.1, 'Solsticio dic']
+  ];
+  (function marks() {
+    let out = '';
+    for (const [deg, name] of MARKS) {
+      const nu = deg * Math.PI / 180, [x, y] = PT(nu), [lx, ly] = IN(nu, 24), c = Math.cos(nu);
+      const anchor = c > 0.3 ? 'end' : c < -0.3 ? 'start' : 'middle';
+      out += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="4" fill="#0c1128" stroke="#9fb0ff" stroke-width="2"/>` +
+             `<text x="${lx.toFixed(1)}" y="${(ly + 5).toFixed(1)}" text-anchor="${anchor}" font-size="18" fill="#a5b0dd">${name}</text>`;
+    }
+    $('marks').innerHTML = out;
+  })();
+
+  /* ---------- Estado ---------- */
+  const paisSel = $('pais'), zonaSel = $('zona'), zonaField = $('zonaField'), pickers = $('pickers');
+  const state = { tz: detected, label: 'tu zona horaria' };
+
+  function fillPaises() {
+    let html = `<option value="auto">Mi zona horaria (${cityOf(detected)})</option>`;
+    PAISES.forEach((p, i) => { html += `<option value="${i}">${p.name}</option>`; });
+    paisSel.innerHTML = html;
+    const dc = canon(detected);
+    let found = null;
+    PAISES.forEach((p, i) => p.zonas.forEach((z, j) => { if (!found && canon(z.tz) === dc) found = [i, j]; }));
+    if (found) { paisSel.value = String(found[0]); applyPais(found[1]); } else { paisSel.value = 'auto'; applyPais(0); }
+  }
+  function applyPais(zoneIdx) {
+    const v = paisSel.value;
+    if (v === 'auto') {
+      zonaField.hidden = true; pickers.classList.remove('two');
+      state.tz = detected; state.label = 'tu zona horaria';
+    } else {
+      const p = PAISES[+v];
+      if (p.zonas.length > 1) {
+        zonaSel.innerHTML = p.zonas.map((z, j) => `<option value="${j}">${z.label}</option>`).join('');
+        zonaSel.value = String(zoneIdx || 0);
+        zonaField.hidden = false; pickers.classList.add('two');
+      } else { zonaField.hidden = true; pickers.classList.remove('two'); }
+      const z = p.zonas[p.zonas.length > 1 ? +zonaSel.value : 0];
+      state.tz = z.tz;
+      state.label = 'hora de ' + p.name + (p.zonas.length > 1 ? ' · ' + z.label : '');
+    }
+    lastEndKey = ''; lastGeo = -1;
+    tick();
+  }
+  paisSel.addEventListener('change', () => applyPais(0));
+  zonaSel.addEventListener('change', () => applyPais(+zonaSel.value));
+
+  /* ---------- Bucle principal ---------- */
+  const el = { d: $('cd'), h: $('ch'), m: $('cm'), s: $('cs'), ld: $('ld') };
+  const pad = n => String(n).padStart(2, '0');
+  let lastEndKey = '', lastGeo = -1, tl = null, lapNow = [0, 1];
+
+  function placeEarth(nu) {
+    const [x, y] = PT(nu), c = Math.cos(nu), s = Math.sin(nu);
+    $('earth').setAttribute('transform', `translate(${x.toFixed(1)} ${y.toFixed(1)})`);
+    const lab = $('earthLabel');
+    if (c > 0.45) { lab.setAttribute('text-anchor', 'start'); lab.setAttribute('x', 24); lab.setAttribute('y', 6); }
+    else if (c < -0.45) { lab.setAttribute('text-anchor', 'end'); lab.setAttribute('x', -24); lab.setAttribute('y', 6); }
+    else { lab.setAttribute('text-anchor', 'middle'); lab.setAttribute('x', 0); lab.setAttribute('y', s < 0 ? 44 : -30); }
+  }
+
+  function tick() {
+    const now = Date.now(), tz = state.tz;
+    const [a, b] = lapFor(now); lapNow = [a, b];
+    const f = (now - a) / (b - a), left = Math.max(0, b - now);
+
+    let s = Math.floor(left / 1000);
+    const d = Math.floor(s / 86400); s -= d * 86400;
+    const h = Math.floor(s / 3600); s -= h * 3600;
+    const m = Math.floor(s / 60); s -= m * 60;
+    el.d.textContent = nf(d); el.h.textContent = pad(h); el.m.textContent = pad(m); el.s.textContent = pad(s);
+    el.ld.textContent = d === 1 ? 'día' : 'días';
+
+    const tH = Math.floor(left / 3.6e6), tM = Math.floor(left / 6e4) % 60, tS = Math.floor(left / 1000) % 60;
+    $('altLine').textContent = `Dicho de otro modo: faltan ${plural(tH, 'hora', 'horas')}, ${plural(tM, 'minuto', 'minutos')} y ${plural(tS, 'segundo', 'segundos')}.`;
+
+    const key = tz + '|' + b + '|' + state.label;
+    if (key !== lastEndKey) {
+      lastEndKey = key;
+      $('endLine').innerHTML = `La Tierra completa esta vuelta el <strong>${longDate(b, tz)}</strong> a las <strong>${clock(b, tz, true)}</strong> (${state.label}, ${offsetLabel(b, tz)}).`;
+      $('sinceLine').textContent = `Empezó el ${longDate(a, tz)} a las ${clock(a, tz, false)}.`;
+      if (!tl) { $('cMain').textContent = `${shortDate(a, tz)} → ${shortDate(b, tz)}`; }
+    }
+
+    const pct = f * 100;
+    $('pct').textContent = nf(pct, { minimumFractionDigits: 4, maximumFractionDigits: 4 }) + ' %';
+    $('barFill').style.width = pct.toFixed(4) + '%';
+    $('bar').setAttribute('aria-valuenow', pct.toFixed(2));
+
+    const k = kepler(f);
+    $('dist').textContent = nf(Math.round(k.r)) + ' km';
+    $('vel').textContent = nf(k.v, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' km/s';
+
+    const g = Math.floor(now / 5000);
+    if (g !== lastGeo) {
+      lastGeo = g;
+      $('pathDone').setAttribute('d', arcPath(0, k.nu));
+      $('pathRest').setAttribute('d', arcPath(k.nu, TAU));
+      placeEarth(k.nu);
+      $('svg').setAttribute('aria-label', `Órbita de la Tierra alrededor del Sol. La Tierra lleva recorrido el ${nf(pct, { maximumFractionDigits: 1 })} % de la vuelta.`);
+    }
+  }
+
+  /* ---------- Recorrido acelerado ---------- */
+  const btn = $('tlBtn'), ghost = $('ghost'), gTrail = $('pathGhost');
+  const TL_MS = 14000;
+  function tlFrame(ts) {
+    if (!tl) return;
+    if (tl.t0 === null) tl.t0 = ts;
+    const p = Math.min(1, (ts - tl.t0) / TL_MS), k = kepler(p), [x, y] = PT(k.nu);
+    ghost.setAttribute('cx', x.toFixed(1)); ghost.setAttribute('cy', y.toFixed(1));
+    gTrail.setAttribute('d', arcPath(0, k.nu));
+    $('cMain').textContent = shortDate(tl.a + p * (tl.b - tl.a), state.tz);
+    if (p < 1) { tl.raf = requestAnimationFrame(tlFrame); }
+    else { tl.raf = null; setTimeout(() => { if (tl && tl.raf === null) stopTl(); }, 1400); }
+  }
+  function startTl() {
+    tl = { t0: null, raf: null, a: lapNow[0], b: lapNow[1] };
+    btn.textContent = 'Detener'; btn.setAttribute('aria-pressed', 'true');
+    ghost.style.display = ''; gTrail.setAttribute('opacity', '.9');
+    $('cTop').textContent = 'recorrido acelerado';
+    tl.raf = requestAnimationFrame(tlFrame);
+  }
+  function stopTl() {
+    if (tl && tl.raf) cancelAnimationFrame(tl.raf);
+    tl = null;
+    btn.textContent = 'Ver la vuelta completa'; btn.setAttribute('aria-pressed', 'false');
+    ghost.style.display = 'none'; gTrail.setAttribute('opacity', '0'); gTrail.setAttribute('d', '');
+    $('cTop').textContent = 'vuelta actual';
+    lastEndKey = ''; tick();
+  }
+  btn.addEventListener('click', () => { tl ? stopTl() : startTl(); });
+
+  fillPaises();
+  setInterval(tick, 250);
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) tick(); });
+})();
+</script>
+</body>
+</html>
