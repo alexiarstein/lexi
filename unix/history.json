@@ -1,24 +1,6 @@
 {
- "updated": 1793395008701,
+ "updated": 1793401082080,
  "flights": [
-  {
-   "id": "cjbz09vv3u-1793383849578",
-   "cs": "LV-TLS",
-   "type": "bushmaster",
-   "reg": "N630CD",
-   "from": {
-    "code": "SCQP",
-    "name": "La Araucan\u00eda Intl"
-   },
-   "to": {
-    "code": "SANU",
-    "name": "Domingo Faustino Sarmiento"
-   },
-   "dep": 1793383849578,
-   "arr": 1793397774578,
-   "seen": 1793395008701,
-   "status": "air"
-  },
   {
    "id": "ltb0ya7nnz-1793392804281",
    "cs": "LV-SKA",
@@ -34,7 +16,7 @@
    },
    "dep": 1793392804281,
    "arr": 1793409207281,
-   "seen": 1793395008701,
+   "seen": 1793401082080,
    "status": "air"
   },
   {
@@ -52,7 +34,115 @@
    },
    "dep": 1793394395933,
    "arr": 1793409806933,
-   "seen": 1793395008701,
+   "seen": 1793401082080,
+   "status": "air"
+  },
+  {
+   "id": "4a47dd5ve0-1793397837374",
+   "cs": "LV-OSPF",
+   "type": "skylark",
+   "reg": "N364FR",
+   "from": {
+    "code": "MMSM",
+    "name": "Felipe \u00c1ngeles Intl"
+   },
+   "to": {
+    "code": "MMZO",
+    "name": "Playa de Oro Intl"
+   },
+   "dep": 1793397837374,
+   "arr": 1793409566374,
+   "seen": 1793401082080,
+   "status": "air"
+  },
+  {
+   "id": "cjbz09vv3u-1793397805783",
+   "cs": "LV-TLS",
+   "type": "bushmaster",
+   "reg": "N630CD",
+   "from": {
+    "code": "SANU",
+    "name": "Domingo Faustino Sarmiento"
+   },
+   "to": {
+    "code": "SABE",
+    "name": "Aeroparque Jorge Newbery"
+   },
+   "dep": 1793397805783,
+   "arr": 1793414105783,
+   "seen": 1793401082080,
+   "status": "air"
+  },
+  {
+   "id": "r779uiyloj-1793399254837",
+   "cs": "LV-FTP",
+   "type": "puffin",
+   "reg": "N689NX",
+   "from": {
+    "code": "SANE",
+    "name": "Vicecomodoro Angel D. La Paz Aragon\u00e9s"
+   },
+   "to": {
+    "code": "SBCH",
+    "name": "Serafin Enoss Bertaso"
+   },
+   "dep": 1793399254837,
+   "arr": 1793413066837,
+   "seen": 1793401082080,
+   "status": "air"
+  },
+  {
+   "id": "u2vz0kvdqa-1793400643380",
+   "cs": "LV-SSH",
+   "type": "shire",
+   "reg": "N291NU",
+   "from": {
+    "code": "SBFI",
+    "name": "Cataratas Intl"
+   },
+   "to": {
+    "code": "SAAR",
+    "name": "Rosario Islas Malvinas Intl"
+   },
+   "dep": 1793400643380,
+   "arr": 1793410517380,
+   "seen": 1793401082080,
+   "status": "air"
+  },
+  {
+   "id": "wf5ep14gq8-1793395819242",
+   "cs": "LV-IPV6",
+   "type": "puffin",
+   "reg": "N584WX",
+   "from": {
+    "code": "SABE",
+    "name": "Aeroparque Jorge Newbery"
+   },
+   "to": {
+    "code": "SAME",
+    "name": "Governor Francisco Gabrielli Intl"
+   },
+   "dep": 1793395819242,
+   "arr": 1793407126242,
+   "seen": 1793401082080,
+   "status": "air"
+  },
+  {
+   "id": "zbld52fqc8-1793398360468",
+   "cs": "LV-SSL",
+   "type": "skylark",
+   "reg": "N195JM",
+   "from": {
+    "code": "SAZO",
+    "name": "Necochea"
+   },
+   "to": {
+    "code": "AR-0513",
+    "name": "Estancia La Alborada"
+   },
+   "dep": 1793398360468,
+   "arr": 1793401404468,
+   "seen": 1793401082080,
    "status": "air"
   },
   {
@@ -71,25 +161,8 @@
    "dep": 1793386714801,
    "arr": 1793399156801,
    "seen": 1793395008701,
-   "status": "air"
-  },
-  {
-   "id": "tt0simk0o4-1793390308334",
-   "cs": "LV-RAM",
-   "type": "skylark",
-   "reg": "N914JE",
-   "from": {
-    "code": "SAWR",
-    "name": "Gobernador Gregores"
-   },
-   "to": {
-    "code": "SAVC",
-    "name": "General Enrique Mosconi Intl"
-   },
-   "dep": 1793390308334,
-   "arr": 1793397989334,
-   "seen": 1793395008701,
-   "status": "air"
+   "status": "landed",
+   "landed": 1793399156801
   },
   {
    "id": "u2vz0kvdqa-1793393370672",
@@ -107,7 +180,46 @@
    "dep": 1793393370672,
    "arr": 1793398324672,
    "seen": 1793395008701,
-   "status": "air"
+   "status": "landed",
+   "landed": 1793398324672
+  },
+  {
+   "id": "tt0simk0o4-1793390308334",
+   "cs": "LV-RAM",
+   "type": "skylark",
+   "reg": "N914JE",
+   "from": {
+    "code": "SAWR",
+    "name": "Gobernador Gregores"
+   },
+   "to": {
+    "code": "SAVC",
+    "name": "General Enrique Mosconi Intl"
+   },
+   "dep": 1793390308334,
+   "arr": 1793397989334,
+   "seen": 1793395008701,
+   "status": "landed",
+   "landed": 1793397989334
+  },
+  {
+   "id": "cjbz09vv3u-1793383849578",
+   "cs": "LV-TLS",
+   "type": "bushmaster",
+   "reg": "N630CD",
+   "from": {
+    "code": "SCQP",
+    "name": "La Araucan\u00eda Intl"
+   },
+   "to": {
+    "code": "SANU",
+    "name": "Domingo Faustino Sarmiento"
+   },
+   "dep": 1793383849578,
+   "arr": 1793397774578,
+   "seen": 1793395008701,
+   "status": "landed",
+   "landed": 1793397774578
   },
   {
    "id": "wf5ep14gq8-1793392990804",
@@ -125,7 +237,8 @@
    "dep": 1793392990804,
    "arr": 1793395664804,
    "seen": 1793395008701,
-   "status": "air"
+   "status": "landed",
+   "landed": 1793395664804
   },
   {
    "id": "ltb0ya7nnz-1793364355781",
