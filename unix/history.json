@@ -1,76 +1,130 @@
 {
- "updated": 1793365061319,
+ "updated": 1793395008701,
  "flights": [
   {
-   "id": "cjbz09vv3u-1793362298359",
+   "id": "cjbz09vv3u-1793383849578",
    "cs": "LV-TLS",
    "type": "bushmaster",
    "reg": "N630CD",
    "from": {
-    "code": "SAVC",
-    "name": "General Enrique Mosconi Intl"
+    "code": "SCQP",
+    "name": "La Araucan\u00eda Intl"
    },
    "to": {
-    "code": "SAVT",
-    "name": "Almirante Marco Andres Zar"
+    "code": "SANU",
+    "name": "Domingo Faustino Sarmiento"
    },
-   "dep": 1793362298359,
-   "arr": 1793367428359,
-   "seen": 1793365061319,
+   "dep": 1793383849578,
+   "arr": 1793397774578,
+   "seen": 1793395008701,
    "status": "air"
   },
   {
-   "id": "u2vz0kvdqa-1793362138108",
+   "id": "ltb0ya7nnz-1793392804281",
+   "cs": "LV-SKA",
+   "type": "puffin",
+   "reg": "N624AU",
+   "from": {
+    "code": "MBPV",
+    "name": "Providenciales Intl"
+   },
+   "to": {
+    "code": "SKSM",
+    "name": "Sim\u00f3n Bol\u00edvar Intl"
+   },
+   "dep": 1793392804281,
+   "arr": 1793409207281,
+   "seen": 1793395008701,
+   "status": "air"
+  },
+  {
+   "id": "ok8h9ubbh5-1793394395933",
+   "cs": "LV-BGP",
+   "type": "puffin",
+   "reg": "N963PV",
+   "from": {
+    "code": "SANL",
+    "name": "Capitan V A Almonacid"
+   },
+   "to": {
+    "code": "SCFA",
+    "name": "Andr\u00e9s Sabella G\u00e1lvez Intl"
+   },
+   "dep": 1793394395933,
+   "arr": 1793409806933,
+   "seen": 1793395008701,
+   "status": "air"
+  },
+  {
+   "id": "r779uiyloj-1793386714801",
+   "cs": "LV-FTP",
+   "type": "puffin",
+   "reg": "N689NX",
+   "from": {
+    "code": "SUMU",
+    "name": "Carrasco General Ces\u00e1reo L. Berisso Intl"
+   },
+   "to": {
+    "code": "SANE",
+    "name": "Vicecomodoro Angel D. La Paz Aragon\u00e9s"
+   },
+   "dep": 1793386714801,
+   "arr": 1793399156801,
+   "seen": 1793395008701,
+   "status": "air"
+  },
+  {
+   "id": "tt0simk0o4-1793390308334",
+   "cs": "LV-RAM",
+   "type": "skylark",
+   "reg": "N914JE",
+   "from": {
+    "code": "SAWR",
+    "name": "Gobernador Gregores"
+   },
+   "to": {
+    "code": "SAVC",
+    "name": "General Enrique Mosconi Intl"
+   },
+   "dep": 1793390308334,
+   "arr": 1793397989334,
+   "seen": 1793395008701,
+   "status": "air"
+  },
+  {
+   "id": "u2vz0kvdqa-1793393370672",
    "cs": "LV-SSH",
    "type": "shire",
    "reg": "N291NU",
    "from": {
-    "code": "SUAA",
-    "name": "\u00c1ngel S. Adami Intl"
+    "code": "SBCT",
+    "name": "Curitiba-Afonso Pena Intl"
    },
    "to": {
-    "code": "SAAV",
-    "name": "Sauce Viejo"
+    "code": "SARI",
+    "name": "Cataratas Del Iguaz\u00fa Intl"
    },
-   "dep": 1793362138108,
-   "arr": 1793367246108,
-   "seen": 1793365061319,
+   "dep": 1793393370672,
+   "arr": 1793398324672,
+   "seen": 1793395008701,
    "status": "air"
   },
   {
-   "id": "wf5ep14gq8-1793362353317",
+   "id": "wf5ep14gq8-1793392990804",
    "cs": "LV-IPV6",
    "type": "puffin",
    "reg": "N584WX",
    "from": {
-    "code": "SBPF",
-    "name": "Lauro Kurtz"
+    "code": "SA36",
+    "name": "Saladillo"
    },
    "to": {
-    "code": "SBCX",
-    "name": "Hugo Cantergiani Regional"
+    "code": "SABE",
+    "name": "Aeroparque Jorge Newbery"
    },
-   "dep": 1793362353317,
-   "arr": 1793364833317,
-   "seen": 1793365061319,
-   "status": "air"
-  },
-  {
-   "id": "zbld52fqc8-1793354497717",
-   "cs": "LV-SSL",
-   "type": "skylark",
-   "reg": "N195JM",
-   "from": {
-    "code": "SAAR",
-    "name": "Rosario Islas Malvinas Intl"
-   },
-   "to": {
-    "code": "SAZB",
-    "name": "Comandante Espora"
-   },
-   "dep": 1793354497717,
-   "arr": 1793366960717,
-   "seen": 1793365061319,
+   "dep": 1793392990804,
+   "arr": 1793395664804,
+   "seen": 1793395008701,
    "status": "air"
   },
   {
@@ -89,7 +143,8 @@
    "dep": 1793364355781,
    "arr": 1793373189781,
    "seen": 1793365061319,
-   "status": "air"
+   "status": "landed",
+   "landed": 1793373189781
   },
   {
    "id": "ok8h9ubbh5-1793364337217",
@@ -107,7 +162,8 @@
    "dep": 1793364337217,
    "arr": 1793372557217,
    "seen": 1793365061319,
-   "status": "air"
+   "status": "landed",
+   "landed": 1793372557217
   },
   {
    "id": "r779uiyloj-1793364944251",
@@ -125,7 +181,84 @@
    "dep": 1793364944251,
    "arr": 1793367908251,
    "seen": 1793365061319,
-   "status": "air"
+   "status": "landed",
+   "landed": 1793367908251
+  },
+  {
+   "id": "cjbz09vv3u-1793362298359",
+   "cs": "LV-TLS",
+   "type": "bushmaster",
+   "reg": "N630CD",
+   "from": {
+    "code": "SAVC",
+    "name": "General Enrique Mosconi Intl"
+   },
+   "to": {
+    "code": "SAVT",
+    "name": "Almirante Marco Andres Zar"
+   },
+   "dep": 1793362298359,
+   "arr": 1793367428359,
+   "seen": 1793365061319,
+   "status": "landed",
+   "landed": 1793367428359
+  },
+  {
+   "id": "u2vz0kvdqa-1793362138108",
+   "cs": "LV-SSH",
+   "type": "shire",
+   "reg": "N291NU",
+   "from": {
+    "code": "SUAA",
+    "name": "\u00c1ngel S. Adami Intl"
+   },
+   "to": {
+    "code": "SAAV",
+    "name": "Sauce Viejo"
+   },
+   "dep": 1793362138108,
+   "arr": 1793367246108,
+   "seen": 1793365061319,
+   "status": "landed",
+   "landed": 1793367246108
+  },
+  {
+   "id": "zbld52fqc8-1793354497717",
+   "cs": "LV-SSL",
+   "type": "skylark",
+   "reg": "N195JM",
+   "from": {
+    "code": "SAAR",
+    "name": "Rosario Islas Malvinas Intl"
+   },
+   "to": {
+    "code": "SAZB",
+    "name": "Comandante Espora"
+   },
+   "dep": 1793354497717,
+   "arr": 1793366960717,
+   "seen": 1793365061319,
+   "status": "landed",
+   "landed": 1793366960717
+  },
+  {
+   "id": "wf5ep14gq8-1793362353317",
+   "cs": "LV-IPV6",
+   "type": "puffin",
+   "reg": "N584WX",
+   "from": {
+    "code": "SBPF",
+    "name": "Lauro Kurtz"
+   },
+   "to": {
+    "code": "SBCX",
+    "name": "Hugo Cantergiani Regional"
+   },
+   "dep": 1793362353317,
+   "arr": 1793364833317,
+   "seen": 1793365061319,
+   "status": "landed",
+   "landed": 1793365061319
   },
   {
    "id": "r779uiyloj-1793362364865",
