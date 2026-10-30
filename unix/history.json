@@ -1,5 +1,5 @@
 {
- "updated": 1793363795979,
+ "updated": 1793365061319,
  "flights": [
   {
    "id": "cjbz09vv3u-1793362298359",
@@ -16,7 +16,115 @@
    },
    "dep": 1793362298359,
    "arr": 1793367428359,
-   "seen": 1793363795979,
+   "seen": 1793365061319,
+   "status": "air"
+  },
+  {
+   "id": "u2vz0kvdqa-1793362138108",
+   "cs": "LV-SSH",
+   "type": "shire",
+   "reg": "N291NU",
+   "from": {
+    "code": "SUAA",
+    "name": "\u00c1ngel S. Adami Intl"
+   },
+   "to": {
+    "code": "SAAV",
+    "name": "Sauce Viejo"
+   },
+   "dep": 1793362138108,
+   "arr": 1793367246108,
+   "seen": 1793365061319,
+   "status": "air"
+  },
+  {
+   "id": "wf5ep14gq8-1793362353317",
+   "cs": "LV-IPV6",
+   "type": "puffin",
+   "reg": "N584WX",
+   "from": {
+    "code": "SBPF",
+    "name": "Lauro Kurtz"
+   },
+   "to": {
+    "code": "SBCX",
+    "name": "Hugo Cantergiani Regional"
+   },
+   "dep": 1793362353317,
+   "arr": 1793364833317,
+   "seen": 1793365061319,
+   "status": "air"
+  },
+  {
+   "id": "zbld52fqc8-1793354497717",
+   "cs": "LV-SSL",
+   "type": "skylark",
+   "reg": "N195JM",
+   "from": {
+    "code": "SAAR",
+    "name": "Rosario Islas Malvinas Intl"
+   },
+   "to": {
+    "code": "SAZB",
+    "name": "Comandante Espora"
+   },
+   "dep": 1793354497717,
+   "arr": 1793366960717,
+   "seen": 1793365061319,
+   "status": "air"
+  },
+  {
+   "id": "ltb0ya7nnz-1793364355781",
+   "cs": "LV-SKA",
+   "type": "swallow",
+   "reg": "N300YC",
+   "from": {
+    "code": "MBSC",
+    "name": "South Caicos"
+   },
+   "to": {
+    "code": "MYAN",
+    "name": "San Andros"
+   },
+   "dep": 1793364355781,
+   "arr": 1793373189781,
+   "seen": 1793365061319,
+   "status": "air"
+  },
+  {
+   "id": "ok8h9ubbh5-1793364337217",
+   "cs": "LV-BGP",
+   "type": "puffin",
+   "reg": "N963PV",
+   "from": {
+    "code": "SAEZ",
+    "name": "Ezeiza International Airport - Ministro"
+   },
+   "to": {
+    "code": "SBUG",
+    "name": "Rubem Berta"
+   },
+   "dep": 1793364337217,
+   "arr": 1793372557217,
+   "seen": 1793365061319,
+   "status": "air"
+  },
+  {
+   "id": "r779uiyloj-1793364944251",
+   "cs": "LV-FTP",
+   "type": "puffin",
+   "reg": "N689NX",
+   "from": {
+    "code": "SSIJ",
+    "name": "Jo\u00e3o Batista Bos Filho"
+   },
+   "to": {
+    "code": "SA23",
+    "name": "Ap\u00f3stoles"
+   },
+   "dep": 1793364944251,
+   "arr": 1793367908251,
+   "seen": 1793365061319,
    "status": "air"
   },
   {
@@ -35,61 +143,8 @@
    "dep": 1793362364865,
    "arr": 1793364890865,
    "seen": 1793363795979,
-   "status": "air"
-  },
-  {
-   "id": "u2vz0kvdqa-1793362138108",
-   "cs": "LV-SSH",
-   "type": "shire",
-   "reg": "N291NU",
-   "from": {
-    "code": "SUAA",
-    "name": "\u00c1ngel S. Adami Intl"
-   },
-   "to": {
-    "code": "SAAV",
-    "name": "Sauce Viejo"
-   },
-   "dep": 1793362138108,
-   "arr": 1793367246108,
-   "seen": 1793363795979,
-   "status": "air"
-  },
-  {
-   "id": "wf5ep14gq8-1793362353317",
-   "cs": "LV-IPV6",
-   "type": "puffin",
-   "reg": "N584WX",
-   "from": {
-    "code": "SBPF",
-    "name": "Lauro Kurtz"
-   },
-   "to": {
-    "code": "SBCX",
-    "name": "Hugo Cantergiani Regional"
-   },
-   "dep": 1793362353317,
-   "arr": 1793364833317,
-   "seen": 1793363795979,
-   "status": "air"
-  },
-  {
-   "id": "zbld52fqc8-1793354497717",
-   "cs": "LV-SSL",
-   "type": "skylark",
-   "reg": "N195JM",
-   "from": {
-    "code": "SAAR",
-    "name": "Rosario Islas Malvinas Intl"
-   },
-   "to": {
-    "code": "SAZB",
-    "name": "Comandante Espora"
-   },
-   "dep": 1793354497717,
-   "arr": 1793366960717,
-   "seen": 1793363795979,
-   "status": "air"
+   "status": "landed",
+   "landed": 1793364890865
   },
   {
    "id": "u2vz0kvdqa-1793328529031",
