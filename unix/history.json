@@ -1,0 +1,59 @@
+{
+ "updated": 1793328599237,
+ "flights": [
+  {
+   "id": "cjbz09vv3u-1793321512955",
+   "cs": "LV-TLS",
+   "type": "bushmaster",
+   "reg": "N630CD",
+   "from": {
+    "code": "SAVC",
+    "name": "General Enrique Mosconi Intl"
+   },
+   "to": {
+    "code": "SCNT",
+    "name": "Lieutenant Julio Gallardo"
+   },
+   "dep": 1793321512955,
+   "arr": 1793333528955,
+   "seen": 1793328599237,
+   "status": "air"
+  },
+  {
+   "id": "u2vz0kvdqa-1793328529031",
+   "cs": "LV-SSH",
+   "type": "shire",
+   "reg": "N291NU",
+   "from": {
+    "code": "SANT",
+    "name": "Teniente Benjam\u00edn Matienzo Intl"
+   },
+   "to": {
+    "code": "SABE",
+    "name": "Aeroparque Jorge Newbery"
+   },
+   "dep": 1793328529031,
+   "arr": 1793338431031,
+   "seen": 1793328599237,
+   "status": "air"
+  },
+  {
+   "id": "wf5ep14gq8-1793327197735",
+   "cs": "LV-IPV6",
+   "type": "puffin",
+   "reg": "N584WX",
+   "from": {
+    "code": "SADM",
+    "name": "Mor\u00f3n"
+   },
+   "to": {
+    "code": "SAZA",
+    "name": "Azul"
+   },
+   "dep": 1793327197735,
+   "arr": 1793330842735,
+   "seen": 1793328599237,
+   "status": "air"
+  }
+ ]
+}
