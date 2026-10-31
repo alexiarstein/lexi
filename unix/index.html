@@ -50,6 +50,35 @@
   .clock .meta { color: var(--dim); font-size: 12px; letter-spacing: .1em; }
   .stale { color: var(--red); }
 
+  /* company stats */
+  .stats { display: grid; gap: 14px; margin-bottom: 28px; }
+  .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+  .kpi, .reg, .panel { background: var(--board); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; min-width: 0; }
+  .lbl { color: var(--dim); font-size: 10px; letter-spacing: .15em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .kpi .val { font-size: clamp(22px, 2.4vw, 30px); font-weight: 700; margin-top: 6px; color: var(--text); font-variant-numeric: tabular-nums; }
+  .kpi .val small { color: var(--dim); font-size: .5em; font-weight: 400; margin-left: 4px; }
+  .kpi .val.amber { color: var(--amber); }
+
+  .regions { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; }
+  @media (min-width: 1280px) { .regions { grid-template-columns: repeat(9, 1fr); } }
+  .reg .top { display: flex; align-items: baseline; gap: 8px; }
+  .reg .rank { margin-left: auto; font-size: 24px; font-weight: 700; color: var(--amber); }
+  .reg .rank small { color: var(--dim); font-size: 11px; font-weight: 400; }
+  .reg.first .rank { color: var(--green); }
+  .reg.out .rank { color: var(--dim); font-size: 16px; }
+  .reg .v { font-size: 15px; font-weight: 700; margin-top: 2px; font-variant-numeric: tabular-nums; }
+  .reg .note { color: var(--dim); font-size: 10px; line-height: 1.4; margin-top: 4px; min-height: 2.8em; overflow-wrap: anywhere;
+               display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .reg.first .note { color: var(--green); }
+
+  .panels { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 10px; }
+  .panel ol { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 5px; }
+  .panel li { display: grid; grid-template-columns: 7.5em 1fr auto; align-items: center; gap: 10px; font-size: 12px; }
+  .panel li > span:first-child { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-transform: uppercase; }
+  .panel li .bar { height: 6px; border-radius: 0 3px 3px 0; background: var(--amber); opacity: .75; }
+  .panel li b { font-weight: 400; color: #aab3bf; font-variant-numeric: tabular-nums; }
+  .section-h { color: var(--amber); font-size: 11px; letter-spacing: .25em; margin: 6px 0 -4px; }
+
   .boards { display: grid; grid-template-columns: 1fr; gap: 28px; }
   @media (min-width: 1440px) { .boards { grid-template-columns: 1fr 1fr; } }
 
@@ -112,6 +141,8 @@
     .city .name { display: none; }
     .st { font-size: 11px; }
     .board h2 { font-size: 16px; }
+    .kpis { grid-template-columns: 1fr 1fr; }
+    .regions { grid-template-columns: 1fr 1fr; }
   }
   @media (prefers-reduced-motion: reduce) { .flap span, .st.appr { animation: none; } }
 </style>
@@ -131,6 +162,13 @@
       <div class="meta" id="updated"></div>
     </div>
   </header>
+
+  <section class="stats" id="stats" hidden>
+    <div class="kpis" id="kpis"></div>
+    <div class="section-h">STANDINGS THIS WEEK · POSICIONES DE LA SEMANA</div>
+    <div class="regions" id="regions"></div>
+    <div class="panels" id="panels"></div>
+  </section>
 
   <div class="boards">
     <section class="board">
@@ -155,7 +193,7 @@
 </div>
 
 <script>
-const DATA = {"updated":1793401082080,"flights":[{"id":"ltb0ya7nnz-1793392804281","cs":"LV-SKA","type":"puffin","reg":"N624AU","from":{"code":"MBPV","name":"Providenciales Intl"},"to":{"code":"SKSM","name":"Sim\u00f3n Bol\u00edvar Intl"},"dep":1793392804281,"arr":1793409207281,"seen":1793401082080,"status":"air"},{"id":"ok8h9ubbh5-1793394395933","cs":"LV-BGP","type":"puffin","reg":"N963PV","from":{"code":"SANL","name":"Capitan V A Almonacid"},"to":{"code":"SCFA","name":"Andr\u00e9s Sabella G\u00e1lvez Intl"},"dep":1793394395933,"arr":1793409806933,"seen":1793401082080,"status":"air"},{"id":"4a47dd5ve0-1793397837374","cs":"LV-OSPF","type":"skylark","reg":"N364FR","from":{"code":"MMSM","name":"Felipe \u00c1ngeles Intl"},"to":{"code":"MMZO","name":"Playa de Oro Intl"},"dep":1793397837374,"arr":1793409566374,"seen":1793401082080,"status":"air"},{"id":"cjbz09vv3u-1793397805783","cs":"LV-TLS","type":"bushmaster","reg":"N630CD","from":{"code":"SANU","name":"Domingo Faustino Sarmiento"},"to":{"code":"SABE","name":"Aeroparque Jorge Newbery"},"dep":1793397805783,"arr":1793414105783,"seen":1793401082080,"status":"air"},{"id":"r779uiyloj-1793399254837","cs":"LV-FTP","type":"puffin","reg":"N689NX","from":{"code":"SANE","name":"Vicecomodoro Angel D. La Paz Aragon\u00e9s"},"to":{"code":"SBCH","name":"Serafin Enoss Bertaso"},"dep":1793399254837,"arr":1793413066837,"seen":1793401082080,"status":"air"},{"id":"u2vz0kvdqa-1793400643380","cs":"LV-SSH","type":"shire","reg":"N291NU","from":{"code":"SBFI","name":"Cataratas Intl"},"to":{"code":"SAAR","name":"Rosario Islas Malvinas Intl"},"dep":1793400643380,"arr":1793410517380,"seen":1793401082080,"status":"air"},{"id":"wf5ep14gq8-1793395819242","cs":"LV-IPV6","type":"puffin","reg":"N584WX","from":{"code":"SABE","name":"Aeroparque Jorge Newbery"},"to":{"code":"SAME","name":"Governor Francisco Gabrielli Intl"},"dep":1793395819242,"arr":1793407126242,"seen":1793401082080,"status":"air"},{"id":"zbld52fqc8-1793398360468","cs":"LV-SSL","type":"skylark","reg":"N195JM","from":{"code":"SAZO","name":"Necochea"},"to":{"code":"AR-0513","name":"Estancia La Alborada"},"dep":1793398360468,"arr":1793401404468,"seen":1793401082080,"status":"air"},{"id":"r779uiyloj-1793386714801","cs":"LV-FTP","type":"puffin","reg":"N689NX","from":{"code":"SUMU","name":"Carrasco General Ces\u00e1reo L. Berisso Intl"},"to":{"code":"SANE","name":"Vicecomodoro Angel D. La Paz Aragon\u00e9s"},"dep":1793386714801,"arr":1793399156801,"seen":1793395008701,"status":"landed","landed":1793399156801},{"id":"u2vz0kvdqa-1793393370672","cs":"LV-SSH","type":"shire","reg":"N291NU","from":{"code":"SBCT","name":"Curitiba-Afonso Pena Intl"},"to":{"code":"SARI","name":"Cataratas Del Iguaz\u00fa Intl"},"dep":1793393370672,"arr":1793398324672,"seen":1793395008701,"status":"landed","landed":1793398324672},{"id":"tt0simk0o4-1793390308334","cs":"LV-RAM","type":"skylark","reg":"N914JE","from":{"code":"SAWR","name":"Gobernador Gregores"},"to":{"code":"SAVC","name":"General Enrique Mosconi Intl"},"dep":1793390308334,"arr":1793397989334,"seen":1793395008701,"status":"landed","landed":1793397989334},{"id":"cjbz09vv3u-1793383849578","cs":"LV-TLS","type":"bushmaster","reg":"N630CD","from":{"code":"SCQP","name":"La Araucan\u00eda Intl"},"to":{"code":"SANU","name":"Domingo Faustino Sarmiento"},"dep":1793383849578,"arr":1793397774578,"seen":1793395008701,"status":"landed","landed":1793397774578},{"id":"wf5ep14gq8-1793392990804","cs":"LV-IPV6","type":"puffin","reg":"N584WX","from":{"code":"SA36","name":"Saladillo"},"to":{"code":"SABE","name":"Aeroparque Jorge Newbery"},"dep":1793392990804,"arr":1793395664804,"seen":1793395008701,"status":"landed","landed":1793395664804},{"id":"ltb0ya7nnz-1793364355781","cs":"LV-SKA","type":"swallow","reg":"N300YC","from":{"code":"MBSC","name":"South Caicos"},"to":{"code":"MYAN","name":"San Andros"},"dep":1793364355781,"arr":1793373189781,"seen":1793365061319,"status":"landed","landed":1793373189781},{"id":"ok8h9ubbh5-1793364337217","cs":"LV-BGP","type":"puffin","reg":"N963PV","from":{"code":"SAEZ","name":"Ezeiza International Airport - Ministro"},"to":{"code":"SBUG","name":"Rubem Berta"},"dep":1793364337217,"arr":1793372557217,"seen":1793365061319,"status":"landed","landed":1793372557217},{"id":"r779uiyloj-1793364944251","cs":"LV-FTP","type":"puffin","reg":"N689NX","from":{"code":"SSIJ","name":"Jo\u00e3o Batista Bos Filho"},"to":{"code":"SA23","name":"Ap\u00f3stoles"},"dep":1793364944251,"arr":1793367908251,"seen":1793365061319,"status":"landed","landed":1793367908251},{"id":"cjbz09vv3u-1793362298359","cs":"LV-TLS","type":"bushmaster","reg":"N630CD","from":{"code":"SAVC","name":"General Enrique Mosconi Intl"},"to":{"code":"SAVT","name":"Almirante Marco Andres Zar"},"dep":1793362298359,"arr":1793367428359,"seen":1793365061319,"status":"landed","landed":1793367428359},{"id":"u2vz0kvdqa-1793362138108","cs":"LV-SSH","type":"shire","reg":"N291NU","from":{"code":"SUAA","name":"\u00c1ngel S. Adami Intl"},"to":{"code":"SAAV","name":"Sauce Viejo"},"dep":1793362138108,"arr":1793367246108,"seen":1793365061319,"status":"landed","landed":1793367246108},{"id":"zbld52fqc8-1793354497717","cs":"LV-SSL","type":"skylark","reg":"N195JM","from":{"code":"SAAR","name":"Rosario Islas Malvinas Intl"},"to":{"code":"SAZB","name":"Comandante Espora"},"dep":1793354497717,"arr":1793366960717,"seen":1793365061319,"status":"landed","landed":1793366960717},{"id":"wf5ep14gq8-1793362353317","cs":"LV-IPV6","type":"puffin","reg":"N584WX","from":{"code":"SBPF","name":"Lauro Kurtz"},"to":{"code":"SBCX","name":"Hugo Cantergiani Regional"},"dep":1793362353317,"arr":1793364833317,"seen":1793365061319,"status":"landed","landed":1793365061319},{"id":"r779uiyloj-1793362364865","cs":"LV-FTP","type":"puffin","reg":"N689NX","from":{"code":"SBSM","name":"Santa Maria"},"to":{"code":"SSIJ","name":"Jo\u00e3o Batista Bos Filho"},"dep":1793362364865,"arr":1793364890865,"seen":1793363795979,"status":"landed","landed":1793364890865},{"id":"u2vz0kvdqa-1793328529031","cs":"LV-SSH","type":"shire","reg":"N291NU","from":{"code":"SANT","name":"Teniente Benjam\u00edn Matienzo Intl"},"to":{"code":"SABE","name":"Aeroparque Jorge Newbery"},"dep":1793328529031,"arr":1793338431031,"seen":1793329051153,"status":"landed","landed":1793338431031},{"id":"cjbz09vv3u-1793321512955","cs":"LV-TLS","type":"bushmaster","reg":"N630CD","from":{"code":"SAVC","name":"General Enrique Mosconi Intl"},"to":{"code":"SCNT","name":"Lieutenant Julio Gallardo"},"dep":1793321512955,"arr":1793333528955,"seen":1793329051153,"status":"landed","landed":1793333528955},{"id":"wf5ep14gq8-1793327197735","cs":"LV-IPV6","type":"puffin","reg":"N584WX","from":{"code":"SADM","name":"Mor\u00f3n"},"to":{"code":"SAZA","name":"Azul"},"dep":1793327197735,"arr":1793330842735,"seen":1793329051153,"status":"landed","landed":1793330842735}]} || { updated: Date.now(), flights: [] };
+const DATA = {"updated":1793455428277,"flights":[{"id":"cjbz09vv3u-1793451397124","cs":"LV-TLS","type":"bushmaster","reg":"N630CD","from":{"code":"SADM","name":"Mor\u00f3n"},"to":{"code":"SAZA","name":"Azul"},"dep":1793451397124,"arr":1793455719124,"seen":1793455428277,"status":"air"},{"id":"ltb0ya7nnz-1793447596167","cs":"LV-SKA","type":"puffin","reg":"N624AU","from":{"code":"MROC","name":"Juan Santamar\u00eda Intl"},"to":{"code":"MHLC","name":"Golos\u00f3n Intl"},"dep":1793447596167,"arr":1793457360167,"seen":1793455428277,"status":"air"},{"id":"ok8h9ubbh5-1793447609700","cs":"LV-BGP","type":"puffin","reg":"N963PV","from":{"code":"SARE","name":"Resistencia Intl"},"to":{"code":"SCES","name":"Ricardo Garc\u00eda Posada"},"dep":1793447609700,"arr":1793462316700,"seen":1793455428277,"status":"air"},{"id":"r779uiyloj-1793455341692","cs":"LV-FTP","type":"shire","reg":"N304PR","from":{"code":"SBAX","name":"Romeu Zema"},"to":{"code":"SBCF","name":"Tancredo Neves Intl"},"dep":1793455341692,"arr":1793458627692,"seen":1793455428277,"status":"air"},{"id":"tt0simk0o4-1793452954799","cs":"LV-RAM","type":"skylark","reg":"N914JE","from":{"code":"SAZS","name":"Teniente Luis Candelaria Intl"},"to":{"code":"SCQP","name":"La Araucan\u00eda Intl"},"dep":1793452954799,"arr":1793458033799,"seen":1793455428277,"status":"air"},{"id":"u2vz0kvdqa-1793452797723","cs":"LV-SSH","type":"shire","reg":"N291NU","from":{"code":"SAME","name":"Governor Francisco Gabrielli Intl"},"to":{"code":"SASA","name":"Mart\u00edn Miguel de G\u00fcemes Intl"},"dep":1793452797723,"arr":1793461325723,"seen":1793455428277,"status":"air"},{"id":"wf5ep14gq8-1793449599466","cs":"LV-IPV6","type":"puffin","reg":"N584WX","from":{"code":"SABE","name":"Aeroparque Jorge Newbery"},"to":{"code":"SAME","name":"Governor Francisco Gabrielli Intl"},"dep":1793449599466,"arr":1793462497466,"seen":1793455428277,"status":"air"},{"id":"zbld52fqc8-1793454153529","cs":"LV-SSL","type":"skylark","reg":"N195JM","from":{"code":"SAEM","name":"Miramar"},"to":{"code":"AR-0513","name":"Estancia La Alborada"},"dep":1793454153529,"arr":1793456261529,"seen":1793455428277,"status":"air"},{"id":"cjbz09vv3u-1793397805783","cs":"LV-TLS","type":"bushmaster","reg":"N630CD","from":{"code":"SANU","name":"Domingo Faustino Sarmiento"},"to":{"code":"SABE","name":"Aeroparque Jorge Newbery"},"dep":1793397805783,"arr":1793414105783,"seen":1793401082080,"status":"landed","landed":1793414105783},{"id":"r779uiyloj-1793399254837","cs":"LV-FTP","type":"puffin","reg":"N689NX","from":{"code":"SANE","name":"Vicecomodoro Angel D. La Paz Aragon\u00e9s"},"to":{"code":"SBCH","name":"Serafin Enoss Bertaso"},"dep":1793399254837,"arr":1793413066837,"seen":1793401082080,"status":"landed","landed":1793413066837},{"id":"u2vz0kvdqa-1793400643380","cs":"LV-SSH","type":"shire","reg":"N291NU","from":{"code":"SBFI","name":"Cataratas Intl"},"to":{"code":"SAAR","name":"Rosario Islas Malvinas Intl"},"dep":1793400643380,"arr":1793410517380,"seen":1793401082080,"status":"landed","landed":1793410517380},{"id":"ok8h9ubbh5-1793394395933","cs":"LV-BGP","type":"puffin","reg":"N963PV","from":{"code":"SANL","name":"Capitan V A Almonacid"},"to":{"code":"SCFA","name":"Andr\u00e9s Sabella G\u00e1lvez Intl"},"dep":1793394395933,"arr":1793409806933,"seen":1793401082080,"status":"landed","landed":1793409806933},{"id":"4a47dd5ve0-1793397837374","cs":"LV-OSPF","type":"skylark","reg":"N364FR","from":{"code":"MMSM","name":"Felipe \u00c1ngeles Intl"},"to":{"code":"MMZO","name":"Playa de Oro Intl"},"dep":1793397837374,"arr":1793409566374,"seen":1793401082080,"status":"landed","landed":1793409566374},{"id":"ltb0ya7nnz-1793392804281","cs":"LV-SKA","type":"puffin","reg":"N624AU","from":{"code":"MBPV","name":"Providenciales Intl"},"to":{"code":"SKSM","name":"Sim\u00f3n Bol\u00edvar Intl"},"dep":1793392804281,"arr":1793409207281,"seen":1793401082080,"status":"landed","landed":1793409207281},{"id":"wf5ep14gq8-1793395819242","cs":"LV-IPV6","type":"puffin","reg":"N584WX","from":{"code":"SABE","name":"Aeroparque Jorge Newbery"},"to":{"code":"SAME","name":"Governor Francisco Gabrielli Intl"},"dep":1793395819242,"arr":1793407126242,"seen":1793401082080,"status":"landed","landed":1793407126242},{"id":"zbld52fqc8-1793398360468","cs":"LV-SSL","type":"skylark","reg":"N195JM","from":{"code":"SAZO","name":"Necochea"},"to":{"code":"AR-0513","name":"Estancia La Alborada"},"dep":1793398360468,"arr":1793401404468,"seen":1793401082080,"status":"landed","landed":1793401404468},{"id":"r779uiyloj-1793386714801","cs":"LV-FTP","type":"puffin","reg":"N689NX","from":{"code":"SUMU","name":"Carrasco General Ces\u00e1reo L. Berisso Intl"},"to":{"code":"SANE","name":"Vicecomodoro Angel D. La Paz Aragon\u00e9s"},"dep":1793386714801,"arr":1793399156801,"seen":1793395008701,"status":"landed","landed":1793399156801},{"id":"u2vz0kvdqa-1793393370672","cs":"LV-SSH","type":"shire","reg":"N291NU","from":{"code":"SBCT","name":"Curitiba-Afonso Pena Intl"},"to":{"code":"SARI","name":"Cataratas Del Iguaz\u00fa Intl"},"dep":1793393370672,"arr":1793398324672,"seen":1793395008701,"status":"landed","landed":1793398324672},{"id":"tt0simk0o4-1793390308334","cs":"LV-RAM","type":"skylark","reg":"N914JE","from":{"code":"SAWR","name":"Gobernador Gregores"},"to":{"code":"SAVC","name":"General Enrique Mosconi Intl"},"dep":1793390308334,"arr":1793397989334,"seen":1793395008701,"status":"landed","landed":1793397989334},{"id":"cjbz09vv3u-1793383849578","cs":"LV-TLS","type":"bushmaster","reg":"N630CD","from":{"code":"SCQP","name":"La Araucan\u00eda Intl"},"to":{"code":"SANU","name":"Domingo Faustino Sarmiento"},"dep":1793383849578,"arr":1793397774578,"seen":1793395008701,"status":"landed","landed":1793397774578},{"id":"wf5ep14gq8-1793392990804","cs":"LV-IPV6","type":"puffin","reg":"N584WX","from":{"code":"SA36","name":"Saladillo"},"to":{"code":"SABE","name":"Aeroparque Jorge Newbery"},"dep":1793392990804,"arr":1793395664804,"seen":1793395008701,"status":"landed","landed":1793395664804},{"id":"ltb0ya7nnz-1793364355781","cs":"LV-SKA","type":"swallow","reg":"N300YC","from":{"code":"MBSC","name":"South Caicos"},"to":{"code":"MYAN","name":"San Andros"},"dep":1793364355781,"arr":1793373189781,"seen":1793365061319,"status":"landed","landed":1793373189781},{"id":"ok8h9ubbh5-1793364337217","cs":"LV-BGP","type":"puffin","reg":"N963PV","from":{"code":"SAEZ","name":"Ezeiza International Airport - Ministro"},"to":{"code":"SBUG","name":"Rubem Berta"},"dep":1793364337217,"arr":1793372557217,"seen":1793365061319,"status":"landed","landed":1793372557217},{"id":"r779uiyloj-1793364944251","cs":"LV-FTP","type":"puffin","reg":"N689NX","from":{"code":"SSIJ","name":"Jo\u00e3o Batista Bos Filho"},"to":{"code":"SA23","name":"Ap\u00f3stoles"},"dep":1793364944251,"arr":1793367908251,"seen":1793365061319,"status":"landed","landed":1793367908251},{"id":"cjbz09vv3u-1793362298359","cs":"LV-TLS","type":"bushmaster","reg":"N630CD","from":{"code":"SAVC","name":"General Enrique Mosconi Intl"},"to":{"code":"SAVT","name":"Almirante Marco Andres Zar"},"dep":1793362298359,"arr":1793367428359,"seen":1793365061319,"status":"landed","landed":1793367428359},{"id":"u2vz0kvdqa-1793362138108","cs":"LV-SSH","type":"shire","reg":"N291NU","from":{"code":"SUAA","name":"\u00c1ngel S. Adami Intl"},"to":{"code":"SAAV","name":"Sauce Viejo"},"dep":1793362138108,"arr":1793367246108,"seen":1793365061319,"status":"landed","landed":1793367246108},{"id":"zbld52fqc8-1793354497717","cs":"LV-SSL","type":"skylark","reg":"N195JM","from":{"code":"SAAR","name":"Rosario Islas Malvinas Intl"},"to":{"code":"SAZB","name":"Comandante Espora"},"dep":1793354497717,"arr":1793366960717,"seen":1793365061319,"status":"landed","landed":1793366960717},{"id":"wf5ep14gq8-1793362353317","cs":"LV-IPV6","type":"puffin","reg":"N584WX","from":{"code":"SBPF","name":"Lauro Kurtz"},"to":{"code":"SBCX","name":"Hugo Cantergiani Regional"},"dep":1793362353317,"arr":1793364833317,"seen":1793365061319,"status":"landed","landed":1793365061319},{"id":"r779uiyloj-1793362364865","cs":"LV-FTP","type":"puffin","reg":"N689NX","from":{"code":"SBSM","name":"Santa Maria"},"to":{"code":"SSIJ","name":"Jo\u00e3o Batista Bos Filho"},"dep":1793362364865,"arr":1793364890865,"seen":1793363795979,"status":"landed","landed":1793364890865},{"id":"u2vz0kvdqa-1793328529031","cs":"LV-SSH","type":"shire","reg":"N291NU","from":{"code":"SANT","name":"Teniente Benjam\u00edn Matienzo Intl"},"to":{"code":"SABE","name":"Aeroparque Jorge Newbery"},"dep":1793328529031,"arr":1793338431031,"seen":1793329051153,"status":"landed","landed":1793338431031},{"id":"cjbz09vv3u-1793321512955","cs":"LV-TLS","type":"bushmaster","reg":"N630CD","from":{"code":"SAVC","name":"General Enrique Mosconi Intl"},"to":{"code":"SCNT","name":"Lieutenant Julio Gallardo"},"dep":1793321512955,"arr":1793333528955,"seen":1793329051153,"status":"landed","landed":1793333528955},{"id":"wf5ep14gq8-1793327197735","cs":"LV-IPV6","type":"puffin","reg":"N584WX","from":{"code":"SADM","name":"Mor\u00f3n"},"to":{"code":"SAZA","name":"Azul"},"dep":1793327197735,"arr":1793330842735,"seen":1793329051153,"status":"landed","landed":1793330842735}],"totals":{"since":1793328599237,"flights":32,"pilots":9,"minutes":3551,"landed":24,"types":{"bushmaster":5,"shire":6,"puffin":14,"skylark":6,"swallow":1},"airports":{"SABE":3,"SCNT":1,"SAZA":1,"SSIJ":1,"MYAN":1,"SBUG":1,"SA23":1,"SAVT":1,"SAAV":1,"SAZB":1,"SBCX":1,"SANE":1,"SARI":1,"SAVC":1,"SANU":1,"SBCH":1,"SAAR":1,"SCFA":1,"MMZO":1,"SKSM":1,"SAME":1,"AR-0513":1}},"stats":{"live":8,"held":{"n":121,"v":4231730,"top":[{"code":"SABE","v":258160},{"code":"SAEZ","v":235550},{"code":"SARI","v":203720},{"code":"SCES","v":176830},{"code":"SAAR","v":147320}],"by":{"CL":{"n":15,"v":566380},"AR":{"n":53,"v":2385650},"BR":{"n":27,"v":907730},"XX":{"n":8,"v":186020},"BO":{"n":2,"v":13810},"PY":{"n":1,"v":41960},"US":{"n":6,"v":24320},"UY":{"n":5,"v":87350},"MX":{"n":4,"v":18510}}},"flying":505,"bases":["SADM"],"regions":[{"region":"AR","n":6,"leader":{"name":"Unix Airways","v":2429010},"rank":1,"v":2429010},{"region":"UY","n":3,"leader":{"name":"Unix Airways","v":95350},"rank":1,"v":95350},{"region":"BR","n":9,"leader":{"name":"Unix Airways","v":991860},"rank":1,"v":991860},{"region":"CL","n":5,"leader":{"name":"Unix Airways","v":600920},"rank":1,"v":600920},{"region":"PY","n":2,"leader":{"name":"Zen Airlines","v":69030},"rank":2,"v":65790,"ahead":{"name":"Zen Airlines","v":69030}},{"region":"BO","n":3,"leader":{"name":"Nico Airlines","v":62200},"rank":3,"v":13810,"ahead":{"name":"Zen Airlines","v":18290}},{"region":"PE","n":2,"leader":{"name":"Delta Bearlines","v":77490},"v":0},{"region":"MX","n":25,"leader":{"name":"Check-In Airlines","v":1486770},"v":18510,"cutoff":44990},{"region":"US","n":25,"leader":{"name":"Vanguard Aviation","v":11984430},"v":24320,"cutoff":1575360}]}} || { updated: Date.now(), flights: [] };
 const TZ = "America/Argentina/Buenos_Aires";
 const APPROACH_MS = 10 * 60 * 1000;
 
@@ -208,6 +246,74 @@ function render(animate) {
   if (!animate) document.querySelectorAll(".flap span").forEach(s => s.style.animation = "none");
 }
 
+const COUNTRY = { AR: "ARGENTINA", UY: "URUGUAY", BR: "BRASIL", CL: "CHILE", PY: "PARAGUAY",
+                  BO: "BOLIVIA", PE: "PERÚ", MX: "MÉXICO", US: "EE.UU." };
+const num = n => n.toLocaleString("es-AR");
+const short = n => n >= 1e6 ? `${(n / 1e6).toFixed(2)}M` : n >= 1e4 ? `${Math.round(n / 1e3)}K` : num(n);
+const day = t => new Date(t).toLocaleDateString("es-AR", { timeZone: TZ, day: "numeric", month: "short" }).toUpperCase();
+
+function kpi(label, val, cls = "") {
+  return `<div class="kpi"><div class="lbl">${label}</div><div class="val ${cls}">${val}</div></div>`;
+}
+
+function region(r) {
+  const name = esc(COUNTRY[r.region] || r.region);
+  let cls = "", rank, note;
+  if (r.rank === 1) {
+    cls = "first"; rank = "#1"; note = "LEADER · LÍDER";
+  } else if (r.rank) {
+    rank = `#${r.rank}<small>/${r.n}</small>`;
+    note = `${short(r.ahead.v - r.v)} DETRÁS DE ${esc(r.ahead.name)}`;
+  } else if (r.cutoff) {
+    cls = "out"; rank = `&gt;${r.n}`;
+    note = `${short(r.cutoff - r.v)} TO TOP ${r.n} · FALTAN PARA ENTRAR`;
+  } else {
+    cls = "out"; rank = "—";
+    note = r.leader ? `NO PRESENCE · LÍDER ${esc(r.leader.name)}` : "NO PRESENCE · SIN PRESENCIA";
+  }
+  const title = r.leader ? `${name}: ${num(r.v)} · líder ${r.leader.name} ${num(r.leader.v)}` : name;
+  return `<div class="reg ${cls}" title="${esc(title)}">
+    <div class="top"><span class="code">${esc(r.region)}</span><span class="lbl">${name}</span><span class="rank">${rank}</span></div>
+    <div class="v">${r.v ? num(r.v) : "—"}</div>
+    <div class="note">${note}</div></div>`;
+}
+
+function list(label, rows) {
+  if (!rows.length) return "";
+  const max = rows[0][1];
+  return `<div class="panel"><div class="lbl">${label}</div><ol>${rows.map(([k, v]) =>
+    `<li><span>${esc(k)}</span><span class="bar" style="width:${Math.max(4, v / max * 100)}%"></span><b>${num(v)}</b></li>`).join("")}</ol></div>`;
+}
+
+function renderStats() {
+  const s = DATA.stats, t = DATA.totals;
+  if (!s && !t) return;
+  const kpis = [];
+  if (s) {
+    kpis.push(kpi("IN FLIGHT · EN VUELO", `${s.live}${s.flying ? `<small>/ ${num(s.flying)}</small>` : ""}`, "amber"));
+    if (s.held) {
+      kpis.push(kpi("AIRPORTS · AEROPUERTOS", num(s.held.n)));
+      kpis.push(kpi("VALUE · VALOR", short(s.held.v)));
+    }
+  }
+  if (t) {
+    kpis.push(kpi("FLIGHTS · VUELOS", `${num(t.flights)}<small>desde ${day(t.since)}</small>`));
+    kpis.push(kpi("PILOTS · PILOTOS", num(t.pilots)));
+    kpis.push(kpi("HOURS · HORAS VOLADAS", num(Math.round(t.minutes / 60))));
+  }
+  if (s && s.bases && s.bases.length) kpis.push(kpi("BASE", esc(s.bases.join(" ")), "amber"));
+  document.getElementById("kpis").innerHTML = kpis.join("");
+  document.getElementById("regions").innerHTML = s && s.regions ? s.regions.map(region).join("") : "";
+
+  const top = (o, n = 5) => Object.entries(o || {}).sort((a, b) => b[1] - a[1]).slice(0, n);
+  document.getElementById("panels").innerHTML = [
+    t && list("FLEET · FLOTA (VUELOS POR AVIÓN)", top(t.types)),
+    t && list("TOP DESTINATIONS · DESTINOS (ATERRIZAJES)", top(t.airports)),
+    s && s.held && list("TOP AIRPORTS · AEROPUERTOS (VALOR)", s.held.top.map(a => [a.code, a.v])),
+  ].filter(Boolean).join("");
+  document.getElementById("stats").hidden = false;
+}
+
 function tick() {
   const now = Date.now();
   document.getElementById("clock").textContent =
@@ -218,6 +324,7 @@ function tick() {
   el.className = "meta" + (age > 60 * 60 * 1000 ? " stale" : "");
 }
 
+renderStats();
 render(true);
 tick();
 setInterval(tick, 1000);

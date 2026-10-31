@@ -50,6 +50,35 @@
   .clock .meta { color: var(--dim); font-size: 12px; letter-spacing: .1em; }
   .stale { color: var(--red); }
 
+  /* company stats */
+  .stats { display: grid; gap: 14px; margin-bottom: 28px; }
+  .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+  .kpi, .reg, .panel { background: var(--board); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; min-width: 0; }
+  .lbl { color: var(--dim); font-size: 10px; letter-spacing: .15em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .kpi .val { font-size: clamp(22px, 2.4vw, 30px); font-weight: 700; margin-top: 6px; color: var(--text); font-variant-numeric: tabular-nums; }
+  .kpi .val small { color: var(--dim); font-size: .5em; font-weight: 400; margin-left: 4px; }
+  .kpi .val.amber { color: var(--amber); }
+
+  .regions { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; }
+  @media (min-width: 1280px) { .regions { grid-template-columns: repeat(9, 1fr); } }
+  .reg .top { display: flex; align-items: baseline; gap: 8px; }
+  .reg .rank { margin-left: auto; font-size: 24px; font-weight: 700; color: var(--amber); }
+  .reg .rank small { color: var(--dim); font-size: 11px; font-weight: 400; }
+  .reg.first .rank { color: var(--green); }
+  .reg.out .rank { color: var(--dim); font-size: 16px; }
+  .reg .v { font-size: 15px; font-weight: 700; margin-top: 2px; font-variant-numeric: tabular-nums; }
+  .reg .note { color: var(--dim); font-size: 10px; line-height: 1.4; margin-top: 4px; min-height: 2.8em; overflow-wrap: anywhere;
+               display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .reg.first .note { color: var(--green); }
+
+  .panels { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 10px; }
+  .panel ol { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 5px; }
+  .panel li { display: grid; grid-template-columns: 7.5em 1fr auto; align-items: center; gap: 10px; font-size: 12px; }
+  .panel li > span:first-child { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-transform: uppercase; }
+  .panel li .bar { height: 6px; border-radius: 0 3px 3px 0; background: var(--amber); opacity: .75; }
+  .panel li b { font-weight: 400; color: #aab3bf; font-variant-numeric: tabular-nums; }
+  .section-h { color: var(--amber); font-size: 11px; letter-spacing: .25em; margin: 6px 0 -4px; }
+
   .boards { display: grid; grid-template-columns: 1fr; gap: 28px; }
   @media (min-width: 1440px) { .boards { grid-template-columns: 1fr 1fr; } }
 
@@ -112,6 +141,8 @@
     .city .name { display: none; }
     .st { font-size: 11px; }
     .board h2 { font-size: 16px; }
+    .kpis { grid-template-columns: 1fr 1fr; }
+    .regions { grid-template-columns: 1fr 1fr; }
   }
   @media (prefers-reduced-motion: reduce) { .flap span, .st.appr { animation: none; } }
 </style>
@@ -131,6 +162,13 @@
       <div class="meta" id="updated"></div>
     </div>
   </header>
+
+  <section class="stats" id="stats" hidden>
+    <div class="kpis" id="kpis"></div>
+    <div class="section-h">STANDINGS THIS WEEK · POSICIONES DE LA SEMANA</div>
+    <div class="regions" id="regions"></div>
+    <div class="panels" id="panels"></div>
+  </section>
 
   <div class="boards">
     <section class="board">
@@ -208,6 +246,74 @@ function render(animate) {
   if (!animate) document.querySelectorAll(".flap span").forEach(s => s.style.animation = "none");
 }
 
+const COUNTRY = { AR: "ARGENTINA", UY: "URUGUAY", BR: "BRASIL", CL: "CHILE", PY: "PARAGUAY",
+                  BO: "BOLIVIA", PE: "PERÚ", MX: "MÉXICO", US: "EE.UU." };
+const num = n => n.toLocaleString("es-AR");
+const short = n => n >= 1e6 ? `${(n / 1e6).toFixed(2)}M` : n >= 1e4 ? `${Math.round(n / 1e3)}K` : num(n);
+const day = t => new Date(t).toLocaleDateString("es-AR", { timeZone: TZ, day: "numeric", month: "short" }).toUpperCase();
+
+function kpi(label, val, cls = "") {
+  return `<div class="kpi"><div class="lbl">${label}</div><div class="val ${cls}">${val}</div></div>`;
+}
+
+function region(r) {
+  const name = esc(COUNTRY[r.region] || r.region);
+  let cls = "", rank, note;
+  if (r.rank === 1) {
+    cls = "first"; rank = "#1"; note = "LEADER · LÍDER";
+  } else if (r.rank) {
+    rank = `#${r.rank}<small>/${r.n}</small>`;
+    note = `${short(r.ahead.v - r.v)} DETRÁS DE ${esc(r.ahead.name)}`;
+  } else if (r.cutoff) {
+    cls = "out"; rank = `&gt;${r.n}`;
+    note = `${short(r.cutoff - r.v)} TO TOP ${r.n} · FALTAN PARA ENTRAR`;
+  } else {
+    cls = "out"; rank = "—";
+    note = r.leader ? `NO PRESENCE · LÍDER ${esc(r.leader.name)}` : "NO PRESENCE · SIN PRESENCIA";
+  }
+  const title = r.leader ? `${name}: ${num(r.v)} · líder ${r.leader.name} ${num(r.leader.v)}` : name;
+  return `<div class="reg ${cls}" title="${esc(title)}">
+    <div class="top"><span class="code">${esc(r.region)}</span><span class="lbl">${name}</span><span class="rank">${rank}</span></div>
+    <div class="v">${r.v ? num(r.v) : "—"}</div>
+    <div class="note">${note}</div></div>`;
+}
+
+function list(label, rows) {
+  if (!rows.length) return "";
+  const max = rows[0][1];
+  return `<div class="panel"><div class="lbl">${label}</div><ol>${rows.map(([k, v]) =>
+    `<li><span>${esc(k)}</span><span class="bar" style="width:${Math.max(4, v / max * 100)}%"></span><b>${num(v)}</b></li>`).join("")}</ol></div>`;
+}
+
+function renderStats() {
+  const s = DATA.stats, t = DATA.totals;
+  if (!s && !t) return;
+  const kpis = [];
+  if (s) {
+    kpis.push(kpi("IN FLIGHT · EN VUELO", `${s.live}${s.flying ? `<small>/ ${num(s.flying)}</small>` : ""}`, "amber"));
+    if (s.held) {
+      kpis.push(kpi("AIRPORTS · AEROPUERTOS", num(s.held.n)));
+      kpis.push(kpi("VALUE · VALOR", short(s.held.v)));
+    }
+  }
+  if (t) {
+    kpis.push(kpi("FLIGHTS · VUELOS", `${num(t.flights)}<small>desde ${day(t.since)}</small>`));
+    kpis.push(kpi("PILOTS · PILOTOS", num(t.pilots)));
+    kpis.push(kpi("HOURS · HORAS VOLADAS", num(Math.round(t.minutes / 60))));
+  }
+  if (s && s.bases && s.bases.length) kpis.push(kpi("BASE", esc(s.bases.join(" ")), "amber"));
+  document.getElementById("kpis").innerHTML = kpis.join("");
+  document.getElementById("regions").innerHTML = s && s.regions ? s.regions.map(region).join("") : "";
+
+  const top = (o, n = 5) => Object.entries(o || {}).sort((a, b) => b[1] - a[1]).slice(0, n);
+  document.getElementById("panels").innerHTML = [
+    t && list("FLEET · FLOTA (VUELOS POR AVIÓN)", top(t.types)),
+    t && list("TOP DESTINATIONS · DESTINOS (ATERRIZAJES)", top(t.airports)),
+    s && s.held && list("TOP AIRPORTS · AEROPUERTOS (VALOR)", s.held.top.map(a => [a.code, a.v])),
+  ].filter(Boolean).join("");
+  document.getElementById("stats").hidden = false;
+}
+
 function tick() {
   const now = Date.now();
   document.getElementById("clock").textContent =
@@ -218,6 +324,7 @@ function tick() {
   el.className = "meta" + (age > 60 * 60 * 1000 ? " stale" : "");
 }
 
+renderStats();
 render(true);
 tick();
 setInterval(tick, 1000);

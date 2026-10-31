@@ -1,58 +1,148 @@
 {
- "updated": 1793401082080,
+ "updated": 1793455428277,
  "flights": [
   {
-   "id": "ltb0ya7nnz-1793392804281",
+   "id": "cjbz09vv3u-1793451397124",
+   "cs": "LV-TLS",
+   "type": "bushmaster",
+   "reg": "N630CD",
+   "from": {
+    "code": "SADM",
+    "name": "Mor\u00f3n"
+   },
+   "to": {
+    "code": "SAZA",
+    "name": "Azul"
+   },
+   "dep": 1793451397124,
+   "arr": 1793455719124,
+   "seen": 1793455428277,
+   "status": "air"
+  },
+  {
+   "id": "ltb0ya7nnz-1793447596167",
    "cs": "LV-SKA",
    "type": "puffin",
    "reg": "N624AU",
    "from": {
-    "code": "MBPV",
-    "name": "Providenciales Intl"
+    "code": "MROC",
+    "name": "Juan Santamar\u00eda Intl"
    },
    "to": {
-    "code": "SKSM",
-    "name": "Sim\u00f3n Bol\u00edvar Intl"
+    "code": "MHLC",
+    "name": "Golos\u00f3n Intl"
    },
-   "dep": 1793392804281,
-   "arr": 1793409207281,
-   "seen": 1793401082080,
+   "dep": 1793447596167,
+   "arr": 1793457360167,
+   "seen": 1793455428277,
    "status": "air"
   },
   {
-   "id": "ok8h9ubbh5-1793394395933",
+   "id": "ok8h9ubbh5-1793447609700",
    "cs": "LV-BGP",
    "type": "puffin",
    "reg": "N963PV",
    "from": {
-    "code": "SANL",
-    "name": "Capitan V A Almonacid"
+    "code": "SARE",
+    "name": "Resistencia Intl"
    },
    "to": {
-    "code": "SCFA",
-    "name": "Andr\u00e9s Sabella G\u00e1lvez Intl"
+    "code": "SCES",
+    "name": "Ricardo Garc\u00eda Posada"
    },
-   "dep": 1793394395933,
-   "arr": 1793409806933,
-   "seen": 1793401082080,
+   "dep": 1793447609700,
+   "arr": 1793462316700,
+   "seen": 1793455428277,
    "status": "air"
   },
   {
-   "id": "4a47dd5ve0-1793397837374",
-   "cs": "LV-OSPF",
-   "type": "skylark",
-   "reg": "N364FR",
+   "id": "r779uiyloj-1793455341692",
+   "cs": "LV-FTP",
+   "type": "shire",
+   "reg": "N304PR",
    "from": {
-    "code": "MMSM",
-    "name": "Felipe \u00c1ngeles Intl"
+    "code": "SBAX",
+    "name": "Romeu Zema"
    },
    "to": {
-    "code": "MMZO",
-    "name": "Playa de Oro Intl"
+    "code": "SBCF",
+    "name": "Tancredo Neves Intl"
    },
-   "dep": 1793397837374,
-   "arr": 1793409566374,
-   "seen": 1793401082080,
+   "dep": 1793455341692,
+   "arr": 1793458627692,
+   "seen": 1793455428277,
+   "status": "air"
+  },
+  {
+   "id": "tt0simk0o4-1793452954799",
+   "cs": "LV-RAM",
+   "type": "skylark",
+   "reg": "N914JE",
+   "from": {
+    "code": "SAZS",
+    "name": "Teniente Luis Candelaria Intl"
+   },
+   "to": {
+    "code": "SCQP",
+    "name": "La Araucan\u00eda Intl"
+   },
+   "dep": 1793452954799,
+   "arr": 1793458033799,
+   "seen": 1793455428277,
+   "status": "air"
+  },
+  {
+   "id": "u2vz0kvdqa-1793452797723",
+   "cs": "LV-SSH",
+   "type": "shire",
+   "reg": "N291NU",
+   "from": {
+    "code": "SAME",
+    "name": "Governor Francisco Gabrielli Intl"
+   },
+   "to": {
+    "code": "SASA",
+    "name": "Mart\u00edn Miguel de G\u00fcemes Intl"
+   },
+   "dep": 1793452797723,
+   "arr": 1793461325723,
+   "seen": 1793455428277,
+   "status": "air"
+  },
+  {
+   "id": "wf5ep14gq8-1793449599466",
+   "cs": "LV-IPV6",
+   "type": "puffin",
+   "reg": "N584WX",
+   "from": {
+    "code": "SABE",
+    "name": "Aeroparque Jorge Newbery"
+   },
+   "to": {
+    "code": "SAME",
+    "name": "Governor Francisco Gabrielli Intl"
+   },
+   "dep": 1793449599466,
+   "arr": 1793462497466,
+   "seen": 1793455428277,
+   "status": "air"
+  },
+  {
+   "id": "zbld52fqc8-1793454153529",
+   "cs": "LV-SSL",
+   "type": "skylark",
+   "reg": "N195JM",
+   "from": {
+    "code": "SAEM",
+    "name": "Miramar"
+   },
+   "to": {
+    "code": "AR-0513",
+    "name": "Estancia La Alborada"
+   },
+   "dep": 1793454153529,
+   "arr": 1793456261529,
+   "seen": 1793455428277,
    "status": "air"
   },
   {
@@ -71,7 +161,8 @@
    "dep": 1793397805783,
    "arr": 1793414105783,
    "seen": 1793401082080,
-   "status": "air"
+   "status": "landed",
+   "landed": 1793414105783
   },
   {
    "id": "r779uiyloj-1793399254837",
@@ -89,7 +180,8 @@
    "dep": 1793399254837,
    "arr": 1793413066837,
    "seen": 1793401082080,
-   "status": "air"
+   "status": "landed",
+   "landed": 1793413066837
   },
   {
    "id": "u2vz0kvdqa-1793400643380",
@@ -107,7 +199,65 @@
    "dep": 1793400643380,
    "arr": 1793410517380,
    "seen": 1793401082080,
-   "status": "air"
+   "status": "landed",
+   "landed": 1793410517380
+  },
+  {
+   "id": "ok8h9ubbh5-1793394395933",
+   "cs": "LV-BGP",
+   "type": "puffin",
+   "reg": "N963PV",
+   "from": {
+    "code": "SANL",
+    "name": "Capitan V A Almonacid"
+   },
+   "to": {
+    "code": "SCFA",
+    "name": "Andr\u00e9s Sabella G\u00e1lvez Intl"
+   },
+   "dep": 1793394395933,
+   "arr": 1793409806933,
+   "seen": 1793401082080,
+   "status": "landed",
+   "landed": 1793409806933
+  },
+  {
+   "id": "4a47dd5ve0-1793397837374",
+   "cs": "LV-OSPF",
+   "type": "skylark",
+   "reg": "N364FR",
+   "from": {
+    "code": "MMSM",
+    "name": "Felipe \u00c1ngeles Intl"
+   },
+   "to": {
+    "code": "MMZO",
+    "name": "Playa de Oro Intl"
+   },
+   "dep": 1793397837374,
+   "arr": 1793409566374,
+   "seen": 1793401082080,
+   "status": "landed",
+   "landed": 1793409566374
+  },
+  {
+   "id": "ltb0ya7nnz-1793392804281",
+   "cs": "LV-SKA",
+   "type": "puffin",
+   "reg": "N624AU",
+   "from": {
+    "code": "MBPV",
+    "name": "Providenciales Intl"
+   },
+   "to": {
+    "code": "SKSM",
+    "name": "Sim\u00f3n Bol\u00edvar Intl"
+   },
+   "dep": 1793392804281,
+   "arr": 1793409207281,
+   "seen": 1793401082080,
+   "status": "landed",
+   "landed": 1793409207281
   },
   {
    "id": "wf5ep14gq8-1793395819242",
@@ -125,7 +275,8 @@
    "dep": 1793395819242,
    "arr": 1793407126242,
    "seen": 1793401082080,
-   "status": "air"
+   "status": "landed",
+   "landed": 1793407126242
   },
   {
    "id": "zbld52fqc8-1793398360468",
@@ -143,7 +294,8 @@
    "dep": 1793398360468,
    "arr": 1793401404468,
    "seen": 1793401082080,
-   "status": "air"
+   "status": "landed",
+   "landed": 1793401404468
   },
   {
    "id": "r779uiyloj-1793386714801",
@@ -449,5 +601,223 @@
    "status": "landed",
    "landed": 1793330842735
   }
- ]
+ ],
+ "totals": {
+  "since": 1793328599237,
+  "flights": 32,
+  "pilots": [
+   "4a47dd5ve0",
+   "cjbz09vv3u",
+   "ltb0ya7nnz",
+   "ok8h9ubbh5",
+   "r779uiyloj",
+   "tt0simk0o4",
+   "u2vz0kvdqa",
+   "wf5ep14gq8",
+   "zbld52fqc8"
+  ],
+  "minutes": 3551,
+  "landed": 24,
+  "types": {
+   "bushmaster": 5,
+   "shire": 6,
+   "puffin": 14,
+   "skylark": 6,
+   "swallow": 1
+  },
+  "airports": {
+   "SABE": 3,
+   "SCNT": 1,
+   "SAZA": 1,
+   "SSIJ": 1,
+   "MYAN": 1,
+   "SBUG": 1,
+   "SA23": 1,
+   "SAVT": 1,
+   "SAAV": 1,
+   "SAZB": 1,
+   "SBCX": 1,
+   "SANE": 1,
+   "SARI": 1,
+   "SAVC": 1,
+   "SANU": 1,
+   "SBCH": 1,
+   "SAAR": 1,
+   "SCFA": 1,
+   "MMZO": 1,
+   "SKSM": 1,
+   "SAME": 1,
+   "AR-0513": 1
+  }
+ },
+ "stats": {
+  "live": 8,
+  "held": {
+   "n": 121,
+   "v": 4231730,
+   "top": [
+    {
+     "code": "SABE",
+     "v": 258160
+    },
+    {
+     "code": "SAEZ",
+     "v": 235550
+    },
+    {
+     "code": "SARI",
+     "v": 203720
+    },
+    {
+     "code": "SCES",
+     "v": 176830
+    },
+    {
+     "code": "SAAR",
+     "v": 147320
+    }
+   ],
+   "by": {
+    "CL": {
+     "n": 15,
+     "v": 566380
+    },
+    "AR": {
+     "n": 53,
+     "v": 2385650
+    },
+    "BR": {
+     "n": 27,
+     "v": 907730
+    },
+    "XX": {
+     "n": 8,
+     "v": 186020
+    },
+    "BO": {
+     "n": 2,
+     "v": 13810
+    },
+    "PY": {
+     "n": 1,
+     "v": 41960
+    },
+    "US": {
+     "n": 6,
+     "v": 24320
+    },
+    "UY": {
+     "n": 5,
+     "v": 87350
+    },
+    "MX": {
+     "n": 4,
+     "v": 18510
+    }
+   }
+  },
+  "flying": 505,
+  "bases": [
+   "SADM"
+  ],
+  "regions": [
+   {
+    "region": "AR",
+    "n": 6,
+    "leader": {
+     "name": "Unix Airways",
+     "v": 2429010
+    },
+    "rank": 1,
+    "v": 2429010
+   },
+   {
+    "region": "UY",
+    "n": 3,
+    "leader": {
+     "name": "Unix Airways",
+     "v": 95350
+    },
+    "rank": 1,
+    "v": 95350
+   },
+   {
+    "region": "BR",
+    "n": 9,
+    "leader": {
+     "name": "Unix Airways",
+     "v": 991860
+    },
+    "rank": 1,
+    "v": 991860
+   },
+   {
+    "region": "CL",
+    "n": 5,
+    "leader": {
+     "name": "Unix Airways",
+     "v": 600920
+    },
+    "rank": 1,
+    "v": 600920
+   },
+   {
+    "region": "PY",
+    "n": 2,
+    "leader": {
+     "name": "Zen Airlines",
+     "v": 69030
+    },
+    "rank": 2,
+    "v": 65790,
+    "ahead": {
+     "name": "Zen Airlines",
+     "v": 69030
+    }
+   },
+   {
+    "region": "BO",
+    "n": 3,
+    "leader": {
+     "name": "Nico Airlines",
+     "v": 62200
+    },
+    "rank": 3,
+    "v": 13810,
+    "ahead": {
+     "name": "Zen Airlines",
+     "v": 18290
+    }
+   },
+   {
+    "region": "PE",
+    "n": 2,
+    "leader": {
+     "name": "Delta Bearlines",
+     "v": 77490
+    },
+    "v": 0
+   },
+   {
+    "region": "MX",
+    "n": 25,
+    "leader": {
+     "name": "Check-In Airlines",
+     "v": 1486770
+    },
+    "v": 18510,
+    "cutoff": 44990
+   },
+   {
+    "region": "US",
+    "n": 25,
+    "leader": {
+     "name": "Vanguard Aviation",
+     "v": 11984430
+    },
+    "v": 24320,
+    "cutoff": 1575360
+   }
+  ]
+ }
 }
