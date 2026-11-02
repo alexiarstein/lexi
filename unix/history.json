@@ -1,5 +1,5 @@
 {
- "updated": 1793580109941,
+ "updated": 1793580320287,
  "flights": [
   {
    "id": "4a47dd5ve0-1793576106140",
@@ -16,7 +16,7 @@
    },
    "dep": 1793576106140,
    "arr": 1793591028140,
-   "seen": 1793580109941,
+   "seen": 1793580320287,
    "status": "air"
   },
   {
@@ -34,7 +34,7 @@
    },
    "dep": 1793579291399,
    "arr": 1793588989399,
-   "seen": 1793580109941,
+   "seen": 1793580320287,
    "status": "air"
   },
   {
@@ -52,7 +52,7 @@
    },
    "dep": 1793577210496,
    "arr": 1793586330496,
-   "seen": 1793580109941,
+   "seen": 1793580320287,
    "status": "air"
   },
   {
@@ -70,7 +70,79 @@
    },
    "dep": 1793578402325,
    "arr": 1793580826325,
-   "seen": 1793580109941,
+   "seen": 1793580320287,
+   "status": "air"
+  },
+  {
+   "id": "wf5ep14gq8-1793576177269",
+   "cs": "LV-IPV6",
+   "type": "shire",
+   "reg": "N624CL",
+   "from": {
+    "code": "SBPF",
+    "name": "Lauro Kurtz"
+   },
+   "to": {
+    "code": "SBZM",
+    "name": "Presidente Itamar Franco"
+   },
+   "dep": 1793576177269,
+   "arr": 1793586946269,
+   "seen": 1793580320287,
+   "status": "air"
+  },
+  {
+   "id": "ok8h9ubbh5-1793579959039",
+   "cs": "LV-BGP",
+   "type": "shire",
+   "reg": "N321AX",
+   "from": {
+    "code": "SBPK",
+    "name": "Jo\u00e3o Sim\u00f5es Lopes Neto Intl"
+   },
+   "to": {
+    "code": "SBNF",
+    "name": "Ministro Victor Konder Intl"
+   },
+   "dep": 1793579959039,
+   "arr": 1793587876039,
+   "seen": 1793580320287,
+   "status": "air"
+  },
+  {
+   "id": "yoko5oq6xr-1793579874328",
+   "cs": "LV-KEI",
+   "type": "skylark",
+   "reg": "N300SP",
+   "from": {
+    "code": "KTPA",
+    "name": "Tampa Intl"
+   },
+   "to": {
+    "code": "KSPG",
+    "name": "Albert Whitted"
+   },
+   "dep": 1793579874328,
+   "arr": 1793580506328,
+   "seen": 1793580320287,
+   "status": "air"
+  },
+  {
+   "id": "u2vz0kvdqa-1793580298049",
+   "cs": "LV-SSH",
+   "type": "zephyr",
+   "reg": "N759LS",
+   "from": {
+    "code": "SBSP",
+    "name": "Congonhas\u2013Deputado Freitas Nobre"
+   },
+   "to": {
+    "code": "SBSJ",
+    "name": "Professor Urbano Ernesto Stumpf"
+   },
+   "dep": 1793580298049,
+   "arr": 1793581202049,
+   "seen": 1793580320287,
    "status": "air"
   },
   {
@@ -89,61 +161,8 @@
    "dep": 1793578128315,
    "arr": 1793580165315,
    "seen": 1793580109941,
-   "status": "air"
-  },
-  {
-   "id": "wf5ep14gq8-1793576177269",
-   "cs": "LV-IPV6",
-   "type": "shire",
-   "reg": "N624CL",
-   "from": {
-    "code": "SBPF",
-    "name": "Lauro Kurtz"
-   },
-   "to": {
-    "code": "SBZM",
-    "name": "Presidente Itamar Franco"
-   },
-   "dep": 1793576177269,
-   "arr": 1793586946269,
-   "seen": 1793580109941,
-   "status": "air"
-  },
-  {
-   "id": "ok8h9ubbh5-1793579959039",
-   "cs": "LV-BGP",
-   "type": "shire",
-   "reg": "N321AX",
-   "from": {
-    "code": "SBPK",
-    "name": "Jo\u00e3o Sim\u00f5es Lopes Neto Intl"
-   },
-   "to": {
-    "code": "SBNF",
-    "name": "Ministro Victor Konder Intl"
-   },
-   "dep": 1793579959039,
-   "arr": 1793587876039,
-   "seen": 1793580109941,
-   "status": "air"
-  },
-  {
-   "id": "yoko5oq6xr-1793579874328",
-   "cs": "LV-KEI",
-   "type": "skylark",
-   "reg": "N300SP",
-   "from": {
-    "code": "KTPA",
-    "name": "Tampa Intl"
-   },
-   "to": {
-    "code": "KSPG",
-    "name": "Albert Whitted"
-   },
-   "dep": 1793579874328,
-   "arr": 1793580506328,
-   "seen": 1793580109941,
-   "status": "air"
+   "status": "landed",
+   "landed": 1793580165315
   },
   {
    "id": "ok8h9ubbh5-1793572990009",
@@ -699,7 +718,7 @@
  ],
  "totals": {
   "since": 1793328599237,
-  "flights": 61,
+  "flights": 62,
   "pilots": [
    "4a47dd5ve0",
    "alu05xn42a",
@@ -713,15 +732,15 @@
    "yoko5oq6xr",
    "zbld52fqc8"
   ],
-  "minutes": 6846,
-  "landed": 53,
+  "minutes": 6880,
+  "landed": 54,
   "types": {
    "bushmaster": 5,
    "shire": 16,
    "puffin": 22,
    "skylark": 16,
    "swallow": 1,
-   "zephyr": 1
+   "zephyr": 2
   },
   "airports": {
    "SABE": 4,
@@ -766,14 +785,15 @@
    "SCTE": 1,
    "SBPK": 1,
    "SCBQ": 1,
-   "KTPA": 1
+   "KTPA": 1,
+   "SBSP": 1
   }
  },
  "stats": {
   "live": 8,
   "held": {
    "n": 124,
-   "v": 3580875,
+   "v": 3562055,
    "top": [
     {
      "code": "SAEZ",
@@ -797,7 +817,7 @@
     }
    ]
   },
-  "flying": 673,
+  "flying": 675,
   "bases": [
    "SADM"
   ],
@@ -814,13 +834,13 @@
    },
    {
     "region": "BR",
-    "n": 2,
+    "n": 3,
     "leader": {
      "name": "Unix Airways",
-     "v": 141900
+     "v": 158900
     },
     "rank": 1,
-    "v": 141900
+    "v": 158900
    },
    {
     "region": "CL",
@@ -849,7 +869,11 @@
    },
    {
     "region": "PE",
-    "n": 0,
+    "n": 1,
+    "leader": {
+     "name": "Avalon Airways",
+     "v": 189690
+    },
     "v": 0
    },
    {
@@ -866,7 +890,7 @@
     "n": 25,
     "leader": {
      "name": "Vanguard Aviation",
-     "v": 240470
+     "v": 267280
     },
     "rank": 24,
     "v": 28270,
@@ -881,12 +905,12 @@
    "top": [
     {
      "name": "Vanguard Aviation",
-     "v": 605720,
+     "v": 621390,
      "us": false
     },
     {
      "name": "Solaris Sky",
-     "v": 444650,
+     "v": 474250,
      "us": false
     },
     {
@@ -896,22 +920,22 @@
     },
     {
      "name": "Unix Airways",
-     "v": 207850,
+     "v": 224850,
      "us": true
     },
     {
-     "name": "Diessi Airlines",
-     "v": 190540,
+     "name": "SEAsiana",
+     "v": 209000,
      "us": false
     }
    ],
    "rank": 4,
-   "v": 207850,
+   "v": 224850,
    "ahead": {
     "name": "DeepCo Air",
     "v": 246100
    },
-   "t": 1793580109941
+   "t": 1793580320287
   }
  }
 }
