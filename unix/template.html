@@ -53,6 +53,9 @@
   /* company stats */
   .stats { display: grid; gap: 14px; margin-bottom: 28px; }
   .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+  .kpi { display: flex; flex-direction: column; }
+  .kpi .lbl { white-space: normal; line-height: 1.4; }
+  .kpi .val { margin-top: auto; padding-top: 6px; white-space: nowrap; }
   .kpi, .reg, .panel { background: var(--board); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; min-width: 0; }
   .lbl { color: var(--dim); font-size: 10px; letter-spacing: .15em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .kpi .val { font-size: clamp(22px, 2.4vw, 30px); font-weight: 700; margin-top: 6px; color: var(--text); font-variant-numeric: tabular-nums; }
@@ -77,6 +80,10 @@
   .panel li > span:first-child { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-transform: uppercase; }
   .panel li .bar { height: 6px; border-radius: 0 3px 3px 0; background: var(--amber); opacity: .75; }
   .panel li b { font-weight: 400; color: #aab3bf; font-variant-numeric: tabular-nums; }
+  .panel.wide li { grid-template-columns: 12em 1fr auto; }
+  .panel li.us > span:first-child, .panel li.us b { color: var(--amber); font-weight: 700; }
+  .panel li.gap { grid-template-columns: 1fr; color: var(--dim); font-size: 10px; line-height: 1; }
+  .panel .foot { color: var(--dim); font-size: 10px; letter-spacing: .1em; margin-top: 8px; }
   .section-h { color: var(--amber); font-size: 11px; letter-spacing: .25em; margin: 6px 0 -4px; }
 
   .boards { display: grid; grid-template-columns: 1fr; gap: 28px; }
@@ -250,7 +257,7 @@ const COUNTRY = { AR: "ARGENTINA", UY: "URUGUAY", BR: "BRASIL", CL: "CHILE", PY:
                   BO: "BOLIVIA", PE: "PERÚ", MX: "MÉXICO", US: "EE.UU." };
 const num = n => n.toLocaleString("es-AR");
 const short = n => n >= 1e6 ? `${(n / 1e6).toFixed(2)}M` : n >= 1e4 ? `${Math.round(n / 1e3)}K` : num(n);
-const day = t => new Date(t).toLocaleDateString("es-AR", { timeZone: TZ, day: "numeric", month: "short" }).toUpperCase();
+const day = t => new Date(t).toLocaleDateString("es-AR", { timeZone: TZ, day: "2-digit", month: "2-digit" });
 
 function kpi(label, val, cls = "") {
   return `<div class="kpi"><div class="lbl">${label}</div><div class="val ${cls}">${val}</div></div>`;
@@ -266,15 +273,15 @@ function region(r) {
     note = `${short(r.ahead.v - r.v)} DETRÁS DE ${esc(r.ahead.name)}`;
   } else if (r.cutoff) {
     cls = "out"; rank = `&gt;${r.n}`;
-    note = `${short(r.cutoff - r.v)} TO TOP ${r.n} · FALTAN PARA ENTRAR`;
+    note = `OUT OF TOP ${r.n} · FUERA (CORTE ${short(r.cutoff)})`;
   } else {
     cls = "out"; rank = "—";
-    note = r.leader ? `NO PRESENCE · LÍDER ${esc(r.leader.name)}` : "NO PRESENCE · SIN PRESENCIA";
+    note = r.leader ? `NONE THIS WEEK · LÍDER ${esc(r.leader.name)}` : "NONE THIS WEEK · SIN ENTREGAS";
   }
-  const title = r.leader ? `${name}: ${num(r.v)} · líder ${r.leader.name} ${num(r.leader.v)}` : name;
+  const title = r.leader ? `${name}: ${r.v ? num(r.v) : "sin datos"} · líder ${r.leader.name} ${num(r.leader.v)}` : name;
   return `<div class="reg ${cls}" title="${esc(title)}">
     <div class="top"><span class="code">${esc(r.region)}</span><span class="lbl">${name}</span><span class="rank">${rank}</span></div>
-    <div class="v">${r.v ? num(r.v) : "—"}</div>
+    <div class="v">${r.v ? num(r.v) : r.cutoff ? `&lt;${num(r.cutoff)}` : "—"}</div>
     <div class="note">${note}</div></div>`;
 }
 
@@ -285,15 +292,38 @@ function list(label, rows) {
     `<li><span>${esc(k)}</span><span class="bar" style="width:${Math.max(4, v / max * 100)}%"></span><b>${num(v)}</b></li>`).join("")}</ol></div>`;
 }
 
+function companies(w, weeks) {
+  const max = w.top.length ? w.top[0].v : 1;
+  const li = (rank, name, v, us) => `<li class="${us ? "us" : ""}"><span>${rank}. ${esc(name)}</span>` +
+    `<span class="bar" style="width:${Math.max(4, v / max * 100)}%"></span><b>${num(v)}</b></li>`;
+  let rows = w.top.map((c, i) => li(i + 1, c.name, c.v, c.us)).join("");
+  if (!w.top.some(c => c.us)) {
+    rows += `<li class="gap">⋮</li>`;
+    rows += w.rank ? li(w.rank, "Unix Airways", w.v, true)
+                   : `<li class="us"><span>&gt;${w.n}. Unix Airways</span><span></span><b>≈${num(w.v)}</b></li>`;
+  }
+  let foot = w.rank > 1 ? `${short(w.ahead.v - w.v)} DETRÁS DE ${esc(w.ahead.name)}`
+           : w.rank === 1 ? "LEADER · LÍDER MUNDIAL"
+           : w.cutoff ? `${short(w.cutoff - w.v)} TO TOP ${w.n} · FALTAN PARA ENTRAR` : "";
+  const last = weeks && weeks[weeks.length - 1];
+  if (last) foot += `${foot ? " · " : ""}SEMANA PASADA ${last.rank ? "#" + last.rank : "&gt;" + w.n}`;
+  return `<div class="panel wide"><div class="lbl">COMPANY TABLE · TABLA MUNDIAL (SEMANA, $)</div><ol>${rows}</ol>` +
+    (foot ? `<div class="foot">${foot}</div>` : "") + `</div>`;
+}
+
 function renderStats() {
   const s = DATA.stats, t = DATA.totals;
   if (!s && !t) return;
   const kpis = [];
+  if (s && s.world) {
+    const w = s.world;
+    kpis.push(kpi("WORLD RANK · PUESTO MUNDIAL", w.rank ? `#${w.rank}<small>${short(w.v)}</small>` : `&gt;${w.n}<small>≈${short(w.v)}</small>`, "amber"));
+  }
   if (s) {
     kpis.push(kpi("IN FLIGHT · EN VUELO", `${s.live}${s.flying ? `<small>/ ${num(s.flying)}</small>` : ""}`, "amber"));
     if (s.held) {
       kpis.push(kpi("AIRPORTS · AEROPUERTOS", num(s.held.n)));
-      kpis.push(kpi("VALUE · VALOR", short(s.held.v)));
+      kpis.push(kpi("AIRPORTS $ · $ AEROPUERTOS", short(s.held.v)));
     }
   }
   if (t) {
@@ -307,6 +337,7 @@ function renderStats() {
 
   const top = (o, n = 5) => Object.entries(o || {}).sort((a, b) => b[1] - a[1]).slice(0, n);
   document.getElementById("panels").innerHTML = [
+    s && s.world && companies(s.world, DATA.weeks),
     t && list("FLEET · FLOTA (VUELOS POR AVIÓN)", top(t.types)),
     t && list("TOP DESTINATIONS · DESTINOS (ATERRIZAJES)", top(t.airports)),
     s && s.held && list("TOP AIRPORTS · AEROPUERTOS (VALOR)", s.held.top.map(a => [a.code, a.v])),

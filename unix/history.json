@@ -1,5 +1,5 @@
 {
- "updated": 1793579538127,
+ "updated": 1793580109941,
  "flights": [
   {
    "id": "4a47dd5ve0-1793576106140",
@@ -16,7 +16,7 @@
    },
    "dep": 1793576106140,
    "arr": 1793591028140,
-   "seen": 1793579538127,
+   "seen": 1793580109941,
    "status": "air"
   },
   {
@@ -34,7 +34,7 @@
    },
    "dep": 1793579291399,
    "arr": 1793588989399,
-   "seen": 1793579538127,
+   "seen": 1793580109941,
    "status": "air"
   },
   {
@@ -52,7 +52,97 @@
    },
    "dep": 1793577210496,
    "arr": 1793586330496,
-   "seen": 1793579538127,
+   "seen": 1793580109941,
+   "status": "air"
+  },
+  {
+   "id": "r779uiyloj-1793578402325",
+   "cs": "LV-FTP",
+   "type": "shire",
+   "reg": "N304PR",
+   "from": {
+    "code": "SBNM",
+    "name": "Santo \u00c2ngelo"
+   },
+   "to": {
+    "code": "SGEN",
+    "name": "Teniente Ramon A. Ayub Gonzalez Intl"
+   },
+   "dep": 1793578402325,
+   "arr": 1793580826325,
+   "seen": 1793580109941,
+   "status": "air"
+  },
+  {
+   "id": "u2vz0kvdqa-1793578128315",
+   "cs": "LV-SSH",
+   "type": "zephyr",
+   "reg": "N759LS",
+   "from": {
+    "code": "SBCT",
+    "name": "Curitiba-Afonso Pena Intl"
+   },
+   "to": {
+    "code": "SBSP",
+    "name": "Congonhas\u2013Deputado Freitas Nobre"
+   },
+   "dep": 1793578128315,
+   "arr": 1793580165315,
+   "seen": 1793580109941,
+   "status": "air"
+  },
+  {
+   "id": "wf5ep14gq8-1793576177269",
+   "cs": "LV-IPV6",
+   "type": "shire",
+   "reg": "N624CL",
+   "from": {
+    "code": "SBPF",
+    "name": "Lauro Kurtz"
+   },
+   "to": {
+    "code": "SBZM",
+    "name": "Presidente Itamar Franco"
+   },
+   "dep": 1793576177269,
+   "arr": 1793586946269,
+   "seen": 1793580109941,
+   "status": "air"
+  },
+  {
+   "id": "ok8h9ubbh5-1793579959039",
+   "cs": "LV-BGP",
+   "type": "shire",
+   "reg": "N321AX",
+   "from": {
+    "code": "SBPK",
+    "name": "Jo\u00e3o Sim\u00f5es Lopes Neto Intl"
+   },
+   "to": {
+    "code": "SBNF",
+    "name": "Ministro Victor Konder Intl"
+   },
+   "dep": 1793579959039,
+   "arr": 1793587876039,
+   "seen": 1793580109941,
+   "status": "air"
+  },
+  {
+   "id": "yoko5oq6xr-1793579874328",
+   "cs": "LV-KEI",
+   "type": "skylark",
+   "reg": "N300SP",
+   "from": {
+    "code": "KTPA",
+    "name": "Tampa Intl"
+   },
+   "to": {
+    "code": "KSPG",
+    "name": "Albert Whitted"
+   },
+   "dep": 1793579874328,
+   "arr": 1793580506328,
+   "seen": 1793580109941,
    "status": "air"
   },
   {
@@ -71,25 +161,8 @@
    "dep": 1793572990009,
    "arr": 1793579904009,
    "seen": 1793579538127,
-   "status": "air"
-  },
-  {
-   "id": "r779uiyloj-1793578402325",
-   "cs": "LV-FTP",
-   "type": "shire",
-   "reg": "N304PR",
-   "from": {
-    "code": "SBNM",
-    "name": "Santo \u00c2ngelo"
-   },
-   "to": {
-    "code": "SGEN",
-    "name": "Teniente Ramon A. Ayub Gonzalez Intl"
-   },
-   "dep": 1793578402325,
-   "arr": 1793580826325,
-   "seen": 1793579538127,
-   "status": "air"
+   "status": "landed",
+   "landed": 1793579904009
   },
   {
    "id": "tt0simk0o4-1793579311772",
@@ -107,43 +180,8 @@
    "dep": 1793579311772,
    "arr": 1793579850772,
    "seen": 1793579538127,
-   "status": "air"
-  },
-  {
-   "id": "u2vz0kvdqa-1793578128315",
-   "cs": "LV-SSH",
-   "type": "zephyr",
-   "reg": "N759LS",
-   "from": {
-    "code": "SBCT",
-    "name": "Curitiba-Afonso Pena Intl"
-   },
-   "to": {
-    "code": "SBSP",
-    "name": "Congonhas\u2013Deputado Freitas Nobre"
-   },
-   "dep": 1793578128315,
-   "arr": 1793580165315,
-   "seen": 1793579538127,
-   "status": "air"
-  },
-  {
-   "id": "wf5ep14gq8-1793576177269",
-   "cs": "LV-IPV6",
-   "type": "shire",
-   "reg": "N624CL",
-   "from": {
-    "code": "SBPF",
-    "name": "Lauro Kurtz"
-   },
-   "to": {
-    "code": "SBZM",
-    "name": "Presidente Itamar Franco"
-   },
-   "dep": 1793576177269,
-   "arr": 1793586946269,
-   "seen": 1793579538127,
-   "status": "air"
+   "status": "landed",
+   "landed": 1793579850772
   },
   {
    "id": "yoko5oq6xr-1793578402897",
@@ -161,7 +199,8 @@
    "dep": 1793578402897,
    "arr": 1793579846897,
    "seen": 1793579538127,
-   "status": "air"
+   "status": "landed",
+   "landed": 1793579846897
   },
   {
    "id": "4a47dd5ve0-1793543472198",
@@ -660,7 +699,7 @@
  ],
  "totals": {
   "since": 1793328599237,
-  "flights": 59,
+  "flights": 61,
   "pilots": [
    "4a47dd5ve0",
    "alu05xn42a",
@@ -674,13 +713,13 @@
    "yoko5oq6xr",
    "zbld52fqc8"
   ],
-  "minutes": 6698,
-  "landed": 50,
+  "minutes": 6846,
+  "landed": 53,
   "types": {
    "bushmaster": 5,
-   "shire": 15,
+   "shire": 16,
    "puffin": 22,
-   "skylark": 15,
+   "skylark": 16,
    "swallow": 1,
    "zephyr": 1
   },
@@ -724,14 +763,17 @@
    "SBFI": 1,
    "SACO": 1,
    "1CA6": 1,
-   "SCTE": 1
+   "SCTE": 1,
+   "SBPK": 1,
+   "SCBQ": 1,
+   "KTPA": 1
   }
  },
  "stats": {
-  "live": 9,
+  "live": 8,
   "held": {
-   "n": 122,
-   "v": 3523745,
+   "n": 124,
+   "v": 3580875,
    "top": [
     {
      "code": "SAEZ",
@@ -753,51 +795,9 @@
      "code": "SANT",
      "v": 113125
     }
-   ],
-   "by": {
-    "AR": {
-     "n": 52,
-     "v": 1733085
-    },
-    "US": {
-     "n": 2,
-     "v": 25165
-    },
-    "CL": {
-     "n": 13,
-     "v": 378680
-    },
-    "BO": {
-     "n": 3,
-     "v": 56930
-    },
-    "XX": {
-     "n": 6,
-     "v": 91515
-    },
-    "PY": {
-     "n": 2,
-     "v": 89080
-    },
-    "BR": {
-     "n": 33,
-     "v": 1016570
-    },
-    "UY": {
-     "n": 4,
-     "v": 21315
-    },
-    "MX": {
-     "n": 2,
-     "v": 9870
-    },
-    "PE": {
-     "n": 5,
-     "v": 101535
-    }
-   }
+   ]
   },
-  "flying": 679,
+  "flying": 673,
   "bases": [
    "SADM"
   ],
@@ -805,32 +805,32 @@
    {
     "region": "AR",
     "n": 0,
-    "v": 1733085
+    "v": 0
    },
    {
     "region": "UY",
     "n": 0,
-    "v": 21315
+    "v": 0
    },
    {
     "region": "BR",
     "n": 2,
     "leader": {
      "name": "Unix Airways",
-     "v": 88020
+     "v": 141900
     },
     "rank": 1,
-    "v": 88020
+    "v": 141900
    },
    {
     "region": "CL",
     "n": 1,
     "leader": {
      "name": "Unix Airways",
-     "v": 1500
+     "v": 2820
     },
     "rank": 1,
-    "v": 1500
+    "v": 2820
    },
    {
     "region": "PY",
@@ -845,12 +845,12 @@
    {
     "region": "BO",
     "n": 0,
-    "v": 56930
+    "v": 0
    },
    {
     "region": "PE",
     "n": 0,
-    "v": 101535
+    "v": 0
    },
    {
     "region": "MX",
@@ -859,22 +859,59 @@
      "name": "Solaris Sky",
      "v": 98720
     },
-    "v": 9870
+    "v": 0
    },
    {
     "region": "US",
     "n": 25,
     "leader": {
      "name": "Vanguard Aviation",
-     "v": 209850
+     "v": 240470
     },
-    "rank": 18,
-    "v": 25630,
+    "rank": 24,
+    "v": 28270,
     "ahead": {
-     "name": "Zephyr Airlines",
-     "v": 27830
+     "name": "DieselExpress",
+     "v": 29520
     }
    }
-  ]
+  ],
+  "world": {
+   "n": 15,
+   "top": [
+    {
+     "name": "Vanguard Aviation",
+     "v": 605720,
+     "us": false
+    },
+    {
+     "name": "Solaris Sky",
+     "v": 444650,
+     "us": false
+    },
+    {
+     "name": "DeepCo Air",
+     "v": 246100,
+     "us": false
+    },
+    {
+     "name": "Unix Airways",
+     "v": 207850,
+     "us": true
+    },
+    {
+     "name": "Diessi Airlines",
+     "v": 190540,
+     "us": false
+    }
+   ],
+   "rank": 4,
+   "v": 207850,
+   "ahead": {
+    "name": "DeepCo Air",
+    "v": 246100
+   },
+   "t": 1793580109941
+  }
  }
 }

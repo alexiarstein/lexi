@@ -24,18 +24,11 @@ TEMPLATE = HERE / "template.html"
 OUT = HERE / "index.html"
 KEEP_MS = 36 * 3600 * 1000  # how long landed flights stay on the board
 MAX_LANDED = 30
+MAX_WEEKS = 12  # final weekly standings kept in history
 
 # Countries shown in the standings strip, in display order.
 REGIONS = ["AR", "UY", "BR", "CL", "PY", "BO", "PE", "MX", "US"]
 TABLE_SIZE = 25  # /api/tables only lists the top 25
-
-# ICAO prefixes -> country, for splitting "held" airports by country.
-# Codes starting with a digit are FAA local identifiers (US).
-ICAO = {
-    "SA": "AR", "AR": "AR", "SU": "UY", "SC": "CL", "SG": "PY", "SL": "BO",
-    "SP": "PE", "MM": "MX", "K": "US",
-    **{p: "BR" for p in ("SB", "SD", "SI", "SJ", "SN", "SS", "SW")},
-}
 
 
 def fetch(url=API):
@@ -50,12 +43,6 @@ def try_fetch(path):
     except Exception as e:  # extras are optional: keep the board going
         print(f"warning: {path}: {e}", file=sys.stderr)
         return None
-
-
-def country(code):
-    if code[0].isdigit():
-        return "US"
-    return ICAO.get(code[:2]) or ICAO.get(code[0]) or "XX"
 
 
 def airport(a):
@@ -128,22 +115,16 @@ def tally(history, before):
 
 
 def held_stats(held):
-    by = {}
-    for code, a in held.items():
-        c = by.setdefault(country(code), {"n": 0, "v": 0})
-        c["n"] += 1
-        c["v"] += a.get("v", 0)
     top = sorted(held, key=lambda k: -held[k].get("v", 0))[:5]
     return {
         "n": len(held),
         "v": sum(a.get("v", 0) for a in held.values()),
         "top": [{"code": k, "v": held[k].get("v", 0)} for k in top],
-        "by": by,
     }
 
 
-def standing(region, table, held_by):
-    """Our place in a country's weekly table, or what we hold there if unlisted."""
+def standing(region, table):
+    """Our place in a country's weekly table."""
     rows = table.get("list", [])
     cos = table.get("cos", {})
     name = lambda i: cos.get(i, {}).get("name", i)
@@ -158,10 +139,47 @@ def standing(region, table, held_by):
         if i:
             s["ahead"] = {"name": name(rows[i - 1]["id"]), "v": rows[i - 1]["value"]}
     else:
-        s["v"] = held_by.get(region, {}).get("v", 0)
+        # Unlisted: nothing delivered this week, or below the top-25 cutoff.
+        s["v"] = 0
         if len(rows) >= TABLE_SIZE:
             s["cutoff"] = rows[-1]["value"]
     return s
+
+
+def world_rank(world, regions):
+    """Our place in the weekly company table (/api/world lists the top 15).
+
+    Outside the top 15 the value is the sum of our tracked country tables:
+    a slight undercount, since countries outside REGIONS are missed.
+    """
+    rows = world.get("table", [])
+    cos = world.get("cos", {})
+    name = lambda i: cos.get(i, {}).get("name", i)
+    ids = [r["id"] for r in rows]
+    w = {"n": len(rows), "top": [{"name": name(r["id"]), "v": r["value"], "us": r["id"] == CO_ID} for r in rows[:5]]}
+    if CO_ID in ids:
+        i = ids.index(CO_ID)
+        w["rank"] = i + 1
+        w["v"] = rows[i]["value"]
+        if i:
+            w["ahead"] = {"name": name(rows[i - 1]["id"]), "v": rows[i - 1]["value"]}
+    else:
+        w["v"] = sum(r["v"] for r in regions if r.get("rank"))
+        w["approx"] = True
+        if rows:
+            w["cutoff"] = rows[-1]["value"]
+    return w
+
+
+def close_week(history, now, prev):
+    """The weekly table resets: when our value drops sharply, file last week's result."""
+    cur = history["stats"].get("world")
+    if prev and cur and prev.get("v", 0) > 0 and cur["v"] < prev["v"] / 2:
+        weeks = history.setdefault("weeks", [])
+        weeks.append({"end": prev.get("t", now), "rank": prev.get("rank"), "v": prev["v"]})
+        del weeks[:-MAX_WEEKS]
+    if cur:
+        cur["t"] = now
 
 
 def extras(history, data):
@@ -170,7 +188,6 @@ def extras(history, data):
     stats["live"] = len({f["pid"] for f in data.get("flights", [])})
     if "held" in data:
         stats["held"] = held_stats(data["held"])
-    held_by = stats.get("held", {}).get("by", {})
 
     flying = try_fetch("/api/flying")
     if flying and "flying" in flying:
@@ -184,11 +201,16 @@ def extras(history, data):
     for region in REGIONS:
         table = try_fetch(f"/api/tables?region={region}")
         if table is not None:
-            regions.append(standing(region, table, held_by))
+            regions.append(standing(region, table))
         elif region in old:
             regions.append(old[region])
     stats["regions"] = regions
+
+    prev = stats.get("world")
+    if world:
+        stats["world"] = world_rank(world, regions)
     history["stats"] = stats
+    close_week(history, history["updated"], prev)
     return history
 
 
