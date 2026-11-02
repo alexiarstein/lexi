@@ -1,6 +1,132 @@
 {
- "updated": 1793580320287,
+ "updated": 1793630145311,
  "flights": [
+  {
+   "id": "4a47dd5ve0-1793622653642",
+   "cs": "LV-OSPF",
+   "type": "puffin",
+   "reg": "N195EF",
+   "from": {
+    "code": "SBGL",
+    "name": "Rio de Janeiro Gale\u00e3o \u2013 Tom Jobim Intl"
+   },
+   "to": {
+    "code": "SBGO",
+    "name": "Santa Genoveva Intl"
+   },
+   "dep": 1793622653642,
+   "arr": 1793635992642,
+   "seen": 1793630145311,
+   "status": "air"
+  },
+  {
+   "id": "cjbz09vv3u-1793622586354",
+   "cs": "LV-TLS",
+   "type": "puffin",
+   "reg": "N480CX",
+   "from": {
+    "code": "SAZN",
+    "name": "Presidente Per\u00f3n Intl"
+   },
+   "to": {
+    "code": "SAAR",
+    "name": "Rosario Islas Malvinas Intl"
+   },
+   "dep": 1793622586354,
+   "arr": 1793635307354,
+   "seen": 1793630145311,
+   "status": "air"
+  },
+  {
+   "id": "r779uiyloj-1793619796569",
+   "cs": "LV-FTP",
+   "type": "shire",
+   "reg": "N304PR",
+   "from": {
+    "code": "SAZN",
+    "name": "Presidente Per\u00f3n Intl"
+   },
+   "to": {
+    "code": "SUMU",
+    "name": "Carrasco General Ces\u00e1reo L. Berisso Intl"
+   },
+   "dep": 1793619796569,
+   "arr": 1793632694569,
+   "seen": 1793630145311,
+   "status": "air"
+  },
+  {
+   "id": "u2vz0kvdqa-1793623223151",
+   "cs": "LV-SSH",
+   "type": "zephyr",
+   "reg": "N759LS",
+   "from": {
+    "code": "SBGO",
+    "name": "Santa Genoveva Intl"
+   },
+   "to": {
+    "code": "SAME",
+    "name": "Governor Francisco Gabrielli Intl"
+   },
+   "dep": 1793623223151,
+   "arr": 1793635398151,
+   "seen": 1793630145311,
+   "status": "air"
+  },
+  {
+   "id": "wf5ep14gq8-1793629888449",
+   "cs": "LV-IPV6",
+   "type": "shire",
+   "reg": "N624CL",
+   "from": {
+    "code": "KPAM",
+    "name": "Tyndall Air Force Base"
+   },
+   "to": {
+    "code": "94FA",
+    "name": "Stock Island"
+   },
+   "dep": 1793629888449,
+   "arr": 1793630601449,
+   "seen": 1793630145311,
+   "status": "air"
+  },
+  {
+   "id": "yoko5oq6xr-1793628599086",
+   "cs": "LV-KEI",
+   "type": "skylark",
+   "reg": "N300SP",
+   "from": {
+    "code": "83FL",
+    "name": "Nassau"
+   },
+   "to": {
+    "code": "8FA1",
+    "name": "Clark Field"
+   },
+   "dep": 1793628599086,
+   "arr": 1793630394086,
+   "seen": 1793630145311,
+   "status": "air"
+  },
+  {
+   "id": "zbld52fqc8-1793628829199",
+   "cs": "LV-SSL",
+   "type": "puffin",
+   "reg": "N648BJ",
+   "from": {
+    "code": "SABE",
+    "name": "Aeroparque Jorge Newbery"
+   },
+   "to": {
+    "code": "SUCM",
+    "name": "Zagarzaz\u00fa Intl"
+   },
+   "dep": 1793628829199,
+   "arr": 1793630148199,
+   "seen": 1793630145311,
+   "status": "air"
+  },
   {
    "id": "4a47dd5ve0-1793576106140",
    "cs": "LV-OSPF",
@@ -17,7 +143,8 @@
    "dep": 1793576106140,
    "arr": 1793591028140,
    "seen": 1793580320287,
-   "status": "air"
+   "status": "landed",
+   "landed": 1793591028140
   },
   {
    "id": "cjbz09vv3u-1793579291399",
@@ -35,61 +162,8 @@
    "dep": 1793579291399,
    "arr": 1793588989399,
    "seen": 1793580320287,
-   "status": "air"
-  },
-  {
-   "id": "ltb0ya7nnz-1793577210496",
-   "cs": "LV-SKA",
-   "type": "puffin",
-   "reg": "N624AU",
-   "from": {
-    "code": "KPIT",
-    "name": "Pittsburgh Intl"
-   },
-   "to": {
-    "code": "KAVL",
-    "name": "Asheville Regional"
-   },
-   "dep": 1793577210496,
-   "arr": 1793586330496,
-   "seen": 1793580320287,
-   "status": "air"
-  },
-  {
-   "id": "r779uiyloj-1793578402325",
-   "cs": "LV-FTP",
-   "type": "shire",
-   "reg": "N304PR",
-   "from": {
-    "code": "SBNM",
-    "name": "Santo \u00c2ngelo"
-   },
-   "to": {
-    "code": "SGEN",
-    "name": "Teniente Ramon A. Ayub Gonzalez Intl"
-   },
-   "dep": 1793578402325,
-   "arr": 1793580826325,
-   "seen": 1793580320287,
-   "status": "air"
-  },
-  {
-   "id": "wf5ep14gq8-1793576177269",
-   "cs": "LV-IPV6",
-   "type": "shire",
-   "reg": "N624CL",
-   "from": {
-    "code": "SBPF",
-    "name": "Lauro Kurtz"
-   },
-   "to": {
-    "code": "SBZM",
-    "name": "Presidente Itamar Franco"
-   },
-   "dep": 1793576177269,
-   "arr": 1793586946269,
-   "seen": 1793580320287,
-   "status": "air"
+   "status": "landed",
+   "landed": 1793588989399
   },
   {
    "id": "ok8h9ubbh5-1793579959039",
@@ -107,25 +181,46 @@
    "dep": 1793579959039,
    "arr": 1793587876039,
    "seen": 1793580320287,
-   "status": "air"
+   "status": "landed",
+   "landed": 1793587876039
   },
   {
-   "id": "yoko5oq6xr-1793579874328",
-   "cs": "LV-KEI",
-   "type": "skylark",
-   "reg": "N300SP",
+   "id": "wf5ep14gq8-1793576177269",
+   "cs": "LV-IPV6",
+   "type": "shire",
+   "reg": "N624CL",
    "from": {
-    "code": "KTPA",
-    "name": "Tampa Intl"
+    "code": "SBPF",
+    "name": "Lauro Kurtz"
    },
    "to": {
-    "code": "KSPG",
-    "name": "Albert Whitted"
+    "code": "SBZM",
+    "name": "Presidente Itamar Franco"
    },
-   "dep": 1793579874328,
-   "arr": 1793580506328,
+   "dep": 1793576177269,
+   "arr": 1793586946269,
    "seen": 1793580320287,
-   "status": "air"
+   "status": "landed",
+   "landed": 1793586946269
+  },
+  {
+   "id": "ltb0ya7nnz-1793577210496",
+   "cs": "LV-SKA",
+   "type": "puffin",
+   "reg": "N624AU",
+   "from": {
+    "code": "KPIT",
+    "name": "Pittsburgh Intl"
+   },
+   "to": {
+    "code": "KAVL",
+    "name": "Asheville Regional"
+   },
+   "dep": 1793577210496,
+   "arr": 1793586330496,
+   "seen": 1793580320287,
+   "status": "landed",
+   "landed": 1793586330496
   },
   {
    "id": "u2vz0kvdqa-1793580298049",
@@ -143,7 +238,46 @@
    "dep": 1793580298049,
    "arr": 1793581202049,
    "seen": 1793580320287,
-   "status": "air"
+   "status": "landed",
+   "landed": 1793581202049
+  },
+  {
+   "id": "r779uiyloj-1793578402325",
+   "cs": "LV-FTP",
+   "type": "shire",
+   "reg": "N304PR",
+   "from": {
+    "code": "SBNM",
+    "name": "Santo \u00c2ngelo"
+   },
+   "to": {
+    "code": "SGEN",
+    "name": "Teniente Ramon A. Ayub Gonzalez Intl"
+   },
+   "dep": 1793578402325,
+   "arr": 1793580826325,
+   "seen": 1793580320287,
+   "status": "landed",
+   "landed": 1793580826325
+  },
+  {
+   "id": "yoko5oq6xr-1793579874328",
+   "cs": "LV-KEI",
+   "type": "skylark",
+   "reg": "N300SP",
+   "from": {
+    "code": "KTPA",
+    "name": "Tampa Intl"
+   },
+   "to": {
+    "code": "KSPG",
+    "name": "Albert Whitted"
+   },
+   "dep": 1793579874328,
+   "arr": 1793580506328,
+   "seen": 1793580320287,
+   "status": "landed",
+   "landed": 1793580506328
   },
   {
    "id": "u2vz0kvdqa-1793578128315",
@@ -391,334 +525,11 @@
    "seen": 1793543558208,
    "status": "landed",
    "landed": 1793543888750
-  },
-  {
-   "id": "r779uiyloj-1793482826849",
-   "cs": "LV-FTP",
-   "type": "shire",
-   "reg": "N304PR",
-   "from": {
-    "code": "SBPS",
-    "name": "Porto Seguro Intl"
-   },
-   "to": {
-    "code": "SBCF",
-    "name": "Tancredo Neves Intl"
-   },
-   "dep": 1793482826849,
-   "arr": 1793489589849,
-   "seen": 1793484287461,
-   "status": "landed",
-   "landed": 1793489589849
-  },
-  {
-   "id": "zbld52fqc8-1793483570032",
-   "cs": "LV-SSL",
-   "type": "skylark",
-   "reg": "N195JM",
-   "from": {
-    "code": "SAZA",
-    "name": "Azul"
-   },
-   "to": {
-    "code": "SAEZ",
-    "name": "Ezeiza International Airport - Ministro"
-   },
-   "dep": 1793483570032,
-   "arr": 1793489002032,
-   "seen": 1793484287461,
-   "status": "landed",
-   "landed": 1793489002032
-  },
-  {
-   "id": "4a47dd5ve0-1793483917736",
-   "cs": "LV-OSPF",
-   "type": "skylark",
-   "reg": "N364FR",
-   "from": {
-    "code": "SAAG",
-    "name": "Gualeguaychu"
-   },
-   "to": {
-    "code": "SABE",
-    "name": "Aeroparque Jorge Newbery"
-   },
-   "dep": 1793483917736,
-   "arr": 1793487675736,
-   "seen": 1793484287461,
-   "status": "landed",
-   "landed": 1793487675736
-  },
-  {
-   "id": "u2vz0kvdqa-1793484101415",
-   "cs": "LV-SSH",
-   "type": "shire",
-   "reg": "N291NU",
-   "from": {
-    "code": "SPZO",
-    "name": "Alejandro Velasco Astete Intl"
-   },
-   "to": {
-    "code": "SPJL",
-    "name": "Inca Manco Capac Intl"
-   },
-   "dep": 1793484101415,
-   "arr": 1793486709415,
-   "seen": 1793484287461,
-   "status": "landed",
-   "landed": 1793486709415
-  },
-  {
-   "id": "ltb0ya7nnz-1793482322269",
-   "cs": "LV-SKA",
-   "type": "puffin",
-   "reg": "N624AU",
-   "from": {
-    "code": "MZBZ",
-    "name": "Philip S. W. Goldson Intl"
-   },
-   "to": {
-    "code": "MHRO",
-    "name": "Juan Manuel G\u00e1lvez Intl"
-   },
-   "dep": 1793482322269,
-   "arr": 1793486000269,
-   "seen": 1793484287461,
-   "status": "landed",
-   "landed": 1793486000269
-  },
-  {
-   "id": "wf5ep14gq8-1793472138246",
-   "cs": "LV-IPV6",
-   "type": "puffin",
-   "reg": "N584WX",
-   "from": {
-    "code": "SAZN",
-    "name": "Presidente Per\u00f3n Intl"
-   },
-   "to": {
-    "code": "SAAR",
-    "name": "Rosario Islas Malvinas Intl"
-   },
-   "dep": 1793472138246,
-   "arr": 1793485724246,
-   "seen": 1793484287461,
-   "status": "landed",
-   "landed": 1793485724246
-  },
-  {
-   "id": "tt0simk0o4-1793482155165",
-   "cs": "LV-RAM",
-   "type": "skylark",
-   "reg": "N914JE",
-   "from": {
-    "code": "SCTC",
-    "name": "Maquehue"
-   },
-   "to": {
-    "code": "LCP",
-    "name": "Loncopue"
-   },
-   "dep": 1793482155165,
-   "arr": 1793485552165,
-   "seen": 1793484287461,
-   "status": "landed",
-   "landed": 1793485552165
-  },
-  {
-   "id": "ok8h9ubbh5-1793479955614",
-   "cs": "LV-BGP",
-   "type": "puffin",
-   "reg": "N963PV",
-   "from": {
-    "code": "SLLP",
-    "name": "El Alto Intl"
-   },
-   "to": {
-    "code": "SLTR",
-    "name": "Teniente Av. Jorge Henrich Arauz"
-   },
-   "dep": 1793479955614,
-   "arr": 1793485224614,
-   "seen": 1793484287461,
-   "status": "landed",
-   "landed": 1793485224614
-  },
-  {
-   "id": "cjbz09vv3u-1793480634684",
-   "cs": "LV-TLS",
-   "type": "puffin",
-   "reg": "N462UL",
-   "from": {
-    "code": "SAZM",
-    "name": "\u00c1stor Piazzola Intl"
-   },
-   "to": {
-    "code": "SAEZ",
-    "name": "Ezeiza International Airport - Ministro"
-   },
-   "dep": 1793480634684,
-   "arr": 1793484900684,
-   "seen": 1793484287461,
-   "status": "landed",
-   "landed": 1793484900684
-  },
-  {
-   "id": "wf5ep14gq8-1793449599466",
-   "cs": "LV-IPV6",
-   "type": "puffin",
-   "reg": "N584WX",
-   "from": {
-    "code": "SABE",
-    "name": "Aeroparque Jorge Newbery"
-   },
-   "to": {
-    "code": "SAME",
-    "name": "Governor Francisco Gabrielli Intl"
-   },
-   "dep": 1793449599466,
-   "arr": 1793462497466,
-   "seen": 1793455518598,
-   "status": "landed",
-   "landed": 1793462497466
-  },
-  {
-   "id": "ok8h9ubbh5-1793447609700",
-   "cs": "LV-BGP",
-   "type": "puffin",
-   "reg": "N963PV",
-   "from": {
-    "code": "SARE",
-    "name": "Resistencia Intl"
-   },
-   "to": {
-    "code": "SCES",
-    "name": "Ricardo Garc\u00eda Posada"
-   },
-   "dep": 1793447609700,
-   "arr": 1793462316700,
-   "seen": 1793455518598,
-   "status": "landed",
-   "landed": 1793462316700
-  },
-  {
-   "id": "u2vz0kvdqa-1793452797723",
-   "cs": "LV-SSH",
-   "type": "shire",
-   "reg": "N291NU",
-   "from": {
-    "code": "SAME",
-    "name": "Governor Francisco Gabrielli Intl"
-   },
-   "to": {
-    "code": "SASA",
-    "name": "Mart\u00edn Miguel de G\u00fcemes Intl"
-   },
-   "dep": 1793452797723,
-   "arr": 1793461325723,
-   "seen": 1793455518598,
-   "status": "landed",
-   "landed": 1793461325723
-  },
-  {
-   "id": "r779uiyloj-1793455341692",
-   "cs": "LV-FTP",
-   "type": "shire",
-   "reg": "N304PR",
-   "from": {
-    "code": "SBAX",
-    "name": "Romeu Zema"
-   },
-   "to": {
-    "code": "SBCF",
-    "name": "Tancredo Neves Intl"
-   },
-   "dep": 1793455341692,
-   "arr": 1793458627692,
-   "seen": 1793455518598,
-   "status": "landed",
-   "landed": 1793458627692
-  },
-  {
-   "id": "tt0simk0o4-1793452954799",
-   "cs": "LV-RAM",
-   "type": "skylark",
-   "reg": "N914JE",
-   "from": {
-    "code": "SAZS",
-    "name": "Teniente Luis Candelaria Intl"
-   },
-   "to": {
-    "code": "SCQP",
-    "name": "La Araucan\u00eda Intl"
-   },
-   "dep": 1793452954799,
-   "arr": 1793458033799,
-   "seen": 1793455518598,
-   "status": "landed",
-   "landed": 1793458033799
-  },
-  {
-   "id": "ltb0ya7nnz-1793447596167",
-   "cs": "LV-SKA",
-   "type": "puffin",
-   "reg": "N624AU",
-   "from": {
-    "code": "MROC",
-    "name": "Juan Santamar\u00eda Intl"
-   },
-   "to": {
-    "code": "MHLC",
-    "name": "Golos\u00f3n Intl"
-   },
-   "dep": 1793447596167,
-   "arr": 1793457360167,
-   "seen": 1793455518598,
-   "status": "landed",
-   "landed": 1793457360167
-  },
-  {
-   "id": "zbld52fqc8-1793454153529",
-   "cs": "LV-SSL",
-   "type": "skylark",
-   "reg": "N195JM",
-   "from": {
-    "code": "SAEM",
-    "name": "Miramar"
-   },
-   "to": {
-    "code": "AR-0513",
-    "name": "Estancia La Alborada"
-   },
-   "dep": 1793454153529,
-   "arr": 1793456261529,
-   "seen": 1793455518598,
-   "status": "landed",
-   "landed": 1793456261529
-  },
-  {
-   "id": "cjbz09vv3u-1793451397124",
-   "cs": "LV-TLS",
-   "type": "bushmaster",
-   "reg": "N630CD",
-   "from": {
-    "code": "SADM",
-    "name": "Mor\u00f3n"
-   },
-   "to": {
-    "code": "SAZA",
-    "name": "Azul"
-   },
-   "dep": 1793451397124,
-   "arr": 1793455719124,
-   "seen": 1793455518598,
-   "status": "landed",
-   "landed": 1793455719124
   }
  ],
  "totals": {
   "since": 1793328599237,
-  "flights": 62,
+  "flights": 69,
   "pilots": [
    "4a47dd5ve0",
    "alu05xn42a",
@@ -732,15 +543,15 @@
    "yoko5oq6xr",
    "zbld52fqc8"
   ],
-  "minutes": 6880,
-  "landed": 54,
+  "minutes": 7820,
+  "landed": 62,
   "types": {
    "bushmaster": 5,
-   "shire": 16,
-   "puffin": 22,
-   "skylark": 16,
+   "shire": 18,
+   "puffin": 25,
+   "skylark": 17,
    "swallow": 1,
-   "zephyr": 2
+   "zephyr": 3
   },
   "airports": {
    "SABE": 4,
@@ -751,7 +562,7 @@
    "SBUG": 1,
    "SA23": 1,
    "SAVT": 1,
-   "SAAV": 1,
+   "SAAV": 2,
    "SAZB": 1,
    "SBCX": 1,
    "SANE": 1,
@@ -786,102 +597,126 @@
    "SBPK": 1,
    "SCBQ": 1,
    "KTPA": 1,
-   "SBSP": 1
+   "SBSP": 1,
+   "SGEN": 2,
+   "SBNF": 1,
+   "SBZM": 1,
+   "KAVL": 1,
+   "SBSJ": 1,
+   "KSPG": 1
   }
  },
  "stats": {
-  "live": 8,
+  "live": 7,
   "held": {
-   "n": 124,
-   "v": 3562055,
+   "n": 132,
+   "v": 4519780,
    "top": [
     {
-     "code": "SAEZ",
-     "v": 143135
-    },
-    {
-     "code": "SCES",
-     "v": 142260
+     "code": "SBGO",
+     "v": 224945
     },
     {
      "code": "SABE",
-     "v": 141950
+     "v": 217980
     },
     {
-     "code": "SBFI",
-     "v": 122200
+     "code": "SAME",
+     "v": 170645
     },
     {
-     "code": "SANT",
-     "v": 113125
+     "code": "SAZN",
+     "v": 161315
+    },
+    {
+     "code": "SAEZ",
+     "v": 143135
     }
    ]
   },
-  "flying": 675,
+  "flying": 653,
   "bases": [
    "SADM"
   ],
   "regions": [
    {
     "region": "AR",
-    "n": 0,
-    "v": 0
+    "n": 4,
+    "leader": {
+     "name": "Unix Airways",
+     "v": 401750
+    },
+    "rank": 1,
+    "v": 401750
    },
    {
     "region": "UY",
-    "n": 0,
-    "v": 0
+    "n": 1,
+    "leader": {
+     "name": "Unix Airways",
+     "v": 4100
+    },
+    "rank": 1,
+    "v": 4100
    },
    {
     "region": "BR",
-    "n": 3,
+    "n": 10,
     "leader": {
      "name": "Unix Airways",
-     "v": 158900
+     "v": 793960
     },
     "rank": 1,
-    "v": 158900
+    "v": 793960
    },
    {
     "region": "CL",
-    "n": 1,
+    "n": 3,
     "leader": {
-     "name": "Unix Airways",
-     "v": 2820
+     "name": "FSS Centroamerica",
+     "v": 91890
     },
-    "rank": 1,
-    "v": 2820
+    "rank": 2,
+    "v": 8780,
+    "ahead": {
+     "name": "FSS Centroamerica",
+     "v": 91890
+    }
    },
    {
     "region": "PY",
-    "n": 1,
+    "n": 3,
     "leader": {
      "name": "Unix Airways",
-     "v": 34860
+     "v": 78620
     },
     "rank": 1,
-    "v": 34860
+    "v": 78620
    },
    {
     "region": "BO",
-    "n": 0,
+    "n": 3,
+    "leader": {
+     "name": "FSS Centroamerica",
+     "v": 117940
+    },
     "v": 0
    },
    {
     "region": "PE",
-    "n": 1,
+    "n": 3,
     "leader": {
-     "name": "Avalon Airways",
-     "v": 189690
+     "name": "Aerogrex",
+     "v": 250000
     },
     "v": 0
    },
    {
     "region": "MX",
-    "n": 2,
+    "n": 18,
     "leader": {
-     "name": "Solaris Sky",
-     "v": 98720
+     "name": "Check-In Airlines",
+     "v": 501970
     },
     "v": 0
    },
@@ -889,14 +724,14 @@
     "region": "US",
     "n": 25,
     "leader": {
-     "name": "Vanguard Aviation",
-     "v": 267280
+     "name": "PocketPlanes",
+     "v": 4843720
     },
-    "rank": 24,
-    "v": 28270,
+    "rank": 20,
+    "v": 464800,
     "ahead": {
-     "name": "DieselExpress",
-     "v": 29520
+     "name": "Based Airlines",
+     "v": 500680
     }
    }
   ],
@@ -904,38 +739,35 @@
    "n": 15,
    "top": [
     {
-     "name": "Vanguard Aviation",
-     "v": 621390,
+     "name": "SEAsiana",
+     "v": 6150150,
      "us": false
     },
     {
-     "name": "Solaris Sky",
-     "v": 474250,
+     "name": "PocketPlanes",
+     "v": 5814730,
+     "us": false
+    },
+    {
+     "name": "Vanguard Aviation",
+     "v": 4710950,
+     "us": false
+    },
+    {
+     "name": "Check-In Airlines",
+     "v": 4063900,
      "us": false
     },
     {
      "name": "DeepCo Air",
-     "v": 246100,
-     "us": false
-    },
-    {
-     "name": "Unix Airways",
-     "v": 224850,
-     "us": true
-    },
-    {
-     "name": "SEAsiana",
-     "v": 209000,
+     "v": 4001690,
      "us": false
     }
    ],
-   "rank": 4,
-   "v": 224850,
-   "ahead": {
-    "name": "DeepCo Air",
-    "v": 246100
-   },
-   "t": 1793580320287
+   "v": 1752010,
+   "approx": true,
+   "cutoff": 1889890,
+   "t": 1793630145311
   }
  }
 }
