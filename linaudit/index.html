@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>linaudit(1) — auditoría de seguridad para Linux</title>
+<meta name="description" content="linaudit: auditoría de seguridad de solo lectura para Linux, con un puntaje de 1 a 10. Más de 120 controles en 9 categorías, interfaz de terminal, reportes de texto y JSON. Software libre (AGPL v3)." />
+<meta property="og:title" content="linaudit — auditoría de seguridad de solo lectura para Linux" />
+<meta property="og:description" content="Mira tu máquina como lo haría un atacante o un auditor y te dice qué está mal, qué tan grave es y cómo arreglarlo." />
+<meta property="og:image" content="https://lexiworks.dev/linaudit/Screenshot_20261105_170313.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;0,600;1,400&family=IBM+Plex+Serif:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:        #14120d;
+    --panel:     #1b1811;
+    --panel-h:   #211d15;
+    --ink:       #e6e0d2;
+    --ink-2:     #a89e8a;
+    --ink-3:     #625c4a;
+    --accent:    #c98a3f;
+    --accent-2:  #8a5e2d;
+    --ok:        #7a9b76;
+    --crit:      #d9675a;
+    --high:      #e08a7a;
+    --med:       #d6a861;
+    --low:       #7fb2c9;
+    --rule:      rgba(230,224,210,0.12);
+    --rule-h:    rgba(230,224,210,0.26);
+    --mono: 'IBM Plex Mono', monospace;
+    --serif: 'IBM Plex Serif', serif;
+  }
+  body.light{
+    --bg:        #f1ece0;
+    --panel:     #e8e1d0;
+    --panel-h:   #ded5c0;
+    --ink:       #221d14;
+    --ink-2:     #5d5541;
+    --ink-3:     #8c826c;
+    --accent:    #915d1e;
+    --accent-2:  #b17a30;
+    --ok:        #4d6b49;
+    --crit:      #a8392c;
+    --high:      #b0543f;
+    --med:       #8f6418;
+    --low:       #2f6a85;
+    --rule:      rgba(34,29,20,0.14);
+    --rule-h:    rgba(34,29,20,0.30);
+  }
+
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--serif);
+    font-size:16px;
+    line-height:1.7;
+    min-height:100vh;
+    transition:background .3s, color .3s;
+  }
+  a{color:inherit;}
+  ::selection{background:var(--accent);color:var(--bg);}
+
+  .wrap{max-width:820px;margin:0 auto;padding:0 1.5rem;}
+
+  /* ── MAN HEADER / FOOTER ── */
+  .manbar{
+    font-family:var(--mono);font-size:.68rem;letter-spacing:.04em;color:var(--ink-3);
+    display:flex;justify-content:space-between;padding:1.1rem 0;
+    border-bottom:1px solid var(--rule);text-transform:uppercase;
+  }
+  .manbar.foot{border-bottom:none;border-top:1px solid var(--rule);margin-top:1.4rem;}
+  .manbar .mid{display:none;}
+  @media(min-width:640px){ .manbar .mid{display:inline;} }
+
+  .toolbar{display:flex;justify-content:space-between;align-items:center;padding:.9rem 0 0;gap:1rem;}
+  .brand{font-family:var(--mono);font-size:.82rem;color:var(--ink);letter-spacing:.02em;text-decoration:none;}
+  .brand .path{color:var(--ink-3);}
+  .brand:hover .path{color:var(--accent);}
+  .toggles{display:flex;gap:.5rem;}
+  .toggle-btn{
+    font-family:var(--mono);font-size:.66rem;letter-spacing:.06em;color:var(--ink-2);
+    background:transparent;border:1px solid var(--rule);border-radius:3px;
+    padding:.32rem .6rem;cursor:pointer;transition:border-color .2s, color .2s;
+  }
+  .toggle-btn:hover{border-color:var(--rule-h);color:var(--ink);}
+
+  /* ── HERO ── */
+  .hero{padding:3rem 0 2.2rem;}
+  h1{
+    font-family:var(--serif);font-weight:500;
+    font-size:clamp(2.1rem,6vw,3rem);letter-spacing:-.01em;line-height:1.15;
+  }
+  h1 .sec{font-family:var(--mono);font-size:.45em;color:var(--ink-3);font-weight:400;vertical-align:.35em;margin-left:.2em;}
+  .tagline{font-size:1.15rem;color:var(--ink-2);margin:.5rem 0 1.4rem;max-width:56ch;}
+  .tagline em{color:var(--accent);font-style:italic;}
+  .badges{display:flex;flex-wrap:wrap;gap:.45rem;margin-bottom:1.8rem;}
+  .badge{
+    font-family:var(--mono);font-size:.68rem;letter-spacing:.04em;color:var(--ink-2);
+    border:1px solid var(--rule);border-radius:3px;padding:.22rem .55rem;white-space:nowrap;
+  }
+  .badge b{color:var(--accent);font-weight:500;}
+  .cta{display:flex;flex-wrap:wrap;gap:.6rem;margin-bottom:2.2rem;}
+  .btn{
+    font-family:var(--mono);font-size:.78rem;text-decoration:none;
+    padding:.55rem .95rem;border-radius:4px;border:1px solid var(--rule-h);color:var(--ink);
+    transition:border-color .2s, background .2s, color .2s;
+  }
+  .btn:hover{border-color:var(--accent);color:var(--accent);}
+  .btn.primary{background:var(--accent);border-color:var(--accent);color:var(--bg);}
+  .btn.primary:hover{background:transparent;color:var(--accent);}
+
+  /* ── TERMINAL FRAME (screenshots + code) ── */
+  .term{border:1px solid var(--rule);border-radius:8px;background:var(--panel);overflow:hidden;}
+  .term-chrome{
+    display:flex;align-items:center;gap:.5rem;padding:.6rem .9rem;
+    border-bottom:1px solid var(--rule);background:var(--panel-h);
+  }
+  .dot{width:9px;height:9px;border-radius:50%;background:var(--ink-3);opacity:.5;}
+  .term-title{font-family:var(--mono);font-size:.7rem;color:var(--ink-3);margin-left:.4rem;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .term img{display:block;width:100%;height:auto;background:#22252a;cursor:zoom-in;}
+  figure{margin:0;}
+  figcaption{font-family:var(--mono);font-size:.72rem;color:var(--ink-3);padding:.7rem .2rem 0;}
+  figcaption b{color:var(--ink-2);font-weight:500;}
+
+  .shots{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-top:1.2rem;}
+  @media(max-width:640px){ .shots{grid-template-columns:1fr;} }
+
+  /* ── SECTIONS ── */
+  section{padding:2.6rem 0;border-top:1px solid var(--rule);}
+  .sec-label{
+    font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;color:var(--ink-3);
+    text-transform:uppercase;margin-bottom:1.3rem;
+  }
+  .sec-label a{text-decoration:none;}
+  .sec-label a:hover{color:var(--accent);}
+  h3{font-family:var(--mono);font-size:.86rem;font-weight:500;color:var(--ink);margin:1.8rem 0 .7rem;}
+  h3:first-child{margin-top:0;}
+  .body-text p, .body-text li{color:var(--ink-2);max-width:66ch;}
+  .body-text p{margin-bottom:1rem;}
+  .body-text p:last-child{margin-bottom:0;}
+  .body-text strong{color:var(--ink);font-weight:500;}
+  .body-text a, .table a{color:var(--accent);text-decoration:underline;text-decoration-color:var(--rule-h);text-underline-offset:.2em;}
+  .body-text a:hover{text-decoration-color:var(--accent);}
+  .body-text ul, .body-text ol{padding-left:1.3rem;margin-bottom:1rem;}
+  .body-text li{margin-bottom:.4rem;}
+  .body-text li::marker{color:var(--ink-3);font-family:var(--mono);font-size:.85em;}
+  code{font-family:var(--mono);font-size:.86em;color:var(--ink);background:var(--panel);
+    border:1px solid var(--rule);border-radius:3px;padding:.05em .35em;}
+
+  .note{
+    border-left:2px solid var(--accent);background:var(--panel);
+    padding:.9rem 1.1rem;border-radius:0 4px 4px 0;margin:1.2rem 0;
+    color:var(--ink-2);font-size:.95rem;max-width:66ch;
+  }
+  .note strong{color:var(--ink);font-weight:500;}
+
+  /* code blocks */
+  .code{position:relative;margin:1rem 0 1.2rem;}
+  .code pre{
+    font-family:var(--mono);font-size:.8rem;line-height:1.65;color:var(--ink);
+    background:var(--panel);border:1px solid var(--rule);border-radius:6px;
+    padding:1rem 1.1rem;overflow-x:auto;white-space:pre;
+  }
+  .code .c{color:var(--ink-3);}
+  .code .p{color:var(--ok);user-select:none;}
+  .copy{
+    position:absolute;top:.5rem;right:.5rem;
+    font-family:var(--mono);font-size:.62rem;letter-spacing:.06em;color:var(--ink-3);
+    background:var(--panel-h);border:1px solid var(--rule);border-radius:3px;
+    padding:.2rem .5rem;cursor:pointer;opacity:0;transition:opacity .2s, color .2s;
+  }
+  .code:hover .copy, .copy:focus{opacity:1;}
+  .copy:hover{color:var(--accent);}
+  @media(hover:none){ .copy{opacity:1;} }
+
+  /* flags (OPTIONS) */
+  .flags{display:flex;flex-direction:column;}
+  .flag{display:grid;grid-template-columns:13rem 1fr;gap:1rem;padding:.7rem 0;border-top:1px solid var(--rule);font-size:.92rem;}
+  .flag:first-child{border-top:none;}
+  .flag .name{font-family:var(--mono);color:var(--accent);font-size:.8rem;padding-top:.15rem;word-break:break-word;}
+  .flag .desc{color:var(--ink-2);}
+  .flag .desc strong{color:var(--ink);font-weight:500;}
+
+  /* features */
+  .features{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--rule);border:1px solid var(--rule);border-radius:6px;overflow:hidden;}
+  .feat{background:var(--panel);padding:1.1rem 1.2rem;}
+  .feat-k{font-family:var(--mono);font-size:.78rem;color:var(--accent);margin-bottom:.35rem;}
+  .feat p{font-size:.88rem;color:var(--ink-2);}
+  @media(max-width:640px){ .features{grid-template-columns:1fr;} }
+
+  /* categories */
+  .cats{display:flex;flex-direction:column;}
+  .cat{display:grid;grid-template-columns:7.5rem 3rem 1fr;gap:.9rem;align-items:baseline;padding:.6rem 0;border-top:1px solid var(--rule);}
+  .cat:first-child{border-top:none;}
+  .cat .n{font-family:var(--mono);font-size:.82rem;color:var(--accent);}
+  .cat .ct{font-family:var(--mono);font-size:.72rem;color:var(--ink-3);text-align:right;}
+  .cat .d{font-size:.9rem;color:var(--ink-2);}
+  @media(max-width:560px){ .cat{grid-template-columns:6.5rem 1fr;} .cat .ct{display:none;} }
+
+  /* tables */
+  .table{width:100%;border-collapse:collapse;font-size:.88rem;margin:1rem 0 1.2rem;}
+  .table th{font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-weight:400;text-align:left;padding:.5rem .6rem .5rem 0;border-bottom:1px solid var(--rule-h);}
+  .table td{padding:.6rem .6rem .6rem 0;border-bottom:1px solid var(--rule);color:var(--ink-2);vertical-align:top;}
+  .table td:first-child{font-family:var(--mono);font-size:.8rem;color:var(--accent);white-space:nowrap;}
+  .table-wrap{overflow-x:auto;}
+
+  /* severity weights */
+  .sev{display:grid;grid-template-columns:repeat(5,1fr);gap:.5rem;margin:1.2rem 0;}
+  .sev div{border:1px solid var(--rule);border-radius:4px;padding:.6rem .5rem;text-align:center;background:var(--panel);}
+  .sev .lbl{font-family:var(--mono);font-size:.64rem;letter-spacing:.08em;display:block;}
+  .sev .w{font-family:var(--mono);font-size:1.35rem;color:var(--ink);}
+  .sev .crit .lbl{color:var(--crit);} .sev .high .lbl{color:var(--high);}
+  .sev .med .lbl{color:var(--med);} .sev .low .lbl{color:var(--low);} .sev .info .lbl{color:var(--ink-3);}
+  @media(max-width:480px){ .sev{grid-template-columns:repeat(3,1fr);} }
+
+  /* steps */
+  .steps{counter-reset:step;list-style:none;padding:0 !important;}
+  .steps > li{counter-increment:step;position:relative;padding-left:2.4rem !important;margin-bottom:1.3rem !important;}
+  .steps > li::before{
+    content:counter(step);position:absolute;left:0;top:.05rem;
+    font-family:var(--mono);font-size:.72rem;color:var(--accent);
+    border:1px solid var(--accent-2);border-radius:50%;width:1.6rem;height:1.6rem;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .steps > li > p{margin-bottom:.4rem;}
+
+  /* tree */
+  .tree .k{color:var(--accent);}
+
+  /* see also */
+  .seealso{display:flex;flex-direction:column;gap:.1rem;}
+  .seealso a{
+    display:flex;justify-content:space-between;align-items:baseline;gap:1rem;
+    padding:.6rem 0;border-top:1px solid var(--rule);text-decoration:none;
+    font-family:var(--mono);font-size:.86rem;color:var(--ink);
+  }
+  .seealso a:first-child{border-top:none;}
+  .seealso a:hover{color:var(--accent);}
+  .seealso a .tag{color:var(--ink-3);font-size:.72rem;text-align:right;}
+  .seealso a:hover .tag{color:var(--accent-2);}
+
+  /* toc */
+  .toc{display:flex;flex-wrap:wrap;gap:.3rem 1.1rem;font-family:var(--mono);font-size:.74rem;}
+  .toc a{color:var(--ink-3);text-decoration:none;}
+  .toc a:hover{color:var(--accent);}
+
+  footer{padding:2.2rem 0 3rem;}
+  .colophon{font-family:var(--mono);font-size:.72rem;color:var(--ink-3);display:flex;justify-content:space-between;flex-wrap:wrap;gap:.5rem;}
+
+  /* lightbox */
+  .lightbox{
+    position:fixed;inset:0;background:rgba(10,9,6,.92);display:none;
+    align-items:center;justify-content:center;padding:1.5rem;z-index:10;cursor:zoom-out;
+  }
+  .lightbox.open{display:flex;}
+  .lightbox img{max-width:100%;max-height:100%;border-radius:6px;box-shadow:0 10px 40px rgba(0,0,0,.5);}
+
+  @media(max-width:600px){
+    .flag{grid-template-columns:1fr;gap:.2rem;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="manbar">
+    <span>LINAUDIT(1)</span>
+    <span class="mid lang-es">Comandos de usuario</span>
+    <span class="mid lang-en">User commands</span>
+    <span>LINAUDIT(1)</span>
+  </div>
+
+  <div class="toolbar">
+    <a class="brand" href="/">alexia<span class="path">@</span>lexiworks<span class="path">:~/</span>linaudit</a>
+    <div class="toggles">
+      <button class="toggle-btn" onclick="toggleLang()"><span class="lang-es">EN</span><span class="lang-en">ES</span></button>
+      <button class="toggle-btn" onclick="toggleMode()">☽/☀</button>
+    </div>
+  </div>
+
+  <!-- ── HERO ── -->
+  <div class="hero">
+    <p class="sec-label lang-es">Nombre</p>
+    <p class="sec-label lang-en">Name</p>
+    <h1>linaudit<span class="sec">(1)</span></h1>
+    <p class="tagline lang-es">Auditoría de seguridad <em>de solo lectura</em> para Linux, con un puntaje de 1 a 10. Mira tu máquina como lo haría un atacante o un auditor, y te dice en palabras simples qué está mal, qué tan grave es y cómo arreglarlo.</p>
+    <p class="tagline lang-en">A <em>read-only</em> security audit for Linux, with a score from 1 to 10. It looks at your machine the way an attacker or an auditor would, and tells you in plain words what is wrong, how serious it is, and how to fix it.</p>
+
+    <div class="badges">
+      <span class="badge"><b>128</b> <span class="lang-es">controles</span><span class="lang-en">checks</span></span>
+      <span class="badge"><b>9</b> <span class="lang-es">categorías</span><span class="lang-en">categories</span></span>
+      <span class="badge">Debian · Ubuntu · RHEL</span>
+      <span class="badge">Rust 1.85+</span>
+      <span class="badge">AGPL-3.0+</span>
+      <span class="badge">es · en</span>
+    </div>
+
+    <div class="cta">
+      <a class="btn primary" href="#instalacion"><span class="lang-es">Instalar</span><span class="lang-en">Install</span></a>
+      <a class="btn" href="https://github.com/alexiarstein/linaudit" target="_blank" rel="noopener">github/linaudit →</a>
+      <a class="btn" href="https://github.com/alexiarstein/linaudit/blob/main/docs/CHECKS.md" target="_blank" rel="noopener"><span class="lang-es">Lista de controles</span><span class="lang-en">List of checks</span></a>
+    </div>
+
+    <figure class="term">
+      <div class="term-chrome">
+        <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+        <span class="term-title">root@gentoocito:~# linaudit</span>
+      </div>
+      <img src="Screenshot_20261105_170313.png" width="1022" height="558"
+           alt="Pantalla de resumen de linaudit: puntaje 6 de 10, hallazgos abiertos por gravedad, estado de cada categoría y la lista de lo más urgente." />
+    </figure>
+  </div>
+
+  <nav class="toc" aria-label="Contenido">
+    <a href="#sinopsis"><span class="lang-es">sinopsis</span><span class="lang-en">synopsis</span></a>
+    <a href="#descripcion"><span class="lang-es">descripción</span><span class="lang-en">description</span></a>
+    <a href="#capturas"><span class="lang-es">capturas</span><span class="lang-en">screenshots</span></a>
+    <a href="#categorias"><span class="lang-es">categorías</span><span class="lang-en">categories</span></a>
+    <a href="#instalacion"><span class="lang-es">instalación</span><span class="lang-en">install</span></a>
+    <a href="#opciones"><span class="lang-es">opciones</span><span class="lang-en">options</span></a>
+    <a href="#perfiles"><span class="lang-es">perfiles</span><span class="lang-en">profiles</span></a>
+    <a href="#puntaje"><span class="lang-es">puntaje</span><span class="lang-en">score</span></a>
+    <a href="#excepciones"><span class="lang-es">excepciones</span><span class="lang-en">waivers</span></a>
+    <a href="#compilar"><span class="lang-es">compilar</span><span class="lang-en">build</span></a>
+    <a href="#idiomas"><span class="lang-es">traducir</span><span class="lang-en">translate</span></a>
+    <a href="#colaborar"><span class="lang-es">colaborar</span><span class="lang-en">contribute</span></a>
+  </nav>
+
+  <!-- ── SINOPSIS ── -->
+  <section id="sinopsis" style="margin-top:2rem;">
+    <p class="sec-label lang-es">Sinopsis</p>
+    <p class="sec-label lang-en">Synopsis</p>
+    <div class="code"><pre><span class="p"># </span>linaudit [--profile server|desktop|container] [--plain | --json] [--fast]
+           [--category <span class="lang-es">LISTA</span><span class="lang-en">LIST</span>] [--min-score N] [--output <span class="lang-es">ARCHIVO</span><span class="lang-en">FILE</span>] [--lang es|en]</pre></div>
+  </section>
+
+  <!-- ── DESCRIPCIÓN ── -->
+  <section id="descripcion">
+    <p class="sec-label lang-es">Descripción</p>
+    <p class="sec-label lang-en">Description</p>
+    <div class="body-text" style="margin-bottom:1.6rem;">
+      <p class="lang-es">linaudit es un chequeo de salud de seguridad para servidores y computadoras Linux. Corre más de cien controles sobre cuentas, SSH, permisos, credenciales expuestas, red, actualizaciones, persistencia y aplicaciones de servidor, y resume todo en <strong>un número de 1 a 10</strong> fácil de comparar entre máquinas. Cada hallazgo viene con el comando o la configuración exacta que lo arregla.</p>
+      <p class="lang-en">linaudit is a security health check for Linux servers and computers. It runs more than a hundred checks over accounts, SSH, permissions, exposed credentials, network, updates, persistence and server applications, and sums everything up in <strong>a single number from 1 to 10</strong> that is easy to compare between machines. Every finding comes with the exact command or setting that fixes it.</p>
+    </div>
+    <div class="features">
+      <div class="feat">
+        <div class="feat-k lang-es">solo lectura</div><div class="feat-k lang-en">read-only</div>
+        <p class="lang-es">Nunca modifica nada del sistema. Cuando encuentra una contraseña o una clave, te dice <em>dónde</em> está, nunca su valor.</p>
+        <p class="lang-en">It never changes anything on the system. When it finds a password or a key, it tells you <em>where</em> it is, never its value.</p>
+      </div>
+      <div class="feat">
+        <div class="feat-k lang-es">puntaje honesto</div><div class="feat-k lang-en">honest score</div>
+        <p class="lang-es">Ponderado por gravedad y con techos: con un hallazgo crítico abierto, no hay forma de sacar más de 6.</p>
+        <p class="lang-en">Weighted by severity and capped: with one open critical finding there is no way to score above 6.</p>
+      </div>
+      <div class="feat">
+        <div class="feat-k lang-es">interfaz de terminal</div><div class="feat-k lang-en">terminal UI</div>
+        <p class="lang-es">Resumen, hallazgos filtrables y categorías. Buscás, filtrás y copiás el arreglo con <code>y</code>.</p>
+        <p class="lang-en">Summary, filterable findings and categories. Search, filter, and copy the fix with <code>y</code>.</p>
+      </div>
+      <div class="feat">
+        <div class="feat-k lang-es">texto y JSON</div><div class="feat-k lang-en">text and JSON</div>
+        <p class="lang-es">Reporte plano para leer o mandar por mail, y JSON para scripts, cron, CI o un colector central.</p>
+        <p class="lang-en">Plain report to read or email, and JSON for scripts, cron, CI or a central collector.</p>
+      </div>
+      <div class="feat">
+        <div class="feat-k lang-es">perfiles</div><div class="feat-k lang-en">profiles</div>
+        <p class="lang-es">Servidor, escritorio o contenedor: el criterio se adapta a lo que es la máquina, y lo deja escrito.</p>
+        <p class="lang-en">Server, desktop or container: the criteria adapt to what the machine is, and the report says so.</p>
+      </div>
+      <div class="feat">
+        <div class="feat-k lang-es">castellano e inglés</div><div class="feat-k lang-en">Spanish and English</div>
+        <p class="lang-es">Traducciones con gettext, embebidas en el binario. Sumar un idioma es un archivo <code>.po</code> y unas líneas de código.</p>
+        <p class="lang-en">gettext translations embedded in the binary. Adding a language is one <code>.po</code> file and a few lines of code.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CAPTURAS ── -->
+  <section id="capturas">
+    <p class="sec-label lang-es">Capturas</p>
+    <p class="sec-label lang-en">Screenshots</p>
+    <div class="body-text">
+      <p class="lang-es">Un recorrido rápido: la bienvenida, la auditoría en curso y el resumen final.</p>
+      <p class="lang-en">A quick tour: the welcome screen, the audit in progress, and the final summary.</p>
+    </div>
+    <div class="shots">
+      <figure>
+        <div class="term">
+          <div class="term-chrome"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="term-title">bienvenida</span></div>
+          <img src="Screenshot_20261105_170155.png" width="1016" height="552" loading="lazy"
+               alt="Pantalla de bienvenida de linaudit con el logo, los datos del sistema y el selector de idioma." />
+        </div>
+        <figcaption class="lang-es"><b>Bienvenida.</b> Datos del sistema, aviso si no sos root y, la primera vez, la elección de idioma.</figcaption>
+        <figcaption class="lang-en"><b>Welcome.</b> System details, a warning if you are not root and, the first time, the language choice.</figcaption>
+      </figure>
+      <figure>
+        <div class="term">
+          <div class="term-chrome"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="term-title">auditando</span></div>
+          <img src="Screenshot_20261105_170222.png" width="1025" height="560" loading="lazy"
+               alt="linaudit auditando el sistema: barra de progreso y lista de las nueve categorías." />
+        </div>
+        <figcaption class="lang-es"><b>Auditoría.</b> Las nueve categorías, una por una. Con <code>--fast</code> tarda segundos.</figcaption>
+        <figcaption class="lang-en"><b>Audit.</b> The nine categories, one by one. With <code>--fast</code> it takes seconds.</figcaption>
+      </figure>
+    </div>
+    <div class="body-text" style="margin-top:1.6rem;">
+      <p class="lang-es">Al terminar hay tres pestañas: <strong>Resumen</strong> (el puntaje, los hallazgos abiertos por gravedad y los más urgentes, como en la captura de arriba), <strong>Hallazgos</strong> (cada problema con su detalle y su arreglo) y <strong>Categorías</strong>. Con <code>?</code> ves los atajos y con <code>q</code> salís.</p>
+      <p class="lang-en">When it finishes there are three tabs: <strong>Summary</strong> (the score, open findings by severity and the most urgent ones, as in the screenshot above), <strong>Findings</strong> (every problem with its details and its fix) and <strong>Categories</strong>. Press <code>?</code> for the shortcuts and <code>q</code> to quit.</p>
+    </div>
+  </section>
+
+  <!-- ── CATEGORÍAS ── -->
+  <section id="categorias">
+    <p class="sec-label lang-es">Qué revisa</p>
+    <p class="sec-label lang-en">What it checks</p>
+    <div class="cats">
+      <div class="cat"><span class="n">accounts</span><span class="ct">12</span>
+        <span class="d lang-es">Cuentas con UID 0, contraseñas vacías o con hashes débiles, <code>NOPASSWD</code> en sudo, cuentas de servicio con shell.</span>
+        <span class="d lang-en">UID 0 accounts, empty or weakly hashed passwords, <code>NOPASSWD</code> in sudo, service accounts with a shell.</span></div>
+      <div class="cat"><span class="n">ssh</span><span class="ct">16</span>
+        <span class="d lang-es">Configuración efectiva de OpenSSH: login de root, contraseñas, algoritmos débiles, bloques <code>Match</code>, claves de host.</span>
+        <span class="d lang-en">Effective OpenSSH configuration: root login, passwords, weak algorithms, <code>Match</code> blocks, host keys.</span></div>
+      <div class="cat"><span class="n">filesystem</span><span class="ct">18</span>
+        <span class="d lang-es">Permisos críticos, SUID/SGID fuera de paquetes o en binarios de GTFOBins, world-writable, montajes de <code>/tmp</code>.</span>
+        <span class="d lang-en">Critical permissions, SUID/SGID outside packages or on GTFOBins binaries, world-writable files, <code>/tmp</code> mounts.</span></div>
+      <div class="cat"><span class="n">secrets</span><span class="ct">8</span>
+        <span class="d lang-es">Credenciales en texto plano, en URLs, historiales, units de systemd y cron; claves privadas legibles por todos.</span>
+        <span class="d lang-en">Plaintext credentials, in URLs, shell histories, systemd units and cron; world-readable private keys.</span></div>
+      <div class="cat"><span class="n">network</span><span class="ct">17</span>
+        <span class="d lang-es">Firewall local, puertos expuestos y parámetros de red del kernel.</span>
+        <span class="d lang-en">Local firewall, exposed ports and kernel network parameters.</span></div>
+      <div class="cat"><span class="n">patching</span><span class="ct">7</span>
+        <span class="d lang-es">Actualizaciones pendientes, reinicio pendiente, fin de soporte de la distribución.</span>
+        <span class="d lang-en">Pending updates, pending reboot, end of support of the distribution.</span></div>
+      <div class="cat"><span class="n">persistence</span><span class="ct">15</span>
+        <span class="d lang-es">Indicadores de compromiso y mecanismos de persistencia: PAM, <code>ld.so.preload</code>, cron, units, claves autorizadas.</span>
+        <span class="d lang-en">Signs of compromise and persistence mechanisms: PAM, <code>ld.so.preload</code>, cron, units, authorized keys.</span></div>
+      <div class="cat"><span class="n">hardening</span><span class="ct">17</span>
+        <span class="d lang-es">SELinux/AppArmor, auditd, sincronización horaria, logs, parámetros de endurecimiento del kernel.</span>
+        <span class="d lang-en">SELinux/AppArmor, auditd, time sync, logging, kernel hardening parameters.</span></div>
+      <div class="cat"><span class="n">apps</span><span class="ct">18</span>
+        <span class="d lang-es">Tomcat, Redis, Docker, PostgreSQL, Samba, Apache y nginx: las configuraciones peligrosas de siempre.</span>
+        <span class="d lang-en">Tomcat, Redis, Docker, PostgreSQL, Samba, Apache and nginx: the usual dangerous settings.</span></div>
+    </div>
+    <div class="body-text" style="margin-top:1.2rem;">
+      <p class="lang-es">Cada control tiene un ID estable (<code>SSH-001</code>, <code>FS-013</code>…) que nunca cambia de significado. La lista completa, con la gravedad de cada uno, está en <a href="https://github.com/alexiarstein/linaudit/blob/main/docs/CHECKS.md" target="_blank" rel="noopener">docs/CHECKS.md</a>.</p>
+      <p class="lang-en">Every check has a stable ID (<code>SSH-001</code>, <code>FS-013</code>…) that never changes meaning. The full list, with each one's severity, is in <a href="https://github.com/alexiarstein/linaudit/blob/main/docs/CHECKS.md" target="_blank" rel="noopener">docs/CHECKS.md</a>.</p>
+    </div>
+  </section>
+
+  <!-- ── INSTALACIÓN ── -->
+  <section id="instalacion">
+    <p class="sec-label lang-es">Instalación</p>
+    <p class="sec-label lang-en">Install</p>
+    <div class="body-text">
+      <h3 class="lang-es">Debian y derivadas</h3>
+      <h3 class="lang-en">Debian and derivatives</h3>
+      <p class="lang-es">El paquete está en camino al archivo oficial de Debian:</p>
+      <p class="lang-en">The package is on its way into the official Debian archive:</p>
+    </div>
+    <div class="code"><pre><span class="p">$ </span>sudo apt install linaudit</pre></div>
+    <div class="body-text">
+      <h3 class="lang-es">Desde el código fuente</h3>
+      <h3 class="lang-en">From source</h3>
+      <p class="lang-es">Hace falta Rust 1.85 o más nuevo (la versión de Debian 13). Funciona en cualquier distribución; no tiene dependencias en tiempo de ejecución.</p>
+      <p class="lang-en">You need Rust 1.85 or newer (the version in Debian 13). It works on any distribution and has no runtime dependencies.</p>
+    </div>
+    <div class="code"><pre><span class="p">$ </span>git clone https://github.com/alexiarstein/linaudit
+<span class="p">$ </span>cd linaudit
+<span class="p">$ </span>cargo build --release
+<span class="p">$ </span>sudo install -m 755 target/release/linaudit /usr/local/bin/</pre></div>
+    <div class="body-text">
+      <h3 class="lang-es">Primer uso</h3>
+      <h3 class="lang-en">First run</h3>
+    </div>
+    <div class="code"><pre><span class="p">$ </span>sudo linaudit</pre></div>
+    <div class="note lang-es"><strong>Correlo con sudo.</strong> Sin root muchos controles no pueden leer lo que necesitan (la base de contraseñas, las reglas del firewall). linaudit igual corre, pero avisa qué no pudo evaluar y el puntaje no puede pasar de 6: lo que no se pudo mirar nunca cuenta como bien.</div>
+    <div class="note lang-en"><strong>Run it with sudo.</strong> Without root many checks cannot read what they need (the password database, the firewall rules). linaudit still runs, but it tells you what it could not evaluate and the score cannot go above 6: whatever could not be looked at never counts as fine.</div>
+  </section>
+
+  <!-- ── OPCIONES ── -->
+  <section id="opciones">
+    <p class="sec-label lang-es">Opciones</p>
+    <p class="sec-label lang-en">Options</p>
+    <div class="flags">
+      <div class="flag"><div class="name">--plain</div>
+        <div class="desc lang-es">Reporte de texto en vez de la interfaz interactiva. Con <code>--all</code> incluye también los controles aprobados.</div>
+        <div class="desc lang-en">Text report instead of the interactive interface. With <code>--all</code> it also lists the checks that passed.</div></div>
+      <div class="flag"><div class="name">--json</div>
+        <div class="desc lang-es">Salida JSON, pensada para un colector central o para procesar con <code>jq</code>.</div>
+        <div class="desc lang-en">JSON output, meant for a central collector or for processing with <code>jq</code>.</div></div>
+      <div class="flag"><div class="name">--output ARCHIVO</div>
+        <div class="desc lang-es">Guarda el reporte en el archivo (con modo 600) en vez de imprimirlo.</div>
+        <div class="desc lang-en">Saves the report to the file (mode 600) instead of printing it.</div></div>
+      <div class="flag"><div class="name">--fast</div>
+        <div class="desc lang-es">Saltea los barridos completos del disco (SUID, world-writable…): segundos en vez de minutos.</div>
+        <div class="desc lang-en">Skips the full disk sweeps (SUID, world-writable…): seconds instead of minutes.</div></div>
+      <div class="flag"><div class="name">--category ssh,accounts</div>
+        <div class="desc lang-es">Corre solo algunas categorías. <code>--list-categories</code> las muestra.</div>
+        <div class="desc lang-en">Runs only some categories. <code>--list-categories</code> lists them.</div></div>
+      <div class="flag"><div class="name">--profile PERFIL</div>
+        <div class="desc lang-es"><code>server</code>, <code>desktop</code>, <code>container</code> o <code>auto</code>. Evita la pregunta inicial. También <code>LINAUDIT_PROFILE</code>.</div>
+        <div class="desc lang-en"><code>server</code>, <code>desktop</code>, <code>container</code> or <code>auto</code>. Skips the initial question. Also <code>LINAUDIT_PROFILE</code>.</div></div>
+      <div class="flag"><div class="name">--min-score N</div>
+        <div class="desc lang-es">Código de salida 1 si el puntaje es menor que N. Útil en cron, CI y monitoreo.</div>
+        <div class="desc lang-en">Exit code 1 if the score is lower than N. Handy in cron, CI and monitoring.</div></div>
+      <div class="flag"><div class="name">--waivers ARCHIVO</div>
+        <div class="desc lang-es">Archivo de excepciones extra, además de <code>/etc/linaudit/waivers.conf</code>.</div>
+        <div class="desc lang-en">Extra waivers file, besides <code>/etc/linaudit/waivers.conf</code>.</div></div>
+      <div class="flag"><div class="name">--lang es|en</div>
+        <div class="desc lang-es">Idioma para esta corrida. También <code>LINAUDIT_LANG</code>.</div>
+        <div class="desc lang-en">Language for this run. Also <code>LINAUDIT_LANG</code>.</div></div>
+      <div class="flag"><div class="name">--no-color</div>
+        <div class="desc lang-es">Sin colores (también respeta <code>NO_COLOR</code>).</div>
+        <div class="desc lang-en">No colors (<code>NO_COLOR</code> is honored too).</div></div>
+    </div>
+    <div class="code" style="margin-top:1.4rem;"><pre><span class="c"># </span><span class="c lang-es">auditoría rápida de un servidor, sin preguntas, guardada en JSON</span><span class="c lang-en">quick server audit, no questions, saved as JSON</span>
+<span class="p">$ </span>sudo linaudit --profile server --fast --json --output reporte.json
+
+<span class="c"># </span><span class="c lang-es">en un pipeline: falla si el puntaje baja de 7</span><span class="c lang-en">in a pipeline: fail if the score drops below 7</span>
+<span class="p">$ </span>sudo linaudit --plain --min-score 7</pre></div>
+    <div class="body-text">
+      <p class="lang-es">Todas las opciones están en <code>linaudit --help</code> y en <code>man linaudit</code>.</p>
+      <p class="lang-en">Every option is in <code>linaudit --help</code> and <code>man linaudit</code>.</p>
+    </div>
+  </section>
+
+  <!-- ── PERFILES ── -->
+  <section id="perfiles">
+    <p class="sec-label lang-es">Perfiles</p>
+    <p class="sec-label lang-en">Profiles</p>
+    <div class="body-text">
+      <p class="lang-es">No todos los controles tienen sentido en todas las máquinas: un banner legal importa en un servidor corporativo, no en tu notebook; el firewall de un contenedor lo maneja su host. linaudit detecta el perfil que corresponde y te lo sugiere.</p>
+      <p class="lang-en">Not every check makes sense on every machine: a legal banner matters on a corporate server, not on your laptop; a container's firewall is handled by its host. linaudit detects the right profile and suggests it.</p>
+    </div>
+    <div class="table-wrap">
+      <table class="table">
+        <thead><tr>
+          <th><span class="lang-es">Perfil</span><span class="lang-en">Profile</span></th>
+          <th><span class="lang-es">Para</span><span class="lang-en">For</span></th>
+          <th><span class="lang-es">Qué cambia</span><span class="lang-en">What changes</span></th>
+        </tr></thead>
+        <tbody>
+          <tr><td>server</td>
+            <td><span class="lang-es">servidores, VPS, todo lo expuesto</span><span class="lang-en">servers, VPS, anything exposed</span></td>
+            <td><span class="lang-es">nada: todos los controles con su gravedad completa</span><span class="lang-en">nothing: every check at full severity</span></td></tr>
+          <tr><td>desktop</td>
+            <td><span class="lang-es">computadoras personales</span><span class="lang-en">personal computers</span></td>
+            <td><span class="lang-es">relaja los controles de servidor corporativo; el firewall baja de ALTO a MEDIO</span><span class="lang-en">relaxes corporate-server checks; the firewall goes from HIGH to MEDIUM</span></td></tr>
+          <tr><td>container</td>
+            <td><span class="lang-es">contenedores y VMs efímeras</span><span class="lang-en">containers and ephemeral VMs</span></td>
+            <td><span class="lang-es">lo que maneja el host (reloj, firewall, kernel, logs) queda como "no aplica"</span><span class="lang-en">what the host handles (clock, firewall, kernel, logs) becomes "not applicable"</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="body-text">
+      <p class="lang-es">Un perfil nunca esconde un control: solo le cambia la gravedad o lo marca como "no aplica", y lo deja escrito en el reporte.</p>
+      <p class="lang-en">A profile never hides a check: it only changes its severity or marks it "not applicable", and says so in the report.</p>
+    </div>
+  </section>
+
+  <!-- ── PUNTAJE ── -->
+  <section id="puntaje">
+    <p class="sec-label lang-es">Cómo se calcula el puntaje</p>
+    <p class="sec-label lang-en">How the score works</p>
+    <div class="body-text">
+      <p class="lang-es">Cada control pesa según su gravedad. Los aprobados suman su peso, las advertencias la mitad y las fallas nada; el porcentaje resultante se lleva a una escala de 1 a 10.</p>
+      <p class="lang-en">Each check weighs according to its severity. Passed checks add their weight, warnings half of it, and failures nothing; the resulting percentage is mapped onto a 1 to 10 scale.</p>
+    </div>
+    <div class="sev">
+      <div class="crit"><span class="lbl lang-es">CRÍTICO</span><span class="lbl lang-en">CRITICAL</span><span class="w">10</span></div>
+      <div class="high"><span class="lbl lang-es">ALTO</span><span class="lbl lang-en">HIGH</span><span class="w">6</span></div>
+      <div class="med"><span class="lbl lang-es">MEDIO</span><span class="lbl lang-en">MEDIUM</span><span class="w">3</span></div>
+      <div class="low"><span class="lbl lang-es">BAJO</span><span class="lbl lang-en">LOW</span><span class="w">1</span></div>
+      <div class="info"><span class="lbl">INFO</span><span class="w">0</span></div>
+    </div>
+    <div class="body-text">
+      <p class="lang-es">Después se aplican <strong>techos</strong>, porque un "9 de 10" con un agujero crítico abierto sería mentira:</p>
+      <p class="lang-en">Then <strong>caps</strong> are applied, because a "9 out of 10" with an open critical hole would be a lie:</p>
+    </div>
+    <div class="table-wrap">
+      <table class="table">
+        <thead><tr>
+          <th><span class="lang-es">Si queda abierto</span><span class="lang-en">If still open</span></th>
+          <th><span class="lang-es">Máximo</span><span class="lang-en">Maximum</span></th>
+        </tr></thead>
+        <tbody>
+          <tr><td><span class="lang-es">1 crítico</span><span class="lang-en">1 critical</span></td><td>6</td></tr>
+          <tr><td><span class="lang-es">2 críticos</span><span class="lang-en">2 critical</span></td><td>4</td></tr>
+          <tr><td><span class="lang-es">3 o más críticos</span><span class="lang-en">3+ critical</span></td><td>3</td></tr>
+          <tr><td><span class="lang-es">5 o más altos</span><span class="lang-en">5+ high</span></td><td>6</td></tr>
+          <tr><td><span class="lang-es">1 a 4 altos</span><span class="lang-en">1–4 high</span></td><td>8</td></tr>
+          <tr><td><span class="lang-es">menos del 90 % evaluado</span><span class="lang-en">under 90 % evaluated</span></td><td>6</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="body-text">
+      <p class="lang-es">El reporte siempre dice qué techo bajó el puntaje y por qué, así sabés qué arreglar primero.</p>
+      <p class="lang-en">The report always says which cap lowered the score and why, so you know what to fix first.</p>
+    </div>
+  </section>
+
+  <!-- ── EXCEPCIONES ── -->
+  <section id="excepciones">
+    <p class="sec-label lang-es">Excepciones y auditorías periódicas</p>
+    <p class="sec-label lang-en">Waivers and scheduled audits</p>
+    <div class="body-text">
+      <h3 class="lang-es">Aceptar un hallazgo a propósito</h3>
+      <h3 class="lang-en">Accepting a finding on purpose</h3>
+      <p class="lang-es">A veces un hallazgo es una decisión tomada: por ejemplo, la máquina está detrás de un firewall dedicado. Anotalo en <code>/etc/linaudit/waivers.conf</code>, una línea por control, con el motivo:</p>
+      <p class="lang-en">Sometimes a finding is a deliberate decision: for example, the machine sits behind a dedicated firewall. Write it down in <code>/etc/linaudit/waivers.conf</code>, one line per check, with the reason:</p>
+    </div>
+    <div class="code"><pre>NET-001   <span class="c"># <span class="lang-es">Firewall perimetral dedicado. Ticket INF-1234</span><span class="lang-en">Dedicated perimeter firewall. Ticket INF-1234</span></span></pre></div>
+    <div class="body-text">
+      <p class="lang-es">El control deja de afectar el puntaje, pero sigue apareciendo en el reporte con su motivo: la decisión queda a la vista.</p>
+      <p class="lang-en">The check stops affecting the score but still shows up in the report with its reason: the decision stays visible.</p>
+      <h3 class="lang-es">Una auditoría por semana</h3>
+      <h3 class="lang-en">A weekly audit</h3>
+      <p class="lang-es">El paquete de Debian trae un timer de systemd (apagado por defecto) que corre la auditoría una vez por semana y guarda el último reporte en <code>/var/lib/linaudit/latest.json</code>, con permisos restringidos.</p>
+      <p class="lang-en">The Debian package ships a systemd timer (disabled by default) that runs the audit once a week and keeps the latest report in <code>/var/lib/linaudit/latest.json</code>, with restricted permissions.</p>
+    </div>
+    <div class="code"><pre><span class="p">$ </span>sudo systemctl enable --now linaudit.timer</pre></div>
+  </section>
+
+  <!-- ── COMPILAR ── -->
+  <section id="compilar">
+    <p class="sec-label lang-es">Compilar y probar</p>
+    <p class="sec-label lang-en">Building and testing</p>
+    <div class="body-text">
+      <p class="lang-es">linaudit está escrito en Rust y es un workspace de Cargo con dos crates: el motor, sin interfaz, y el binario. Hace falta Rust 1.85 o más nuevo.</p>
+      <p class="lang-en">linaudit is written in Rust as a Cargo workspace with two crates: the engine, with no user interface, and the binary. You need Rust 1.85 or newer.</p>
+    </div>
+    <div class="code"><pre><span class="p">$ </span>cargo build --release     <span class="c"># <span class="lang-es">binario en target/release/linaudit</span><span class="lang-en">binary in target/release/linaudit</span></span>
+<span class="p">$ </span>cargo test                <span class="c"># <span class="lang-es">unitarios, fixtures de disco, render de la TUI, traducciones</span><span class="lang-en">unit tests, filesystem fixtures, TUI rendering, translations</span></span>
+<span class="p">$ </span>./target/release/linaudit --fast --plain</pre></div>
+
+    <div class="code tree"><pre><span class="k">crates/linaudit-core</span>   <span class="lang-es">motor: controles, perfiles, excepciones, puntaje e i18n</span><span class="lang-en">engine: checks, profiles, waivers, score and i18n</span>
+<span class="k">crates/linaudit</span>        <span class="lang-es">binario: CLI, interfaz (ratatui), reportes de texto y JSON</span><span class="lang-en">binary: CLI, interface (ratatui), text and JSON reports</span>
+<span class="k">po/</span>                    <span class="lang-es">traducciones (gettext)</span><span class="lang-en">translations (gettext)</span>
+<span class="k">doc/</span>                   <span class="lang-es">páginas de manual</span><span class="lang-en">man pages</span>
+<span class="k">etc/</span>                   <span class="lang-es">archivos por defecto de /etc/linaudit</span><span class="lang-en">default /etc/linaudit files</span>
+<span class="k">contrib/</span>               <span class="lang-es">units de systemd y scripts de mantenimiento</span><span class="lang-en">systemd units and maintenance scripts</span>
+<span class="k">debian/</span>                <span class="lang-es">empaquetado para Debian</span><span class="lang-en">Debian packaging</span></pre></div>
+
+    <div class="body-text">
+      <h3 class="lang-es">Armar el paquete .deb</h3>
+      <h3 class="lang-en">Building the .deb</h3>
+      <p class="lang-es">El directorio <code>debian/</code> compila contra los crates de Rust empaquetados en Debian (<code>librust-*-dev</code>) con el wrapper de cargo de Debian, sin bajar nada de crates.io. Además genera los autocompletados de bash, zsh y fish.</p>
+      <p class="lang-en">The <code>debian/</code> directory builds against the Rust crates packaged in Debian (<code>librust-*-dev</code>) with Debian's cargo wrapper, without downloading anything from crates.io. It also generates bash, zsh and fish completions.</p>
+    </div>
+    <div class="code"><pre><span class="p">$ </span>sudo apt build-dep .
+<span class="p">$ </span>dpkg-buildpackage -us -uc -b
+<span class="p">$ </span>sudo apt install ../linaudit_*.deb</pre></div>
+    <div class="body-text">
+      <p class="lang-es">El código compila con las versiones de crates de Debian 13 (ratatui 0.29, toml 0.8) y de unstable (ratatui 0.30, toml 1.x). Si actualizás dependencias, mantené las dos funcionando.</p>
+      <p class="lang-en">The code builds with the crate versions in Debian 13 (ratatui 0.29, toml 0.8) and in unstable (ratatui 0.30, toml 1.x). If you update dependencies, keep both working.</p>
+    </div>
+  </section>
+
+  <!-- ── IDIOMAS ── -->
+  <section id="idiomas">
+    <p class="sec-label lang-es">Traducir linaudit a otro idioma</p>
+    <p class="sec-label lang-en">Translating linaudit</p>
+    <div class="body-text">
+      <p class="lang-es">Los textos del código están en inglés y son las claves (<code>msgid</code>) de los catálogos gettext de <code>po/</code>. Los catálogos van <strong>embebidos en el binario</strong>, así que funciona igual instalado desde el .deb que suelto. Si falta una traducción, se muestra el inglés.</p>
+      <p class="lang-en">The texts in the code are in English and are the keys (<code>msgid</code>) of the gettext catalogs in <code>po/</code>. The catalogs are <strong>embedded in the binary</strong>, so it works the same installed from the .deb or as a loose binary. If a translation is missing, the English text is shown.</p>
+      <p class="lang-es">Para sumar un idioma (en el ejemplo, portugués, <code>pt</code>):</p>
+      <p class="lang-en">To add a language (in this example, Portuguese, <code>pt</code>):</p>
+
+      <ol class="steps">
+        <li>
+          <p class="lang-es"><strong>Crear el catálogo</strong> a partir de la plantilla. Hacen falta las herramientas de gettext (<code>apt install gettext</code>).</p>
+          <p class="lang-en"><strong>Create the catalog</strong> from the template. You need the gettext tools (<code>apt install gettext</code>).</p>
+          <div class="code"><pre><span class="p">$ </span>msginit -i po/linaudit.pot -o po/pt.po -l pt --no-translator</pre></div>
+          <p class="lang-es">Revisá que el encabezado tenga bien el <code>Plural-Forms</code> del idioma.</p>
+          <p class="lang-en">Check that the header has the right <code>Plural-Forms</code> for the language.</p>
+        </li>
+        <li>
+          <p class="lang-es"><strong>Traducir</strong> con Poedit, Lokalize o cualquier editor. Los valores van por nombre: <code>{n}</code>, <code>{dir}</code>… y la traducción tiene que conservar exactamente los mismos <code>{nombres}</code>. Los IDs de los controles, las claves del JSON y los valores de la CLI no se traducen.</p>
+          <p class="lang-en"><strong>Translate</strong> with Poedit, Lokalize or any editor. Values are inserted by name: <code>{n}</code>, <code>{dir}</code>… and the translation must keep exactly the same <code>{names}</code>. Check IDs, JSON keys and CLI values are not translated.</p>
+          <div class="code"><pre>msgid "Found {n} files in {dir}"
+msgstr "Encontrados {n} arquivos em {dir}"</pre></div>
+        </li>
+        <li>
+          <p class="lang-es"><strong>Registrar el idioma</strong> en <code>crates/linaudit-core/src/i18n.rs</code>: agregalo al enum <code>Lang</code> y a <code>Lang::ALL</code>, completá <code>code()</code>, <code>native_name()</code>, <code>from_code()</code>, <code>catalog()</code> y <code>plural_index()</code>, sumá su constante en <code>set_lang()</code>/<code>lang()</code>, y embebé el catálogo:</p>
+          <p class="lang-en"><strong>Register the language</strong> in <code>crates/linaudit-core/src/i18n.rs</code>: add it to the <code>Lang</code> enum and to <code>Lang::ALL</code>, fill in <code>code()</code>, <code>native_name()</code>, <code>from_code()</code>, <code>catalog()</code> and <code>plural_index()</code>, add its constant to <code>set_lang()</code>/<code>lang()</code>, and embed the catalog:</p>
+          <div class="code"><pre>static PT: LazyLock&lt;Catalog&gt; =
+    LazyLock::new(|| Catalog::parse(include_str!("../../../po/pt.po")));</pre></div>
+          <p class="lang-es">El compilador te va a marcar cada <code>match</code> que falte cubrir.</p>
+          <p class="lang-en">The compiler will point out every <code>match</code> left to cover.</p>
+        </li>
+        <li>
+          <p class="lang-es"><strong>Verificar y probar.</strong></p>
+          <p class="lang-en"><strong>Check and try it.</strong></p>
+          <div class="code"><pre><span class="p">$ </span>msgfmt --check-format --statistics -o /dev/null po/pt.po
+<span class="p">$ </span>cargo test
+<span class="p">$ </span>cargo run --release -- --lang pt --fast</pre></div>
+          <p class="lang-es">Opcional pero muy bienvenido: una página de manual traducida (<code>doc/linaudit.pt.1</code>) y un <code>README.pt.md</code>.</p>
+          <p class="lang-en">Optional but very welcome: a translated man page (<code>doc/linaudit.pt.1</code>) and a <code>README.pt.md</code>.</p>
+        </li>
+      </ol>
+
+      <h3 class="lang-es">Mantener las traducciones al día</h3>
+      <h3 class="lang-en">Keeping translations up to date</h3>
+      <p class="lang-es">Cuando cambian los textos del código, este script regenera <code>po/linaudit.pot</code> y actualiza todos los <code>po/*.po</code>: los textos nuevos quedan sin traducir y los que ya no existen, como obsoletos.</p>
+      <p class="lang-en">When the texts in the code change, this script regenerates <code>po/linaudit.pot</code> and updates every <code>po/*.po</code>: new texts are left untranslated and removed ones are marked obsolete.</p>
+    </div>
+    <div class="code"><pre><span class="p">$ </span>contrib/i18n-update.sh</pre></div>
+    <div class="body-text">
+      <p class="lang-es">En el código, todo texto visible pasa por <code>tr!("...")</code>; los plurales, por <code>trn!</code>. Un test falla si algún texto del código no está en <code>po/es.po</code>.</p>
+      <p class="lang-en">In the code, every user-facing text goes through <code>tr!("...")</code>; plurals go through <code>trn!</code>. A test fails if any text in the code is missing from <code>po/es.po</code>.</p>
+    </div>
+    <div class="code"><pre>tr!("{n} files", n = count)
+trn!("{n} file", "{n} files", count, n = count)</pre></div>
+  </section>
+
+  <!-- ── COLABORAR ── -->
+  <section id="colaborar">
+    <p class="sec-label lang-es">Colaborar</p>
+    <p class="sec-label lang-en">Contributing</p>
+    <div class="note lang-es"><strong>La regla de oro: linaudit es de solo lectura.</strong> Ningún control puede modificar el sistema, y ninguna salida puede contener el valor de un secreto (solo el archivo y la línea donde se encontró). Un pull request que rompa esto no se acepta.</div>
+    <div class="note lang-en"><strong>The golden rule: linaudit is read-only.</strong> No check may modify the system, and no output may contain the value of a secret (only the file and line where it was found). Pull requests that break this will not be merged.</div>
+    <div class="body-text">
+      <h3 class="lang-es">Agregar un control</h3>
+      <h3 class="lang-en">Adding a check</h3>
+      <p class="lang-es">Los controles viven en <code>crates/linaudit-core/src/checks/</code>, un módulo por categoría. Cada uno tiene un ID estable que no cambia de significado nunca, porque de él dependen las excepciones y los colectores. Sumá el ID nuevo a <code>docs/CHECKS.md</code> y cubrilo con un test usando el fixture de sistema de archivos (<code>checks/fixture.rs</code>), que permite probarlo sin root.</p>
+      <p class="lang-en">Checks live in <code>crates/linaudit-core/src/checks/</code>, one module per category. Each has a stable ID that never changes meaning, because waivers and collectors depend on it. Add the new ID to <code>docs/CHECKS.md</code> and cover it with a test using the filesystem fixture (<code>checks/fixture.rs</code>), which lets you test it without root.</p>
+      <h3 class="lang-es">También suma</h3>
+      <h3 class="lang-en">Also welcome</h3>
+      <ul>
+        <li class="lang-es">Reportes de falsos positivos (sobre todo en la búsqueda de credenciales).</li>
+        <li class="lang-en">False-positive reports (especially in the credentials search).</li>
+        <li class="lang-es">Pruebas en la familia Red Hat (RHEL, Rocky, Alma, Fedora), que está menos probada que Debian.</li>
+        <li class="lang-en">Testing on the Red Hat family (RHEL, Rocky, Alma, Fedora), which is less tested than Debian.</li>
+        <li class="lang-es">Traducciones y mejoras al empaquetado.</li>
+        <li class="lang-en">Translations and packaging fixes.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ── ADVERTENCIAS ── -->
+  <section>
+    <p class="sec-label lang-es">Advertencias</p>
+    <p class="sec-label lang-en">Caveats</p>
+    <div class="body-text">
+      <ul>
+        <li class="lang-es">Los reportes describen los puntos débiles de la máquina: <strong>guardalos en privado</strong>.</li>
+        <li class="lang-en">Reports describe the machine's weak spots: <strong>keep them private</strong>.</li>
+        <li class="lang-es">Algunos controles son heurísticos y pueden dar falsos positivos. Tomá los hallazgos como cosas para revisar, no como veredictos.</li>
+        <li class="lang-en">Some checks are heuristic and can produce false positives. Treat findings as things to review, not verdicts.</li>
+        <li class="lang-es">No reemplaza una auditoría formal de cumplimiento (CIS, STIG), un análisis forense ni un antivirus/EDR. Es un chequeo de salud rápido y honesto que podés correr todas las veces que quieras.</li>
+        <li class="lang-en">It does not replace a formal compliance audit (CIS, STIG), forensic analysis or an antivirus/EDR. It is a quick, honest health check you can run as often as you like.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ── VÉASE TAMBIÉN ── -->
+  <section>
+    <p class="sec-label lang-es">Véase también</p>
+    <p class="sec-label lang-en">See also</p>
+    <div class="seealso">
+      <a href="https://github.com/alexiarstein/linaudit" target="_blank" rel="noopener">github.com/alexiarstein/linaudit <span class="tag lang-es">código fuente</span><span class="tag lang-en">source code</span></a>
+      <a href="https://github.com/alexiarstein/linaudit/issues" target="_blank" rel="noopener">issues <span class="tag lang-es">errores e ideas</span><span class="tag lang-en">bugs and ideas</span></a>
+      <a href="https://github.com/alexiarstein/linaudit/blob/main/docs/CHECKS.md" target="_blank" rel="noopener">CHECKS.md <span class="tag lang-es">todos los controles</span><span class="tag lang-en">every check</span></a>
+      <a href="https://github.com/alexiarstein/linaudit/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener">CONTRIBUTING.md <span class="tag lang-es">guía para colaborar</span><span class="tag lang-en">contributor guide</span></a>
+      <a href="/">lexiworks.dev <span class="tag">alexia-michelle(1)</span></a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="colophon">
+      <span class="lang-es">AUTORA — Alexia Michelle · GNU AGPL v3.0 o posterior</span>
+      <span class="lang-en">AUTHOR — Alexia Michelle · GNU AGPL v3.0 or later</span>
+      <span>linaudit 0.2.0</span>
+    </div>
+    <div class="manbar foot">
+      <span>2026-11-05</span>
+      <span class="mid">lexiworks.dev/linaudit</span>
+      <span>LINAUDIT(1)</span>
+    </div>
+  </footer>
+
+</div>
+
+<div class="lightbox" id="lightbox" onclick="this.classList.remove('open')"><img alt="" /></div>
+
+<script>
+  function setLang(lang){
+    document.documentElement.lang = lang;
+    document.querySelectorAll('.lang-es').forEach(el => el.style.display = lang === 'es' ? '' : 'none');
+    document.querySelectorAll('.lang-en').forEach(el => el.style.display = lang === 'en' ? '' : 'none');
+  }
+  function toggleLang(){
+    setLang(document.documentElement.lang === 'es' ? 'en' : 'es');
+  }
+  function toggleMode(){
+    document.body.classList.toggle('light');
+  }
+  window.addEventListener('DOMContentLoaded', () => {
+    const q = new URLSearchParams(location.search).get('lang');
+    setLang(q === 'en' ? 'en' : 'es');
+
+    // copy buttons on code blocks
+    document.querySelectorAll('.code pre').forEach(pre => {
+      const btn = document.createElement('button');
+      btn.className = 'copy';
+      btn.type = 'button';
+      btn.textContent = 'copy';
+      btn.addEventListener('click', () => {
+        const clone = pre.cloneNode(true);
+        clone.querySelectorAll('.p').forEach(p => p.remove());
+        clone.querySelectorAll('.lang-es,.lang-en').forEach(el => {
+          if (el.style.display === 'none') el.remove();
+        });
+        const text = clone.textContent.replace(/\n{3,}/g, '\n\n').trim();
+        navigator.clipboard.writeText(text).then(() => {
+          btn.textContent = 'ok';
+          setTimeout(() => btn.textContent = 'copy', 1200);
+        }).catch(() => {});
+      });
+      pre.parentNode.appendChild(btn);
+    });
+
+    // lightbox for screenshots
+    const lb = document.getElementById('lightbox');
+    document.querySelectorAll('.term img').forEach(img => {
+      img.addEventListener('click', () => {
+        lb.querySelector('img').src = img.src;
+        lb.querySelector('img').alt = img.alt;
+        lb.classList.add('open');
+      });
+    });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') lb.classList.remove('open'); });
+  });
+</script>
+</body>
+</html>
